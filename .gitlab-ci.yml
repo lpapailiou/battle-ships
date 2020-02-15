@@ -12,7 +12,7 @@ cache:
 stages:
   - sign
 
-    -
+
 assembleRelease:
   stage: sign
   script:
