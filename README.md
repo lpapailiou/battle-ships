@@ -1,3 +1,3 @@
-# SchiffeVersenken
+# BattleShips
 
-Schiffe Versenken Multiplayer Spiel
+Ein Multiplayer Schiffe versenken für Android
