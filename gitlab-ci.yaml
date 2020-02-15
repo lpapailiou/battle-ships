@@ -1,0 +1,28 @@
+image: jangrewe/gitlab-ci-android
+
+before_script:
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - chmod +x ./gradlew
+
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+    - .gradle/
+
+stages:
+  - sign
+
+    -
+assembleRelease:
+  stage: sign
+  script:
+    - echo $KEYSTORE_BASE64 | base64 -d > keystore.jks
+    - ./gradlew assembleRelease
+      -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks
+      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
+      -Pandroid.injected.signing.key.alias=$FFHS_KEY_ALIAS
+      -Pandroid.injected.signing.key.password=$FFHS_KEY_PASSWORD
+  artifacts:
+    paths:
+      - app/build/outputs/apk/release
+      - CHANGELOG
