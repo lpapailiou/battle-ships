@@ -20,8 +20,8 @@ assembleRelease:
     - ./gradlew assembleRelease
       -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks
       -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
-      -Pandroid.injected.signing.key.alias=$FFHS_KEY_ALIAS
-      -Pandroid.injected.signing.key.password=$FFHS_KEY_PASSWORD
+      -Pandroid.injected.signing.key.alias=$GITLAB_KEY_ALIAS
+      -Pandroid.injected.signing.key.password=$GITLAB_KEY_PASSWORD
   artifacts:
     paths:
       - app/build/outputs/apk/release
