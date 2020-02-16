@@ -9,7 +9,7 @@ curl \
     --data "{ \
         'name': 'BattleShips Release ${CI_COMMIT_REF_NAME}', \
         'tag_name': '${CI_COMMIT_REF_NAME}', \
-        'description': '${CI_COMMIT_MESSAGE}', \
+        'description': 'commit message', \
         'assets': { \
             'links': \
             [{ \
