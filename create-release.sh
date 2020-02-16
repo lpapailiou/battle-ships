@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "commit message without newline: '${CI_COMMIT_MESSAGE/$'\n'/}'"
 
