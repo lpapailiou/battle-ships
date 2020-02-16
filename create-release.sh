@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "commit message without newline: '${CI_COMMIT_MESSAGE/$'\n'}'"
+echo "commit message without newline: '${CI_COMMIT_MESSAGE/$'\n'/}'"
 
 curl \
     --header 'Content-Type: application/json' \
