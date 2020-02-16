@@ -1,8 +1,6 @@
 #!/bin/sh
 
-set -x
-
-
+echo "commit message without newline: '${CI_COMMIT_MESSAGE/$'\n'}'"
 
 curl \
     --header 'Content-Type: application/json' \
@@ -10,7 +8,7 @@ curl \
     --data "{ \
         \"name\": \"BattleShips Release ${CI_COMMIT_REF_NAME}\", \
         \"tag_name\": \"${CI_COMMIT_REF_NAME}\", \
-        \"description\": \"commit message\", \
+        \"description\": \"${CI_COMMIT_MESSAGE/$'\n'/}\", \
         \"assets\": { \
             \"links\": \
             [{ \
