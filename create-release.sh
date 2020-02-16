@@ -11,7 +11,7 @@ curl \
             \"links\":
             [{
                 \"name\": \"battleships.apk\",
-                \"url\": \"https://gitlab.com/api/v4/projects/${CI_PROJECT_ID/jobs/${CI_JOB_ID}/artifacts\"
+                \"url\": \"https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/jobs/${CI_JOB_ID}/artifacts\"
             }]
         }
     }" \
