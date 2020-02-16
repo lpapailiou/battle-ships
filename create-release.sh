@@ -1,13 +1,5 @@
 #!/bin/bash
 
-
-echo "CI_JOB_ID: '${CI_JOB_ID}'"
-echo "CI_PIPELINE_ID: '${CI_PIPELINE_ID}'"
-echo "CI_CONCURRENT_ID: '${CI_CONCURRENT_ID}'"
-echo "CI_CONCURRENT_PROJECT_ID: '${CI_CONCURRENT_PROJECT_ID}'"
-echo "CI_PIPELINE_IID: '${CI_PIPELINE_IID}'"
-echo "CI_RUNNER_ID: '${CI_RUNNER_ID}'"
-
 set -x
 
 curl \

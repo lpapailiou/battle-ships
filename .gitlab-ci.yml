@@ -6,12 +6,11 @@ before_script:
 
 
 stages:
-  - sign
   - release
 
 
 assembleRelease:
-  stage: sign
+  stage: release
   only:
     - tags
 
@@ -22,15 +21,7 @@ assembleRelease:
       -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
       -Pandroid.injected.signing.key.alias=$GITLAB_KEY_ALIAS
       -Pandroid.injected.signing.key.password=$GITLAB_KEY_PASSWORD
+    - ./create-release.sh
   artifacts:
     paths:
       - app/build/outputs/apk/release/battleships-release.apk
-
-
-release:
-  stage: release
-  only:
-    - tags
-
-  script:
-    - ./create-release.sh
