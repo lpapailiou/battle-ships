@@ -1,10 +1,7 @@
 #!/bin/sh
 
-echo "COMMIT_REF_NAME: '${CI_COMMIT_REF_NAME}'"
-echo "CI_JOB_TOKEN: '${CI_JOB_TOKEN}'"
-echo "CI_COMMIT_MESSAGE: '${CI_COMMIT_MESSAGE}'"
-echo "CI_PROJECT_ID: '${CI_PROJECT_ID}'"
-echo "CI_PROJECT_ID: '${CI_PROJECT_ID}'"
+set -x
+
 
 curl \
     --header 'Content-Type: application/json' \
