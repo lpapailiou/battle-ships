@@ -1,10 +1,10 @@
 #!/bin/sh
 
-echo "COMMIT_REF_NAME: ${CI_COMMIT_REF_NAME}"
+echo "COMMIT_REF_NAME: '${CI_COMMIT_REF_NAME}'"
 
 curl \
     --header 'Content-Type: application/json' \
-    --header "JOB-TOKEN: ${CI_JOB_TOKEN}"" \
+    --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
     --data "{ \
         \"name\": \"BattleShips Release ${CI_COMMIT_REF_NAME}\", \
         \"tag_name\": \"${CI_COMMIT_REF_NAME}\", \
