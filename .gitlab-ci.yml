@@ -10,21 +10,22 @@ stages:
   - release
 
 
-#assembleRelease:
-#  stage: sign
-#  only:
-#    - tags
-#
-#  script:
-#    - echo $KEYSTORE_BASE64 | base64 -d > keystore.jks
-#    - ./gradlew assembleRelease
-#      -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks
-#      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
-#      -Pandroid.injected.signing.key.alias=$GITLAB_KEY_ALIAS
-#      -Pandroid.injected.signing.key.password=$GITLAB_KEY_PASSWORD
-#  artifacts:
-#    paths:
-#      - app/build/outputs/apk/release/battleships-release.apk
+assembleRelease:
+  stage: sign
+  only:
+    - tags
+
+  script:
+    - echo $KEYSTORE_BASE64 | base64 -d > keystore.jks
+    - ./gradlew assembleRelease
+      -Pandroid.injected.signing.store.file=$(pwd)/keystore.jks
+      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
+      -Pandroid.injected.signing.key.alias=$GITLAB_KEY_ALIAS
+      -Pandroid.injected.signing.key.password=$GITLAB_KEY_PASSWORD
+  artifacts:
+    paths:
+      - app/build/outputs/apk/release/battleships-release.apk
+
 
 release:
   stage: release
