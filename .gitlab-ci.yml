@@ -4,17 +4,16 @@ before_script:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
 
-cache:
-  key: ${CI_PROJECT_ID}
-  paths:
-    - .gradle/
 
 stages:
-  - sign
+  - release
 
 
 assembleRelease:
-  stage: sign
+  stage: release
+  only:
+    - tags
+
   script:
     - echo $KEYSTORE_BASE64 | base64 -d > keystore.jks
     - ./gradlew assembleRelease
@@ -22,7 +21,7 @@ assembleRelease:
       -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
       -Pandroid.injected.signing.key.alias=$GITLAB_KEY_ALIAS
       -Pandroid.injected.signing.key.password=$GITLAB_KEY_PASSWORD
+    - ./create-release.sh
   artifacts:
     paths:
-      - app/build/outputs/apk/release
-      - CHANGELOG
+      - app/build/outputs/apk/release/battleships-release.apk
