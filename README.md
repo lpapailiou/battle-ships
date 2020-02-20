@@ -48,3 +48,8 @@ sind man alle bisherigen Schüsse sowie Treffer markiert, welche man selbst bere
 
 Beim Gewinnen eines Spiels erhält man 5 Punkte. Beim Verlieren 0. Auf der Startseite lässt sich eine
 Page öffnen, welche das aktuelle Ranking aufzeigt.
+
+## Offlinefähigkeit
+
+Die Applikation soll Schüsse, welche offline getätigt wurden zwischenspeichern und bei der nächsten
+funktionierenden Internetverbindung hochladen.
