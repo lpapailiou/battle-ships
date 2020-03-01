@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">BattleShips</string>
     <string name="app_title">BattleShips</string>
+    <string name="benutzername">Benutzername</string>
+    <string name="username">username</string>
+    <string name="online">Online spielen</string>
+    <string name="train">Üben</string>
+    <string name="score">Score</string>
+    <string name="Intro">IntroImage</string>
 </resources>
