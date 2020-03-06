@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/Intro"
             android:layout_margin="0dp"
-            app:srcCompat="@drawable/Intro" />
+            app:srcCompat="@drawable/intro" />
     </LinearLayout>
 
 
@@ -47,6 +47,7 @@
             android:labelFor="@id/username"
             android:layout_margin="16dp"
             android:backgroundTint="#FFFFFF"
+            android:textColor="	#FFFFFF"
             android:autofillHints="@string/username"
             android:inputType="text" />
     </LinearLayout>

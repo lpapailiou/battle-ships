@@ -24,12 +24,12 @@ class IntroBoard : AppCompatActivity(){
         score = findViewById<Button>(R.id.score)
 
         train!!.setOnClickListener{
-            val intentTrain = Intent(this, BoardFragment::class.java) //TODO: Verify class MainFragment or BoardFragment?
+            val intentTrain = Intent(this, Score::class.java) //TODO: Verify class MainFragment or BoardFragment?
             startActivity(intentTrain)
         }
 
         online!!.setOnClickListener{
-            val intentOnline = Intent(this, BoardFragment::class.java) //TODO: Verify class MainFragment or BoardFragment?
+            val intentOnline = Intent(this, Score::class.java) //TODO: Verify class MainFragment or BoardFragment?
             startActivity(intentOnline)
         }
 
