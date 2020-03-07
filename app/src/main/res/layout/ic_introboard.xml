@@ -1,97 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#000000"
     tools:context=".ui.main.IntroBoard">
 
-    <LinearLayout
-        android:id="@+id/linearLayout0"
-        android:layout_width="match_parent"
-        android:layout_height="326dp"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/Intro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/Intro"
-            android:layout_margin="0dp"
-            app:srcCompat="@drawable/intro" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/Intro"
+        android:layout_width="406dp"
+        android:layout_height="539dp"
+        android:layout_margin="0dp"
+        android:contentDescription="@string/Intro"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/intro"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
+    <TextView
+        android:id="@+id/benutzername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/benutzername"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBaseline_toBaselineOf="@+id/username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/username" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="115dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="344dp"
-        android:orientation="horizontal">
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="241dp"
+        android:layout_height="37dp"
+        android:layout_margin="16dp"
+        android:autofillHints="@string/username"
+        android:backgroundTint="#FFFFFF"
+        android:inputType="text"
+        android:labelFor="@id/username"
+        android:textColor="	#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@id/Intro"
+        app:layout_constraintLeft_toRightOf="@id/benutzername"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/Intro"
+        app:layout_constraintVertical_bias="0.95" />
 
-        <TextView
-            android:id="@+id/benutzername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:textColor="#FFFFFF"
-            android:text="@string/benutzername" />
+    <Button
+        android:id="@+id/online"
+        style="@style/TextAppearance.AppCompat.Widget.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#31ED00"
+        android:text="@string/online"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toStartOf="@+id/train"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Intro"/>
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@id/username"
-            android:layout_margin="16dp"
-            android:backgroundTint="#FFFFFF"
-            android:textColor="	#FFFFFF"
-            android:autofillHints="@string/username"
-            android:inputType="text" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/train"
+        style="@style/TextAppearance.AppCompat.Widget.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#31ED00"
+        android:text="@string/train"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@id/online"
+        app:layout_constraintEnd_toStartOf="@+id/score"
+        app:layout_constraintTop_toTopOf="@id/online"/>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="399dp"
-        android:layout_height="172dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="491dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="69dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/train"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/train"
-            android:backgroundTint="#31ED00"
-            android:textColor="#000000"
-            style="@style/TextAppearance.AppCompat.Widget.Switch"/>
-
-        <Button
-            android:id="@+id/online"
-            android:layout_width="181dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/online"
-            android:backgroundTint="#31ED00"
-            android:textColor="#000000"
-            style="@style/TextAppearance.AppCompat.Widget.Switch"/>
-
-        <Button
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/score"
-            android:backgroundTint="#31ED00"
-            android:textColor="#000000"
-            style="@style/TextAppearance.AppCompat.Widget.Switch"/>
-    </LinearLayout>
-</RelativeLayout>
+    <Button
+        android:id="@+id/score"
+        style="@style/TextAppearance.AppCompat.Widget.Switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#31ED00"
+        android:text="@string/score"
+        android:textColor="#000000"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/train"
+        app:layout_constraintLeft_toRightOf="@id/train"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

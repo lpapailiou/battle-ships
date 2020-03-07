@@ -4,13 +4,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import battleships.esa.ffhs.ch.ui.main.IntroBoard
 
 class MainActivity : AppCompatActivity() {
 
     private val SPLASH_TIME_OUT: Long=3000 // 3sec
+    private var sonarGif: View? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        sonarGif = findViewById<View>(R.id.sonarGif)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         Handler().postDelayed({

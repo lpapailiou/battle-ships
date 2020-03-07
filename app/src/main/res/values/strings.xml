@@ -7,4 +7,5 @@
     <string name="train">Üben</string>
     <string name="score">Score</string>
     <string name="Intro">IntroImage</string>
+    <string name="splash">splash</string>
 </resources>
