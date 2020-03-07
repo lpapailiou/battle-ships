@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import battleships.esa.ffhs.ch.MainViewModel
 import battleships.esa.ffhs.ch.R
 
-class ScoreFragment : Fragment() {
+class BoardMineFragment : Fragment() {
 
     companion object {
         fun newInstance() = MainFragment()
@@ -21,7 +21,7 @@ class ScoreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.score_fragment, container, false)
+        return inflater.inflate(R.layout.board_mine_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
