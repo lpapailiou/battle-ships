@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
+import battleships.esa.ffhs.ch.MainActivity
 import battleships.esa.ffhs.ch.R
+import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class BoardFragment : Fragment() {
 

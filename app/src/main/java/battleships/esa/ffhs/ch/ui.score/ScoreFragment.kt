@@ -12,35 +12,19 @@ import battleships.esa.ffhs.ch.R
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
-// https://material.io/resources/icons/?icon=directions_boat&style=baseline
-
-class MainFragment : Fragment() {
+class ScoreFragment : Fragment() {
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
     private lateinit var viewModel: MainViewModel
-    val rootView = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // add clicklistener for go-to-board-placeholder
-        goToBoard.setOnClickListener {
-            it.findNavController().navigate(R.id.boardFragment)
-        }
-
-        // remove toolbar menu when returning to main fragment
-        val toolbar = (activity as MainActivity).toolbar
-        toolbar?.setNavigationIcon(null)
+        return inflater.inflate(R.layout.score_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,4 +32,5 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
     }
+
 }
