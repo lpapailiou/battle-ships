@@ -9,7 +9,7 @@ import battleships.esa.ffhs.ch.ui.main.IntroBoard
 
 class MainActivity : AppCompatActivity() {
 
-    private val SPLASH_TIME_OUT: Long=3000 // 3sec
+    private val SPLASH_TIME_OUT: Long=5000 // 3sec
     private var sonarGif: View? = null
 
 
