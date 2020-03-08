@@ -39,8 +39,8 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // animate intro image with rotation, source: https://blog.kotlin-academy.com/android-animation-using-kotlin-ef385b5b5dea
-        val animation = AnimationUtils.loadAnimation((activity as MainActivity), R.anim.rotate)
-        sonarImg.startAnimation(animation)
+        /*val animation = AnimationUtils.loadAnimation((activity as MainActivity), R.anim.rotate)
+        sonarImg.startAnimation(animation)*/
 
         // add clicklistener for go-to-board-placeholder
         train.setOnClickListener {

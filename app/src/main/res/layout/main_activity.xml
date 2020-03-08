@@ -33,13 +33,6 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/mobile_navigation" />
 
-    <!--<pl.droidsonroids.gif.GifImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sonarGif"
-        android:duration="1"
-        android:src="@drawable/splash" />-->
-
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
 
