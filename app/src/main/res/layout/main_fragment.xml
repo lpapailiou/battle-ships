@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/sonar_transparent_small" />
 
     <TextView
-        android:id="@+id/benutzername"
+        android:id="@+id/usernameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -40,7 +40,7 @@
         android:textColor="@color/colorAccent"
         android:labelFor="@id/username"
         app:layout_constraintBottom_toBottomOf="@id/sonarImg"
-        app:layout_constraintLeft_toRightOf="@id/benutzername"
+        app:layout_constraintLeft_toRightOf="@id/usernameLabel"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/sonarImg"
         app:layout_constraintVertical_bias="0.95" />
@@ -49,7 +49,7 @@
         android:id="@+id/online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/online"
+        android:text="@string/train"
         app:layout_constraintEnd_toStartOf="@+id/train"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sonarImg"/>
@@ -58,7 +58,7 @@
         android:id="@+id/train"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/train"
+        android:text="@string/online"
         app:layout_constraintStart_toEndOf="@id/online"
         app:layout_constraintEnd_toStartOf="@+id/score"
         app:layout_constraintTop_toTopOf="@id/online"/>
