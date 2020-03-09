@@ -8,16 +8,21 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="battleships.esa.ffhs.ch.ui.main.MainFragment"
-        android:label="main_fragment"
+        android:label="Welcome to Battle Ships"
         tools:layout="@layout/main_fragment" />
     <fragment
         android:id="@+id/boardFragment"
         android:name="battleships.esa.ffhs.ch.ui.main.BoardFragment"
-        android:label="board_fragment"
+        android:label="Current game"
         tools:layout="@layout/board_fragment" />
     <fragment
+        android:id="@+id/scoreFragment"
+        android:name="battleships.esa.ffhs.ch.ui.main.ScoreFragment"
+        android:label="Game score"
+        tools:layout="@layout/score_fragment" />
+    <fragment
         android:id="@+id/settings_wheel"
-        android:name="battleships.esa.ffhs.ch.ui.main.SettingsFragment"
+        android:name="battleships.esa.ffhs.ch.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/settings_fragment" />
 </navigation>

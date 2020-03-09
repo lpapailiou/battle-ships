@@ -7,31 +7,82 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainFragment">
 
+    <!-- <ImageView
+        android:id="@+id/sonarImg"
+        android:layout_width="200dp"
+        android:layout_height="539dp"
+        android:layout_margin="0dp"
+        android:contentDescription="@string/Intro"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sonar_transparent_small" /> -->
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="200dp"
+        android:layout_height="539dp"
+        android:layout_margin="0dp"
+        android:contentDescription="@string/Intro"
+        android:id="@+id/sonarImg"
+        android:src="@drawable/splash"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/usernameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="INTRO"
-        android:textSize="36sp"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="276dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_margin="16dp"
+        android:text="@string/username"
+        app:layout_constraintBaseline_toBaselineOf="@+id/username"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/username" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="241dp"
+        android:layout_height="37dp"
+        android:layout_margin="16dp"
+        android:autofillHints="@string/username"
+        android:backgroundTint="@color/colorAccent"
+        android:inputType="text"
+        android:textColor="@color/colorAccent"
+        android:labelFor="@id/username"
+        app:layout_constraintBottom_toBottomOf="@id/sonarImg"
+        app:layout_constraintLeft_toRightOf="@id/usernameLabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sonarImg"
+        app:layout_constraintVertical_bias="0.95" />
 
     <Button
-        android:id="@+id/goToBoard"
+        android:id="@+id/online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginBottom="216dp"
-        android:text="go to board placeholder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/train"
+        app:layout_constraintEnd_toStartOf="@+id/train"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@id/sonarImg"/>
+
+    <Button
+        android:id="@+id/train"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/online"
+        app:layout_constraintStart_toEndOf="@id/online"
+        app:layout_constraintEnd_toStartOf="@+id/score"
+        app:layout_constraintTop_toTopOf="@id/online"/>
+
+    <Button
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/train"
+        app:layout_constraintLeft_toRightOf="@id/train"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
