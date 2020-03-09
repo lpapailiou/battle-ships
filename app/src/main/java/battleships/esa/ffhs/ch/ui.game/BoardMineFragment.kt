@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import battleships.esa.ffhs.ch.MainActivity
-import battleships.esa.ffhs.ch.MainViewModel
 import battleships.esa.ffhs.ch.R
 import kotlinx.android.synthetic.main.board_mine_fragment.*
 

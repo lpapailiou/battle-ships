@@ -11,10 +11,12 @@
         android:id="@+id/intro_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="26dp"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/Intro"
         android:scaleType="centerInside"
         android:src="@drawable/splash"
-        app:layout_constraintBottom_toTopOf="@id/username_layout"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_guideline"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
@@ -26,24 +28,27 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+
         android:hint="@string/username"
         android:textColorHint="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
         app:hintEnabled="true"
-        app:hintTextColor="@color/colorAccent"
 
-        app:layout_constraintBottom_toTopOf="@id/offline_button"
+        app:hintTextColor="@color/colorAccent"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/intro_image">
+        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:singleLine="true"
+            android:textColor="@color/colorAccent"
             app:boxStrokeColor="@color/colorAccent"
             app:colorOnSurface="@color/colorAccent" />
 
@@ -53,12 +58,14 @@
         android:id="@+id/offline_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/train"
+        android:layout_marginTop="26dp"
 
+        android:text="@string/train"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/online_button"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/username_layout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/online_button"
@@ -93,6 +100,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.38" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package battleships.esa.ffhs.ch
+package battleships.esa.ffhs.ch.ui.main
 
 import androidx.lifecycle.ViewModel
 

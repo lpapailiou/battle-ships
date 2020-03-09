@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import battleships.esa.ffhs.ch.MainViewModel
 import battleships.esa.ffhs.ch.R
 
 

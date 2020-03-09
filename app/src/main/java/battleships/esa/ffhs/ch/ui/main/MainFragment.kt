@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import battleships.esa.ffhs.ch.MainActivity
-import battleships.esa.ffhs.ch.MainViewModel
 import battleships.esa.ffhs.ch.R
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_fragment.*

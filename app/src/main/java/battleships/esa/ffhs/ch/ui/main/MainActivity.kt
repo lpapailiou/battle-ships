@@ -1,4 +1,4 @@
-package battleships.esa.ffhs.ch
+package battleships.esa.ffhs.ch.ui.main
 
 import android.os.Bundle
 import android.view.Menu
@@ -8,12 +8,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import battleships.esa.ffhs.ch.R
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
 
     var mainViewModel = MainViewModel()
-    private val SPLASH_TIME_OUT: Long = 3000 // 3sec
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
             }*/
 
-            val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+            val navController = Navigation.findNavController(this,
+                R.id.nav_host_fragment
+            )
             setupActionBar(navController)
         } catch (e: Exception) {
             println(e.stackTrace)
@@ -42,13 +44,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        val navController = Navigation.findNavController(this,
+            R.id.nav_host_fragment
+        )
         val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
         return navigated || super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        val navController = Navigation.findNavController(this,
+            R.id.nav_host_fragment
+        )
         return navController.navigateUp()
     }
 
