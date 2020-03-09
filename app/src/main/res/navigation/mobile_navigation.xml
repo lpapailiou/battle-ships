@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/main_fragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/main_fragment"
         android:name="battleships.esa.ffhs.ch.ui.main.MainFragment"
         android:label="Welcome to Battle Ships"
         tools:layout="@layout/main_fragment">
@@ -17,7 +17,7 @@
             android:id="@+id/action_mainFragment_to_scoreFragment"
             app:destination="@id/score_fragment" />
         <action
-            android:id="@+id/action_mainFragment_to_settings_wheel"
+            android:id="@+id/action_mainFragment_to_settings_fragment"
             app:destination="@id/settings_fragment" />
     </fragment>
 

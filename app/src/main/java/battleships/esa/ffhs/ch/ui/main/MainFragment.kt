@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.main
 
+import MainViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +12,11 @@ import battleships.esa.ffhs.ch.R
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
+
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline
 
 class MainFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

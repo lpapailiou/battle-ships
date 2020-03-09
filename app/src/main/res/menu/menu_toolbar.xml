@@ -5,12 +5,13 @@
     <item
         android:id="@+id/settings_fragment"
         android:icon="@drawable/ic_settings"
-        app:showAsAction="ifRoom"
-        android:title="Settings" />
+        android:title="Settings"
+        app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/mainFragment"
+        android:id="@+id/main_fragment"
         android:icon="@drawable/ic_home"
-        android:title="Home screen">@color/colorAccent</item>
+        android:title="Home screen">
+    </item>
 
     <item
         android:id="@+id/board_fragment"
@@ -21,8 +22,8 @@
         android:id="@+id/score_fragment"
         android:icon="@drawable/ic_star"
         android:title="Scores" />
-        <!--app:showAsAction="ifRoom" -->
-        <!--app:showAsAction="always" -->
+    <!--app:showAsAction="ifRoom" -->
+    <!--app:showAsAction="always" -->
 
 
 </menu>

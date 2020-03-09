@@ -12,6 +12,7 @@ import battleships.esa.ffhs.ch.R
 
 class SquareCell : View {
 
+
     private val borderPaint: Paint
 
     private val rect: Rect = Rect()

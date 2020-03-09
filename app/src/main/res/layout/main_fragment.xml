@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
 
-        android:text="@string/train"
+        android:text="@string/practice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/online_button"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
@@ -107,6 +107,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.38" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
