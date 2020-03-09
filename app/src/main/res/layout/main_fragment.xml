@@ -7,82 +7,92 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainFragment">
 
-    <!-- <ImageView
-        android:id="@+id/sonarImg"
-        android:layout_width="200dp"
-        android:layout_height="539dp"
-        android:layout_margin="0dp"
-        android:contentDescription="@string/Intro"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/sonar_transparent_small" /> -->
-
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/sonarImg"
-        android:layout_width="200dp"
-        android:layout_height="539dp"
-        android:layout_margin="0dp"
+        android:id="@+id/intro_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:contentDescription="@string/Intro"
+        android:scaleType="centerInside"
         android:src="@drawable/splash"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/username_layout"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/usernameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/username"
-        app:layout_constraintBaseline_toBaselineOf="@+id/username"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/username" />
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="241dp"
-        android:layout_height="37dp"
-        android:layout_margin="16dp"
-        android:autofillHints="@string/username"
-        android:backgroundTint="@color/colorAccent"
-        android:inputType="text"
-        android:labelFor="@id/username"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@id/sonarImg"
-        app:layout_constraintLeft_toRightOf="@id/usernameLabel"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/sonarImg"
-        app:layout_constraintVertical_bias="0.95" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/username"
+        android:textColorHint="@color/colorAccent"
+        app:boxStrokeColor="@color/colorAccent"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/colorAccent"
+
+        app:layout_constraintBottom_toTopOf="@id/offline_button"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/intro_image">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:singleLine="true"
+            app:boxStrokeColor="@color/colorAccent"
+            app:colorOnSurface="@color/colorAccent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/online"
+        android:id="@+id/offline_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/train"
-        app:layout_constraintEnd_toStartOf="@+id/train"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sonarImg" />
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/online_button"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
 
     <Button
-        android:id="@+id/train"
+        android:id="@+id/online_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/online"
-        app:layout_constraintEnd_toStartOf="@+id/score"
-        app:layout_constraintStart_toEndOf="@id/online"
-        app:layout_constraintTop_toTopOf="@id/online" />
+
+        app:layout_constraintLeft_toRightOf="@id/offline_button"
+        app:layout_constraintRight_toLeftOf="@+id/score_button"
+        app:layout_constraintTop_toTopOf="@id/offline_button" />
 
     <Button
-        android:id="@+id/score"
+        android:id="@+id/score_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/score"
-        app:layout_constraintLeft_toRightOf="@id/train"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/train" />
+
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintLeft_toRightOf="@id/online_button"
+        app:layout_constraintTop_toTopOf="@id/online_button" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

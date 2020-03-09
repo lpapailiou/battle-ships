@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import battleships.esa.ffhs.ch.MainActivity
 import battleships.esa.ffhs.ch.MainViewModel
 import battleships.esa.ffhs.ch.R
@@ -33,18 +33,17 @@ class MainFragment : Fragment() {
         /*val animation = AnimationUtils.loadAnimation((activity as MainActivity), R.anim.rotate)
         sonarImg.startAnimation(animation)*/
 
-        // add clicklistener for go-to-board-placeholder
-        train.setOnClickListener {
-            it.findNavController().navigate(R.id.boardFragment)
-        }
+        online_button.setOnClickListener(
+            Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_boardFragment)
+        )
 
-        online.setOnClickListener {
-            it.findNavController().navigate(R.id.boardFragment)
-        }
+        offline_button.setOnClickListener(
+            Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_boardFragment)
+        )
 
-        score.setOnClickListener {
-            it.findNavController().navigate(R.id.scoreFragment)
-        }
+        score_button.setOnClickListener(
+            Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_scoreFragment)
+        )
 
         // remove toolbar menu when returning to main fragment
         val toolbar = (activity as MainActivity).toolbar

@@ -32,9 +32,6 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             println(e.stackTrace)
         }
-
-        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

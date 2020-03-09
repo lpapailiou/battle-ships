@@ -1,13 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorOnSurface">#0a2a00</item>
         <!-- <item name="android:windowBackground">@color/colorBackground</item> black background -->
         <item name="android:buttonStyle">@style/ButtonStyle</item>
         <item name="android:windowBackground">@drawable/sonar_grid</item> <!--    background image: sonar grid -->

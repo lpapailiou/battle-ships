@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Battle Ships</string>
-    <string name="score">Score</string>
-    <string name="train">Play offline</string>
-    <string name="online">Play online</string>
-    <string name="username">User name</string>
-    <string name="Intro">Intro</string>
+    <string name="score">View score</string>
+    <string name="train">Offline</string>
+    <string name="online">Online</string>
+    <string name="username">Username</string>
+    <string name="Intro">Intro image</string>
 </resources>

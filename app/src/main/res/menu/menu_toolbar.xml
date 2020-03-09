@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/settings_wheel"
+        android:id="@+id/settings_fragment"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"
         android:title="Settings" />
@@ -13,12 +13,12 @@
         android:title="Home screen">@color/colorAccent</item>
 
     <item
-        android:id="@+id/boardFragment"
+        android:id="@+id/board_fragment"
         android:icon="@drawable/ic_boat"
         android:title="Current game" />
 
     <item
-        android:id="@+id/scoreFragment"
+        android:id="@+id/score_fragment"
         android:icon="@drawable/ic_star"
         android:title="Scores" />
         <!--app:showAsAction="ifRoom" -->
