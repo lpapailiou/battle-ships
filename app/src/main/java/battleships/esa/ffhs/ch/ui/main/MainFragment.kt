@@ -1,16 +1,11 @@
 package battleships.esa.ffhs.ch.ui.main
 
-import android.graphics.Matrix
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import battleships.esa.ffhs.ch.MainActivity
 import battleships.esa.ffhs.ch.MainViewModel
@@ -21,10 +16,6 @@ import kotlinx.android.synthetic.main.main_fragment.*
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline
 
 class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
 
     private lateinit var viewModel: MainViewModel
 
@@ -62,7 +53,6 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+        ViewModelProvider(this).get(MainViewModel::class.java)
     }
 }

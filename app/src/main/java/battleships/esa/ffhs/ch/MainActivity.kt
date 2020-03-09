@@ -1,20 +1,14 @@
 package battleships.esa.ffhs.ch
 
-import android.graphics.ImageDecoder
-import android.graphics.drawable.AnimatedImageDrawable
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import kotlinx.android.synthetic.main.main_activity.*
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,9 +29,12 @@ class MainActivity : AppCompatActivity() {
 
             val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
             setupActionBar(navController)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println(e.stackTrace)
         }
+
+        val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -55,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), container)
+        return navController.navigateUp()
     }
 
     private fun setupActionBar(navController: NavController) {

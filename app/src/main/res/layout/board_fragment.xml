@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.BoardFragment">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.gridlayout.widget.GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"

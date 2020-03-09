@@ -9,9 +9,8 @@ import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.components.Direction
 
-class SquareCell: View {
+class SquareCell : View {
 
     private val borderPaint: Paint
 
@@ -28,7 +27,11 @@ class SquareCell: View {
         borderPaint = initPaint(R.color.colorAccent, Paint.Style.STROKE, 2f)
     }
 
-    private fun initPaint(@ColorRes color: Int, style: Paint.Style = Paint.Style.FILL, width: Float? = null, cap: Paint.Cap? = null): Paint {
+    private fun initPaint(
+        @ColorRes color: Int, style: Paint.Style = Paint.Style.FILL,
+        width: Float? = null,
+        cap: Paint.Cap? = null
+    ): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             this.color = ContextCompat.getColor(context, color)
             this.style = style
