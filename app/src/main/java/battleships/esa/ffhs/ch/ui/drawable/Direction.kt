@@ -1,4 +1,4 @@
-package battleships.esa.ffhs.ch.ui.component
+package battleships.esa.ffhs.ch.ui.drawable
 
 enum class Direction {
     UP, DOWN, LEFT, RiGHT;

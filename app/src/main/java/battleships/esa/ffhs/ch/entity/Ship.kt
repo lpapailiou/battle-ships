@@ -1,4 +1,3 @@
 package battleships.esa.ffhs.ch.entity
 
-data class Ship() {
-}
+//data class Ship() {}

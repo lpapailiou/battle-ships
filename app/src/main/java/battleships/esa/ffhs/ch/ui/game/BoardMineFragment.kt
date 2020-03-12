@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import battleships.esa.ffhs.ch.R
-import kotlinx.android.synthetic.main.board_mine_fragment.*
 
 
 class BoardMineFragment : Fragment() {
@@ -26,8 +25,6 @@ class BoardMineFragment : Fragment() {
 
     // somehow add cells to board
     private fun populateGrid() {
-        val gridParent = myBoardGrid
-        val mLocationsGrid = myBoardGrid
         val nColumns = 14
         val nCards: Int = 14
         val fragmentManager: FragmentManager =
