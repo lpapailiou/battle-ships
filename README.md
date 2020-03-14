@@ -53,3 +53,4 @@ Page öffnen, welche das aktuelle Ranking aufzeigt.
 
 Die Applikation soll Schüsse, welche offline getätigt wurden zwischenspeichern und bei der nächsten
 funktionierenden Internetverbindung hochladen.
+

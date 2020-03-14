@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">BattleShips</string>
-    <string name="app_title">BattleShips</string>
+    <string name="app_name">Battle Ships</string>
+    <string name="score">View score</string>
+    <string name="practice">Offline</string>
+    <string name="online">Online</string>
+    <string name="username">Username</string>
+    <string name="Intro">Intro image</string>
 </resources>
