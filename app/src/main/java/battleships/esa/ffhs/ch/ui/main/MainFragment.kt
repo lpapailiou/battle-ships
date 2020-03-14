@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -44,9 +45,8 @@ class MainFragment : Fragment() {
             Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_scoreFragment)
         )
 
-        // remove toolbar menu when returning to main fragment
-        val toolbar = (activity as MainActivity).toolbar
-        toolbar?.setNavigationIcon(null)
+        // hide NavigationDrawerIcon when we see main fragment, as we can't navigate back anywhere from here
+        (activity as MainActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

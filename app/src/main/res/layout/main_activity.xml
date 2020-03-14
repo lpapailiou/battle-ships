@@ -6,23 +6,13 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="ui.main.MainActivity">
 
     <LinearLayout
         android:orientation="vertical"
         android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true"
-        android:background="?colorPrimary"
-        android:theme="@style/ToolbarTheme"
-        android:elevation="4dp"
-        app:title="Battle Ships"/>
 
     <fragment
         android:id="@+id/nav_host_fragment"
@@ -35,11 +25,4 @@
 
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
-
-
-
-
-
-
-
 
