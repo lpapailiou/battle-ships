@@ -13,10 +13,10 @@
     <fragment
         android:id="@+id/gif_bridge_container"
         android:name="battleships.esa.ffhs.ch.ui.main.GifFragment"
-        android:layout_width="198dp"
-        android:layout_height="205dp"
+        android:layout_width="195dp"
+        android:layout_height="172dp"
         android:layout_marginStart="85dp"
-        android:layout_marginTop="69dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="103dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.008"
@@ -29,9 +29,9 @@
         android:layout_height="48dp"
 
         android:layout_marginStart="88dp"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         android:text="@string/practice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/online_button"
@@ -44,9 +44,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
 
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="68dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         android:text="@string/online"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/listId"
@@ -55,18 +55,17 @@
 
     <ListView
         android:id="@+id/listId"
-        android:layout_width="304dp"
-        android:layout_height="360dp"
+        android:layout_width="299dp"
+        android:layout_height="303dp"
         android:layout_marginStart="58dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="58dp"
         android:layout_marginBottom="53dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container"
-        app:layout_constraintVertical_bias="0.933" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

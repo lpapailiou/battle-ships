@@ -16,8 +16,10 @@
         android:layout_width="199dp"
         android:layout_height="184dp"
         android:layout_marginStart="102dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="103dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/offline_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +33,7 @@
         android:layout_marginStart="84dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="55dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="29dp"
         android:text="@string/practice"
         app:layout_constraintBottom_toTopOf="@+id/listId"
         app:layout_constraintEnd_toStartOf="@+id/online_button"
@@ -44,9 +46,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
 
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="23dp"
         android:layout_marginEnd="83dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="46dp"
         android:text="@string/online"
         app:layout_constraintBottom_toTopOf="@+id/listId"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,18 +57,17 @@
 
     <ListView
         android:id="@+id/listId"
-        android:layout_width="295dp"
-        android:layout_height="304dp"
+        android:layout_width="298dp"
+        android:layout_height="225dp"
         android:layout_marginStart="58dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="27dp"
         android:layout_marginEnd="58dp"
-        android:layout_marginBottom="53dp"
+        android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container"
-        app:layout_constraintVertical_bias="0.944" />
+        app:layout_constraintTop_toBottomOf="@+id/offline_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -62,9 +62,11 @@ class IntroFragment : Fragment() {
             Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_boardFragment)
         )
 
-        score_button.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_scoreFragment)
-        )
+        if (score_button != null) {
+            score_button.setOnClickListener(
+                Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_scoreFragment)
+            )
+        }
     }
 
 }
