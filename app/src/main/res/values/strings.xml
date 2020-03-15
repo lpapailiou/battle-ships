@@ -9,6 +9,8 @@
     <string name="control_bridge">Control bridge</string>
     <string name="current_game">Current game</string>
     <string name="scores">Scores</string>
+    <string name="save_username">Save</string>
+    <string name="change_user_name">Change user name</string>
 
     <string-array
         name="staticgamedata">
@@ -25,5 +27,15 @@
         <item>"2020-01-07 T00:00:00Z me vs bot"</item>
         <item>"2020-01-07 T00:00:00Z me vs bot"</item>
         <item>"2020-01-07 T00:00:00Z me vs corona"</item>
+    </string-array>
+
+    <string-array
+        name="staticscoredata">
+        <item>"2020-03-15 me vs bot: 1:0"</item>
+        <item>"2020-03-15 me vs bot: 0:1"</item>
+        <item>"2020-03-15 me vs bot: 0:1"</item>
+        <item>"2020-03-15 me vs bot: 1:0"</item>
+        <item>"2020-03-15 me vs bot: 1:0"</item>
+        <item>"2020-03-15 me vs bot: 1:0"</item>
     </string-array>
 </resources>
