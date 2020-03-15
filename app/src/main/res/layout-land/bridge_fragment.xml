@@ -13,17 +13,45 @@
     <fragment
         android:id="@+id/gif_bridge_container"
         android:name="battleships.esa.ffhs.ch.ui.main.GifFragment"
-        android:layout_width="206dp"
-        android:layout_height="244dp"
+        android:layout_width="198dp"
+        android:layout_height="205dp"
         android:layout_marginStart="85dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="69dp"
         android:layout_marginEnd="103dp"
-        android:layout_marginBottom="67dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.008"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/offline_button"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/practice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/online_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
+
+    <Button
+        android:id="@+id/online_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/online"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/listId"
+        app:layout_constraintStart_toEndOf="@+id/offline_button"
+        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
 
     <ListView
         android:id="@+id/listId"

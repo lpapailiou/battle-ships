@@ -8,21 +8,50 @@
     android:orientation="vertical"
     tools:context=".ui.main.BridgeFragment">
 
+    <!-- start game button missing here -->
+
     <fragment
         android:id="@+id/gif_bridge_container"
         android:name="battleships.esa.ffhs.ch.ui.main.GifFragment"
-        android:layout_width="206dp"
-        android:layout_height="244dp"
+        android:layout_width="199dp"
+        android:layout_height="184dp"
         android:layout_marginStart="102dp"
-        android:layout_marginTop="98dp"
+        android:layout_marginTop="92dp"
         android:layout_marginEnd="103dp"
-        android:layout_marginBottom="21dp"
-        app:layout_constraintBottom_toTopOf="@+id/listId"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- start game button missing here -->
+    <Button
+        android:id="@+id/offline_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="26dp"
+        android:text="@string/practice"
+        app:layout_constraintBottom_toTopOf="@+id/listId"
+        app:layout_constraintEnd_toStartOf="@+id/online_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
+
+    <Button
+        android:id="@+id/online_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="83dp"
+        android:layout_marginBottom="26dp"
+        android:text="@string/online"
+        app:layout_constraintBottom_toTopOf="@+id/listId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/offline_button"
+        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
 
     <ListView
         android:id="@+id/listId"
@@ -34,8 +63,10 @@
         android:layout_marginBottom="53dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
+        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container"
+        app:layout_constraintVertical_bias="0.944" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
