@@ -1,8 +1,29 @@
 <resources>
     <string name="app_name">Battle Ships</string>
     <string name="score">View score</string>
-    <string name="practice">Offline</string>
-    <string name="online">Online</string>
+    <string name="practice">vs bot</string>
+    <string name="online">vs friend</string>
     <string name="username">Username</string>
     <string name="Intro">Intro image</string>
+    <string name="settings">Settings</string>
+    <string name="control_bridge">Control bridge</string>
+    <string name="current_game">Current game</string>
+    <string name="scores">Scores</string>
+
+    <string-array
+        name="staticgamedata">
+        <item>"2020-03-15 T00:00:00Z me vs bot"</item>
+        <item>"2020-03-15 T00:00:00Z me vs trump"</item>
+        <item>"2020-03-14 T00:00:00Z me vs putin"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs bot"</item>
+        <item>"2020-01-07 T00:00:00Z me vs corona"</item>
+    </string-array>
 </resources>
