@@ -2,6 +2,7 @@ package battleships.esa.ffhs.ch.ui.main
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -17,9 +18,9 @@ class MainActivity : AppCompatActivity() {
         try {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.main_activity)
-            setSupportActionBar(toolbar)
+            //setSupportActionBar(toolbar)
 
-            /*if (savedInstanceState == null) { // blocks navigation
+            /*if (savedInstanceState == null) { // blocked custom toolbar, now maybe works
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
@@ -35,8 +36,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(null)
+        val inflater: MenuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true
     }
