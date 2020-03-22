@@ -30,6 +30,5 @@ class RulesFragment : Fragment() {
         val string: String = getString(R.string.rulesText)
         val TextView: TextView = (activity as MainActivity).findViewById(R.id.rulesT) as TextView
         TextView.setText(Html.fromHtml(string));
-
     }
 }
