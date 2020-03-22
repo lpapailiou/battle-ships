@@ -6,23 +6,20 @@
     <item
         android:id="@+id/settings_fragment"
         android:icon="@drawable/ic_settings"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/main_fragment"
-        android:icon="@drawable/ic_home"
-        android:title="Home screen" />
+        android:title="@string/control_bridge" />
 
     <item
         android:id="@+id/board_fragment"
-        android:icon="@drawable/ic_boat"
-        android:title="Current game" />
+        android:title="@string/current_game" />
 
     <item
         android:id="@+id/score_fragment"
-        android:icon="@drawable/ic_star"
-        android:title="Scores" />
+        android:title="@string/scores" />
 
 
 </menu>
