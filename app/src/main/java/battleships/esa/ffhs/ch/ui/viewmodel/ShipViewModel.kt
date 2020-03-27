@@ -7,6 +7,12 @@ import java.lang.Math.abs
 class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: Set<Point> = setOf()) {
 
     private var isPickedUp = false
+    private var isPositionValid = true
+    var posPoints: MutableList<Point> = mutableListOf<Point>()
+
+    init {
+        updatePoints()
+    }
 
     fun getShip(x: Int, y: Int): ShipViewModel? {
         if (isHere(x, y)) {
@@ -18,24 +24,29 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
 
     fun rotate(x: Int, y: Int) {
         var siz = size-1
-        // size: 4 - 1
 
-        //println("point is: x: " + position.col + " y: " + position.row)
         println("before: (" + position.col + "," + position.row + "), (" + (position.col + siz*direction.getNextX()) + "," + (position.row+siz*direction.getNextY()) + ")")
         var index = getIndex(x, y)
 
-        //println("start point is x: " + x + ", y: " + y)
-        //println("operation is is x: " + (direction.getNextX() * index) + ", y: " + (direction.getNextY() * index))
         direction = direction.getNext()
-        //var newX = x  - (direction.getNextX() * index)
-        //var newY: Int = y  - (direction.getNextY() * index)
+
         var newX = x - (direction.getNextX() * index)
         var newY: Int = y- (direction.getNextY() * index)
 
-        //println("new start point is x: " + newX + ", y: " + newY)
-        println("after: (" + newX + "," + newY + "), (" + (newX+direction.getNextX()*siz) + "," + (newY+direction.getNextY()*siz) + ")")
         position = Point(newX, newY)
+        updatePoints()
+    }
 
+    fun getPoints(): MutableList<Point> {
+        return posPoints
+    }
+
+    fun updatePoints() {
+        posPoints.clear()
+        posPoints.add(position)
+        for (i in 1..size-1) {
+            posPoints.add(Point(position.col + i*direction.getNextX(), position.row+i*direction.getNextY()))
+        }
     }
 
     fun getIndex(x: Int, y: Int): Int {
@@ -77,6 +88,14 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
 
     fun pickUp(pick: Boolean) {
         isPickedUp = pick
+    }
+
+    fun isPositionValid(): Boolean {
+        return isPositionValid
+    }
+
+    fun isPositionValid(valid: Boolean) {
+        isPositionValid = valid
     }
 
 }

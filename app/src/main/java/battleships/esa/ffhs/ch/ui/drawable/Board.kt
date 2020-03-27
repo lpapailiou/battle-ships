@@ -41,7 +41,7 @@ class Board(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-
+        // TODO: adjustment issue - board seems to be too large on real device. check if widht is actual fragment width
         gridWidth = (w.toFloat() / BOARD_SIZE)
     }
 
@@ -49,7 +49,6 @@ class Board(
         // clear canvas
         canvas.drawColor(Color.BLACK)
 
-        println("===================== DRAWING ======================== ")
         // drawing ships first
         ships.forEach { shipViewModel ->
             shipPainter.draw(shipViewModel, canvas)
@@ -85,18 +84,54 @@ class Board(
 
         for (ship in ships) {
             if (ship.isHere(xCoord, yCoord)) {
-                println("===================== FOUND ======================== " + xCoord + ", " + yCoord)
-                //currentShip = ship.getShip(xCoord, yCoord)
-                ship.rotate(xCoord, yCoord)
+                //println("===================== FOUND ======================== " + xCoord + ", " + yCoord)
+                //currentShip = ship.getShip(xCoord, yCoord)    // test for picking up ships (Drag&drop)
+                ship.rotate(xCoord, yCoord)                     // rotation test
+                //ship.isPositionValid(false)                   // validity test
                 refresh = true
             }
         }
 
-        if (refresh) {
-            // refresh canvas
-            invalidate()
+        if (shipInvalidPositionValidityCheck() || refresh) {
+            invalidate()        // refresh canvas if necessary
         }
         return super.onTouchEvent(event)
+    }
+
+    private fun shipInvalidPositionValidityCheck(): Boolean {
+        var changed = false
+        for (ship in ships) {
+            val shipPoints = ship.getPoints()
+            var isPosValid = true
+            // check if out of board
+            for (shipPoint in shipPoints) {
+                if (shipPoint.col < 0  || shipPoint.col >= BOARD_SIZE || shipPoint.row < 0  || shipPoint.row >= BOARD_SIZE) {
+                    isPosValid = false
+                    break
+                }
+            }
+            if (isPosValid) {
+                for (otherShip in ships) {
+                    if (ship != otherShip) {
+                        val otherShipPoints = otherShip.getPoints()
+                        for (shipPoint in shipPoints) {
+                            for (otherShipPoint in otherShipPoints) {
+                                if (shipPoint.col == otherShipPoint.col && shipPoint.row == otherShipPoint.row) {
+                                    isPosValid = false
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (isPosValid != ship.isPositionValid()) {
+                ship.isPositionValid(isPosValid)
+                changed = true
+            }
+        }
+        return changed
     }
 
     // ----------------------------- initialization of ships -----------------------------

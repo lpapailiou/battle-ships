@@ -20,9 +20,11 @@ class ShipPainter(
     }
 
     val paint: Paint
+    val errPaint: Paint
 
     init {
         paint = initPaint()
+        errPaint = initErrPaint()
     }
 
     private fun initPaint(
@@ -34,6 +36,17 @@ class ShipPainter(
             strokeWidth = STROKE_WIDTH
         }
     }
+
+    private fun initErrPaint(
+    ): Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, R.color.colorComplementary)
+            style = Paint.Style.FILL
+            strokeWidth = STROKE_WIDTH
+        }
+    }
+
+
 
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
         if (shipViewModel.isPickedUp()) {
@@ -76,6 +89,11 @@ class ShipPainter(
         var oval: RectF = RectF(startX, startY, endX, endY)
         val insetWith: Float = STROKE_WIDTH * (3/2)
         oval.inset(insetWith,insetWith)                 // resize ships to create padding effect
-        canvas.drawOval(oval, paint)
+
+        if (shipViewModel.isPositionValid()) {
+            canvas.drawOval(oval, paint)
+        } else {
+            canvas.drawOval(oval, errPaint)
+        }
     }
 }
