@@ -1,5 +1,7 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -23,35 +25,23 @@ class ShipPainter(
     val errPaint: Paint
 
     init {
-        paint = initPaint()
-        errPaint = initErrPaint()
+        paint = initPaint(R.color.colorAccent)
+        errPaint = initPaint(R.color.colorComplementary)
     }
 
-    private fun initPaint(
-    ): Paint {
+    private fun initPaint(id: Int): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             //color = Color.BLUE
-            color = ContextCompat.getColor(context, R.color.colorAccent)
+            color = ContextCompat.getColor(context, id)
             style = Paint.Style.FILL
             strokeWidth = STROKE_WIDTH
         }
     }
 
-    private fun initErrPaint(
-    ): Paint {
-        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, R.color.colorComplementary)
-            style = Paint.Style.FILL
-            strokeWidth = STROKE_WIDTH
-        }
-    }
-
-
-
-    fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
+    fun draw(shipViewModel: ShipViewModel, canvas: Canvas): RectF {
         if (shipViewModel.isPickedUp()) {
             println("============ is picked up")
-            return
+            return RectF(0f, 0f, 0f, 0f)
         }
 
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
@@ -94,6 +84,27 @@ class ShipPainter(
             canvas.drawOval(oval, paint)
         } else {
             canvas.drawOval(oval, errPaint)
+        }
+
+        return oval
+    }
+
+    private fun enableDragAndDrop(oval: RectF, view: View) {
+        (oval as View).setOnLongClickListener  { v: View ->
+            val item = ClipData.Item(v.tag as? CharSequence)
+            val dragData = ClipData(
+                v.tag as? CharSequence,
+                arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+                item)
+            println("=====================LONGDRAG STARTED!!!!")
+            v.startDrag(
+                dragData,   // the data to be dragged
+                null,   // the drag shadow builder
+                null,       // no need to use local data
+                0           // flags (not currently used, set to 0)
+            )
+
+
         }
     }
 }

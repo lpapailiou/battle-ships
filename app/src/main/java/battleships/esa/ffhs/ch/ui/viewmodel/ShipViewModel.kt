@@ -16,16 +16,21 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
 
     fun getShip(x: Int, y: Int): ShipViewModel? {
         if (isHere(x, y)) {
-            pickUp(true)
+            //pickUp(true)
             return this
         }
         return null
     }
 
+    fun set(p: Point) {
+        position = p
+        updatePoints()
+    }
+
     fun rotate(x: Int, y: Int) {
         var siz = size-1
 
-        println("before: (" + position.col + "," + position.row + "), (" + (position.col + siz*direction.getNextX()) + "," + (position.row+siz*direction.getNextY()) + ")")
+        //println("before: (" + position.col + "," + position.row + "), (" + (position.col + siz*direction.getNextX()) + "," + (position.row+siz*direction.getNextY()) + ")")
         var index = getIndex(x, y)
 
         direction = direction.getNext()
@@ -37,8 +42,16 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         updatePoints()
     }
 
+    fun getOffset(x: Int, y: Int):Point {
+        return Point(x - position.col, y - position.row)
+    }
+
     fun getPoints(): MutableList<Point> {
         return posPoints
+    }
+
+    fun getPoint(): Point {
+        return position
     }
 
     fun updatePoints() {

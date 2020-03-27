@@ -5,32 +5,19 @@ enum class Direction {
 
     fun getNext(): Direction {
         if (this == UP) {
-            println("new direction is: RIGHT")
             return RIGHT
         } else if (this == RIGHT) {
-            println("new direction is: DOWN")
             return DOWN
         } else if (this == DOWN) {
-            println("new direction is: LEFT")
             return LEFT
         } else if (this == LEFT) {
-            println("new direction is: UP")
             return UP
         }
         return this
     }
 
     fun getOpposite(): Direction {
-        if (this == UP) {
-            return DOWN
-        } else if (this == RIGHT) {
-            return LEFT
-        } else if (this == DOWN) {
-            return UP
-        } else if (this == LEFT) {
-            return RIGHT
-        }
-        return this
+        return this.getNext().getNext()
     }
 
     fun getNextX(): Int {

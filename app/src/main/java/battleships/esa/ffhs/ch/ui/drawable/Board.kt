@@ -1,7 +1,10 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -27,13 +30,16 @@ class Board(
     var paint: Paint
     var paintBackground: Paint
     var gridWidth = 0f
+    var canvasHandler: Canvas = Canvas()
+    var clickCounter: Int = 0
+    var offset = Point(0,0)
 
     init {
 
         ships = initShips()
         currentShip = null
         shipPainter = ShipPainter(context, attributes)
-        paint = initPaint()
+        paint = initPaint(R.color.colorAccent)
         paintBackground = initBackgroundPaint()
     }
 
@@ -46,6 +52,7 @@ class Board(
     }
 
     override fun onDraw(canvas: Canvas) {
+        canvasHandler = canvas
         // clear canvas
         canvas.drawColor(Color.BLACK)
 
@@ -60,6 +67,11 @@ class Board(
 
     // ----------------------------- moving ships -----------------------------
 
+    override fun setOnLongClickListener(l: OnLongClickListener?) {
+        super.setOnLongClickListener(l)
+        println("OnLongClickListener")
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
         var refresh: Boolean = false
@@ -68,8 +80,8 @@ class Board(
         }
 
         if (currentShip != null) {
-            currentShip?.pickUp(false)
-            currentShip = null
+            //currentShip?.pickUp(false)
+            //currentShip = null
             refresh = true
         }
 
@@ -81,21 +93,68 @@ class Board(
 
         var xCoord: Int = (xTouch/gridWidth).toInt()
         var yCoord: Int = (yTouch/gridWidth).toInt()
+        var shipOval: RectF = RectF(0f,0f,0f,0f)
 
         for (ship in ships) {
-            if (ship.isHere(xCoord, yCoord)) {
+            if (ship.isHere(xCoord, yCoord) && currentShip == null) {
                 //println("===================== FOUND ======================== " + xCoord + ", " + yCoord)
-                //currentShip = ship.getShip(xCoord, yCoord)    // test for picking up ships (Drag&drop)
-                ship.rotate(xCoord, yCoord)                     // rotation test
+                currentShip = ship.getShip(xCoord, yCoord)    // test for picking up ships (Drag&drop)
+                offset = currentShip!!.getOffset(xCoord, yCoord)
+
+                if (currentShip != null) {
+                    shipOval = shipPainter.draw(currentShip!!, canvasHandler)
+                }
+                //ship.rotate(xCoord, yCoord)                     // rotation test
                 //ship.isPositionValid(false)                   // validity test
                 refresh = true
             }
         }
-
+/*
         if (shipInvalidPositionValidityCheck() || refresh) {
             invalidate()        // refresh canvas if necessary
+        }*/
+
+        when (event.getActionMasked()) {
+            MotionEvent.ACTION_DOWN -> {
+                println("ACTION_DOWN")
+            }
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                println("ACTION_POINTER_DOWN")
+            }
+            MotionEvent.ACTION_MOVE -> {
+                clickCounter++
+                if (currentShip != null && clickCounter > 6) {
+                    var newPos = Point(xCoord-offset.col, yCoord-offset.row)
+                    var oldPos = currentShip!!.getPoint()
+                    currentShip!!.set(newPos)
+                    for (p in currentShip!!.getPoints()) {
+                        if (p.col < 0 || p.col >= BOARD_SIZE || p.row < 0 || p.row >= BOARD_SIZE) {
+                            currentShip!!.set(oldPos)
+                            break
+                        }
+                    }
+
+                }
+                if (shipInvalidPositionValidityCheck() || refresh) {
+                    invalidate()        // refresh canvas if necessary
+                }
+                println("ACTION_MOVE")
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                if (currentShip != null && clickCounter <= 6) {
+                    currentShip!!.rotate(xCoord, yCoord)
+                }
+                if (shipInvalidPositionValidityCheck() || refresh) {
+                    invalidate()        // refresh canvas if necessary
+                }
+                clickCounter = 0
+                offset = Point(0,0)
+                currentShip = null
+                println("ACTION_UP")
+            }
         }
-        return super.onTouchEvent(event)
+        return super.onTouchEvent(event) || refresh
     }
 
     private fun shipInvalidPositionValidityCheck(): Boolean {
@@ -173,10 +232,9 @@ class Board(
 
     // ----------------------------- create paints -----------------------------
 
-    private fun initPaint(
-    ): Paint {
+    private fun initPaint(id: Int): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, R.color.colorAccent)
+            color = ContextCompat.getColor(context, id)
             style = Paint.Style.STROKE
             strokeWidth = Companion.STROKE_WIDTH
         }
