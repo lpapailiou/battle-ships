@@ -4,7 +4,7 @@
     android:id="@+id/board"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.BoardMineFragment">
+    tools:context=".ui.game.BoardMineFragment">
 
     <battleships.esa.ffhs.ch.ui.drawable.Board
         android:layout_width="match_parent"

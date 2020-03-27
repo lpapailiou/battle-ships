@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
 
-    // temporary global variable to check if user is logged in for the first time
     companion object {
-        var isFirstLogin: Boolean = true
+        var isFirstLogin: Boolean = true        // temporary global variable to check if user is logged in for the first time
+        var isGameStarted: Boolean = false      // check if current game is ready to start or not
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,11 +1,19 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
+import android.util.AttributeSet
+import android.view.View
+import androidx.core.content.ContextCompat
+import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
-class ShipPainter() {
+class ShipPainter(
+    context: Context, attributes: AttributeSet
+) : View(context, attributes) {
 
     companion object {
         const val STROKE_WIDTH = 10f
@@ -20,36 +28,54 @@ class ShipPainter() {
     private fun initPaint(
     ): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.BLUE
+            //color = Color.BLUE
+            color = ContextCompat.getColor(context, R.color.colorAccent)
             style = Paint.Style.FILL
             strokeWidth = STROKE_WIDTH
         }
     }
 
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
+        if (shipViewModel.isPickedUp()) {
+            println("============ is picked up")
+            return
+        }
+
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        val startX = gridWidth * shipViewModel.position.col
-        val startY = gridWidth * shipViewModel.position.row
+        var startX = gridWidth * shipViewModel.position.col
+        var startY = gridWidth * shipViewModel.position.row
 
-        val endX: Float
-        val endY: Float
+        var endX: Float = 0f
+        var endY: Float = 0f
 
         when(shipViewModel.direction) {
-            Direction.DOWN, Direction.UP -> {
+            Direction.UP -> {
+                endY = startY + gridWidth
+                startY = startY + gridWidth - (gridWidth * shipViewModel.size)
+                endX = startX + gridWidth
+            }
+            Direction.DOWN -> {
                 endY = startY + gridWidth * shipViewModel.size
                 endX = startX + gridWidth
             }
-            Direction.LEFT, Direction.RIGHT -> {
+            Direction.RIGHT -> {
                 endX = startX + gridWidth * shipViewModel.size
                 endY = startY + gridWidth
             }
-            else ->{
+            Direction.LEFT -> {
+                endX = startX + gridWidth
+                startX = startX + gridWidth - (gridWidth * shipViewModel.size)
+                endY = startY + gridWidth
+            }
+            else -> {
                 throw Exception("Direction does not exist!")
             }
         }
 
-
-        canvas.drawOval(startX, startY, endX, endY, paint)
+        var oval: RectF = RectF(startX, startY, endX, endY)
+        val insetWith: Float = STROKE_WIDTH * (3/2)
+        oval.inset(insetWith,insetWith)                 // resize ships to create padding effect
+        canvas.drawOval(oval, paint)
     }
 }

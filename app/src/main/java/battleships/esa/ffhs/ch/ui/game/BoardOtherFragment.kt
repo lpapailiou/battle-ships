@@ -1,4 +1,4 @@
-package battleships.esa.ffhs.ch.ui.main
+package battleships.esa.ffhs.ch.ui.game
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -38,11 +38,11 @@ class MainFragment : Fragment() {
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
     private fun initMainFragment() {
-        if ((activity as MainActivity).findViewById<View>(R.id.fragment_container) != null) {
+        if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
             if (!isFirstLogin) {
-                childFragmentManager.beginTransaction().replace(R.id.fragment_container, BridgeFragment(), "bridge").commit()
+                childFragmentManager.beginTransaction().replace(R.id.fragment_container_main, BridgeFragment(), "bridge").commit()
             } else {
-                childFragmentManager.beginTransaction().replace(R.id.fragment_container, IntroFragment(), "intro").commit()
+                childFragmentManager.beginTransaction().replace(R.id.fragment_container_main, IntroFragment(), "intro").commit()
             }
         }
     }

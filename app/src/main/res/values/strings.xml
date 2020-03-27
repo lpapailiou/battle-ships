@@ -11,6 +11,7 @@
     <string name="scores">Scores</string>
     <string name="save_username">Save</string>
     <string name="change_user_name">Change user name</string>
+    <string name="start_the_war">start the war!</string>
 
     <string-array
         name="staticgamedata">
