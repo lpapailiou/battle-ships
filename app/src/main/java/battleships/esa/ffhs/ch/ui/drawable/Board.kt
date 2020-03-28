@@ -26,16 +26,15 @@ class Board(
     var currentShip: ShipViewModel?
     val shipSizes: IntArray = intArrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
     val shipPainter: ShipPainter
+    val CLICK_LIMIT: Int = 6        // makes difference between click and move
 
     var paint: Paint
     var paintBackground: Paint
     var gridWidth = 0f
-    var canvasHandler: Canvas = Canvas()
     var clickCounter: Int = 0
     var offset = Point(0,0)
 
     init {
-
         ships = initShips()
         currentShip = null
         shipPainter = ShipPainter(context, attributes)
@@ -52,7 +51,6 @@ class Board(
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvasHandler = canvas
         // clear canvas
         canvas.drawColor(Color.BLACK)
 
@@ -67,94 +65,62 @@ class Board(
 
     // ----------------------------- moving ships -----------------------------
 
-    override fun setOnLongClickListener(l: OnLongClickListener?) {
-        super.setOnLongClickListener(l)
-        println("OnLongClickListener")
-    }
-
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-
         var refresh: Boolean = false
         if (event == null) {
             return false
         }
 
         if (currentShip != null) {
-            //currentShip?.pickUp(false)
-            //currentShip = null
             refresh = true
         }
 
-        var xTouch: Float
-        var yTouch: Float
+        var xTouch: Float = event.getX(0)
+        var yTouch: Float = event.getY(0)
 
-        xTouch = event.getX(0)
-        yTouch = event.getY(0)
-
-        var xCoord: Int = (xTouch/gridWidth).toInt()
-        var yCoord: Int = (yTouch/gridWidth).toInt()
-        var shipOval: RectF = RectF(0f,0f,0f,0f)
+        var pointerPosition: Point = Point((xTouch/gridWidth).toInt(), (yTouch/gridWidth).toInt())
 
         for (ship in ships) {
-            if (ship.isHere(xCoord, yCoord) && currentShip == null) {
-                //println("===================== FOUND ======================== " + xCoord + ", " + yCoord)
-                currentShip = ship.getShip(xCoord, yCoord)    // test for picking up ships (Drag&drop)
-                offset = currentShip!!.getOffset(xCoord, yCoord)
-
-                if (currentShip != null) {
-                    shipOval = shipPainter.draw(currentShip!!, canvasHandler)
-                }
-                //ship.rotate(xCoord, yCoord)                     // rotation test
-                //ship.isPositionValid(false)                   // validity test
+            if (ship.isHere(pointerPosition) && currentShip == null) {
+                currentShip = ship.getShip(pointerPosition)
+                offset = currentShip!!.getOffset(pointerPosition)
                 refresh = true
             }
         }
-/*
-        if (shipInvalidPositionValidityCheck() || refresh) {
-            invalidate()        // refresh canvas if necessary
-        }*/
 
         when (event.getActionMasked()) {
-            MotionEvent.ACTION_DOWN -> {
-                println("ACTION_DOWN")
-            }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                println("ACTION_POINTER_DOWN")
-            }
-            MotionEvent.ACTION_MOVE -> {
+            MotionEvent.ACTION_MOVE -> {            // move ship around
                 clickCounter++
-                if (currentShip != null && clickCounter > 6) {
-                    var newPos = Point(xCoord-offset.col, yCoord-offset.row)
+                if (currentShip != null && clickCounter > CLICK_LIMIT) {
                     var oldPos = currentShip!!.getPoint()
-                    currentShip!!.set(newPos)
+                    currentShip!!.set(pointerPosition, offset)
                     for (p in currentShip!!.getPoints()) {
-                        if (p.col < 0 || p.col >= BOARD_SIZE || p.row < 0 || p.row >= BOARD_SIZE) {
+                        if (!p.isValid()) {
                             currentShip!!.set(oldPos)
                             break
                         }
                     }
-
                 }
-                if (shipInvalidPositionValidityCheck() || refresh) {
-                    invalidate()        // refresh canvas if necessary
-                }
-                println("ACTION_MOVE")
+                refreshView(refresh)
                 return true
             }
-            MotionEvent.ACTION_UP -> {
-                if (currentShip != null && clickCounter <= 6) {
-                    currentShip!!.rotate(xCoord, yCoord)
+            MotionEvent.ACTION_UP -> {              // rotate ship
+                if (currentShip != null && clickCounter <= CLICK_LIMIT) {
+                    currentShip!!.rotate(pointerPosition)
                 }
-                if (shipInvalidPositionValidityCheck() || refresh) {
-                    invalidate()        // refresh canvas if necessary
-                }
+                refreshView(refresh)
                 clickCounter = 0
                 offset = Point(0,0)
                 currentShip = null
-                println("ACTION_UP")
             }
         }
         return super.onTouchEvent(event) || refresh
+    }
+
+    private fun refreshView(refresh: Boolean) {     // refresh canvas if necessary
+        if (shipInvalidPositionValidityCheck() || refresh) {
+            invalidate()
+        }
     }
 
     private fun shipInvalidPositionValidityCheck(): Boolean {
@@ -164,7 +130,7 @@ class Board(
             var isPosValid = true
             // check if out of board
             for (shipPoint in shipPoints) {
-                if (shipPoint.col < 0  || shipPoint.col >= BOARD_SIZE || shipPoint.row < 0  || shipPoint.row >= BOARD_SIZE) {
+                if (!shipPoint.isValid()) {
                     isPosValid = false
                     break
                 }
@@ -175,7 +141,7 @@ class Board(
                         val otherShipPoints = otherShip.getPoints()
                         for (shipPoint in shipPoints) {
                             for (otherShipPoint in otherShipPoints) {
-                                if (shipPoint.col == otherShipPoint.col && shipPoint.row == otherShipPoint.row) {
+                                if (shipPoint.equals(otherShipPoint)) {
                                     isPosValid = false
                                     break
                                 }

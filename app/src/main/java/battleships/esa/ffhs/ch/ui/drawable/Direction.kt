@@ -1,7 +1,17 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-enum class Direction {
-    UP, DOWN, LEFT, RIGHT;
+enum class Direction(val x: Int, val y: Int) {
+    UP(0, -1),
+    DOWN(0, 1),
+    LEFT(-1, 0),
+    RIGHT(1, 0);
+
+    fun getNextX(): Int {
+        return x
+    }
+    fun getNextY(): Int {
+        return y
+    }
 
     fun getNext(): Direction {
         if (this == UP) {
@@ -20,23 +30,7 @@ enum class Direction {
         return this.getNext().getNext()
     }
 
-    fun getNextX(): Int {
-        var result: Int = 0
-        if (this == LEFT) {
-            result = -1
-        } else if (this == RIGHT) {
-            result = 1
-        }
-        return result
-    }
 
-    fun getNextY(): Int {
-        var result: Int = 0
-        if (this == UP) {
-            result = -1
-        } else if (this == DOWN) {
-            result = 1
-        }
-        return result
-    }
+
+
 }

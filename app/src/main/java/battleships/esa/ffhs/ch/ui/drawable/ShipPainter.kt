@@ -38,12 +38,7 @@ class ShipPainter(
         }
     }
 
-    fun draw(shipViewModel: ShipViewModel, canvas: Canvas): RectF {
-        if (shipViewModel.isPickedUp()) {
-            println("============ is picked up")
-            return RectF(0f, 0f, 0f, 0f)
-        }
-
+    fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
         var startX = gridWidth * shipViewModel.position.col
@@ -84,27 +79,6 @@ class ShipPainter(
             canvas.drawOval(oval, paint)
         } else {
             canvas.drawOval(oval, errPaint)
-        }
-
-        return oval
-    }
-
-    private fun enableDragAndDrop(oval: RectF, view: View) {
-        (oval as View).setOnLongClickListener  { v: View ->
-            val item = ClipData.Item(v.tag as? CharSequence)
-            val dragData = ClipData(
-                v.tag as? CharSequence,
-                arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                item)
-            println("=====================LONGDRAG STARTED!!!!")
-            v.startDrag(
-                dragData,   // the data to be dragged
-                null,   // the drag shadow builder
-                null,       // no need to use local data
-                0           // flags (not currently used, set to 0)
-            )
-
-
         }
     }
 }

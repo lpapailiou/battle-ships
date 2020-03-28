@@ -6,7 +6,6 @@ import java.lang.Math.abs
 
 class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: Set<Point> = setOf()) {
 
-    private var isPickedUp = false
     private var isPositionValid = true
     var posPoints: MutableList<Point> = mutableListOf<Point>()
 
@@ -14,9 +13,8 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         updatePoints()
     }
 
-    fun getShip(x: Int, y: Int): ShipViewModel? {
-        if (isHere(x, y)) {
-            //pickUp(true)
+    fun getShip(p: Point): ShipViewModel? {
+        if (isHere(p)) {
             return this
         }
         return null
@@ -27,23 +25,21 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         updatePoints()
     }
 
-    fun rotate(x: Int, y: Int) {
-        var siz = size-1
+    fun set(p: Point, offset: Point) {
+        set(Point(p.col-offset.col, p.row-offset.row))
+    }
 
-        //println("before: (" + position.col + "," + position.row + "), (" + (position.col + siz*direction.getNextX()) + "," + (position.row+siz*direction.getNextY()) + ")")
-        var index = getIndex(x, y)
+    fun rotate(p: Point) {
+        var siz = size-1
+        var index = getIndex(p)
 
         direction = direction.getNext()
-
-        var newX = x - (direction.getNextX() * index)
-        var newY: Int = y- (direction.getNextY() * index)
-
-        position = Point(newX, newY)
+        position = Point(p.col-(direction.getNextX() * index), p.row-(direction.getNextY() * index))
         updatePoints()
     }
 
-    fun getOffset(x: Int, y: Int):Point {
-        return Point(x - position.col, y - position.row)
+    fun getOffset(p: Point):Point {
+        return Point(p.col - position.col, p.row - position.row)
     }
 
     fun getPoints(): MutableList<Point> {
@@ -62,45 +58,27 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         }
     }
 
-    fun getIndex(x: Int, y: Int): Int {
-        var xVal = position.col
-        var yVal: Int = position.row
+    fun getIndex(p:Point): Int {
+        var pos: Point = position
         var index: Int = 0
 
         for (i in 0..size-1) {
-            if (xVal == x && yVal == y) {
+            if (pos.equals(p)) {
                 return index
             }
-            xVal += direction.getNextX()
-            yVal += direction.getNextY()
+            pos = Point(pos.col+direction.getNextX(), pos.row+direction.getNextY())
             index++
         }
-
         return -1
     }
 
-    fun isHere(x: Int, y: Int): Boolean {
-
-        // TODO: check if we have a fuckup mixing col/row
-        var xVal = position.col
-        var yVal: Int = position.row
-
-        for (i in 0..size-1) {
-            if (xVal == x && yVal == y) {
+    fun isHere(p: Point): Boolean {
+        for (point in posPoints) {
+            if (p.equals(point)) {
                 return true
             }
-            xVal += direction.getNextX()
-            yVal += direction.getNextY()
         }
         return false
-    }
-
-    fun isPickedUp(): Boolean {
-        return isPickedUp
-    }
-
-    fun pickUp(pick: Boolean) {
-        isPickedUp = pick
     }
 
     fun isPositionValid(): Boolean {
