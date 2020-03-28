@@ -1,10 +1,16 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-enum class Direction(val x: Int, val y: Int) {
-    UP(0, -1),
-    DOWN(0, 1),
-    LEFT(-1, 0),
-    RIGHT(1, 0);
+import kotlin.random.Random
+
+enum class Direction(val tag: String, val x: Int, val y: Int) {
+    UP("UP", 0, -1),
+    DOWN("DOWN", 0, 1),
+    LEFT("LEFT", -1, 0),
+    RIGHT("RIGHT", 1, 0),
+    UP_RIGHT("UP_RIGHT", 1, -1),
+    UP_LEFT("UP_LEFT", -1, -1),
+    DOWN_RIGHT("DOWN_RIGHT", 1, 1),
+    DOWN_LEFT("DOWN_LEFT", -1, 1);
 
     fun getNextX(): Int {
         return x
@@ -28,6 +34,12 @@ enum class Direction(val x: Int, val y: Int) {
 
     fun getOpposite(): Direction {
         return this.getNext().getNext()
+    }
+
+    fun getRandom():Direction {
+        var directions:List<Direction> = listOf(UP, DOWN, LEFT, RIGHT)
+        var d:Direction = directions[(0..3).shuffled().first()]
+        return d
     }
 
 

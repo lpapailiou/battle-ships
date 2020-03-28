@@ -2,6 +2,7 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 
 import battleships.esa.ffhs.ch.ui.drawable.Direction
 import battleships.esa.ffhs.ch.ui.drawable.Point
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
 import java.lang.Math.abs
 
 class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: Set<Point> = setOf()) {
@@ -11,6 +12,15 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
 
     init {
         updatePoints()
+    }
+
+    fun setRandomly() {
+        position = position.getRandom()
+        direction = direction.getRandom()
+        updatePoints()
+        if (!isShipOnBoard()) {
+            setRandomly()
+        }
     }
 
     fun getShip(p: Point): ShipViewModel? {
@@ -42,7 +52,26 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         return Point(p.col - position.col, p.row - position.row)
     }
 
+
     fun getPoints(): MutableList<Point> {
+        return posPoints
+    }
+
+    fun getOverlapArea(): MutableList<Point> {
+        if (strictOverlapRule) {
+            var posAreaPoints: MutableList<Point> = mutableListOf<Point>()
+            var dirs: Array<Direction> = Direction.values()
+            posAreaPoints.addAll(posPoints)
+            posPoints.forEach { p ->
+                dirs.forEach { d ->
+                    var point: Point = Point(p.col+d.getNextX(), p.row+d.getNextY())
+                    if (!posAreaPoints.contains(point)) {
+                        posAreaPoints.add(point)
+                    }
+                }
+            }
+            return posAreaPoints
+        }
         return posPoints
     }
 
@@ -79,6 +108,16 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
             }
         }
         return false
+    }
+
+    fun isShipOnBoard(): Boolean {
+        var isOnBoard = true
+        for (p in posPoints) {
+            if (!p.isValid()) {
+                isOnBoard = false
+            }
+        }
+        return isOnBoard
     }
 
     fun isPositionValid(): Boolean {

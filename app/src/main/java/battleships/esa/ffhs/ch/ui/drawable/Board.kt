@@ -10,7 +10,9 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.ui.game.BoardPreparationFragment
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
+import kotlinx.android.synthetic.main.board_preparation_fragment.view.*
 
 
 class Board(
@@ -36,6 +38,7 @@ class Board(
 
     init {
         ships = initShips()
+        setShipsRandomly()          // set ships randomly on board
         currentShip = null
         shipPainter = ShipPainter(context, attributes)
         paint = initPaint(R.color.colorAccent)
@@ -63,7 +66,15 @@ class Board(
         drawGrid(canvas)
     }
 
-    // ----------------------------- moving ships -----------------------------
+
+    fun validateStart(): Boolean {
+        if (ships.filter{s -> !s.isPositionValid()}.count() > 0) {
+            return false
+        }
+        return true
+    }
+
+    // ----------------------------- ship handling -----------------------------
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         var refresh: Boolean = false
@@ -94,11 +105,8 @@ class Board(
                 if (currentShip != null && clickCounter > CLICK_LIMIT) {
                     var oldPos = currentShip!!.getPoint()
                     currentShip!!.set(pointerPosition, offset)
-                    for (p in currentShip!!.getPoints()) {
-                        if (!p.isValid()) {
-                            currentShip!!.set(oldPos)
-                            break
-                        }
+                    if (!currentShip!!.isShipOnBoard()) {
+                        currentShip!!.set(oldPos)
                     }
                 }
                 refreshView(refresh)
@@ -125,30 +133,12 @@ class Board(
 
     private fun shipInvalidPositionValidityCheck(): Boolean {
         var changed = false
+        var overlapList = getOverlappingShips()
         for (ship in ships) {
-            val shipPoints = ship.getPoints()
             var isPosValid = true
-            // check if out of board
-            for (shipPoint in shipPoints) {
-                if (!shipPoint.isValid()) {
-                    isPosValid = false
-                    break
-                }
-            }
-            if (isPosValid) {
-                for (otherShip in ships) {
-                    if (ship != otherShip) {
-                        val otherShipPoints = otherShip.getPoints()
-                        for (shipPoint in shipPoints) {
-                            for (otherShipPoint in otherShipPoints) {
-                                if (shipPoint.equals(otherShipPoint)) {
-                                    isPosValid = false
-                                    break
-                                }
-                            }
-                        }
-                    }
-                }
+
+            if (!ship.isShipOnBoard() || overlapList.contains(ship)) {
+                isPosValid = false
             }
 
             if (isPosValid != ship.isPositionValid()) {
@@ -159,11 +149,46 @@ class Board(
         return changed
     }
 
+    fun getOverlappingShips(): List<ShipViewModel> {
+        val overlapList = mutableListOf<ShipViewModel>()
+        for (ship in ships) {
+            val shipPoints = ship.getOverlapArea()
+            var doesOverlap = false
+
+            for (otherShip in ships) {
+                if (ship != otherShip) {
+                    val otherShipPoints = otherShip.getPoints()
+                    for (shipPoint in shipPoints) {
+                        for (otherShipPoint in otherShipPoints) {
+                            if (shipPoint.equals(otherShipPoint)) {
+                                doesOverlap = true
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (doesOverlap) {
+                overlapList.add(ship)
+            }
+        }
+        return overlapList
+    }
+
+    fun setShipsRandomly() {
+        ships.forEach{s -> s.setRandomly()}
+        var overlapList = getOverlappingShips()
+        while (!overlapList.isEmpty()) {
+            overlapList.first().setRandomly()
+            overlapList = getOverlappingShips()
+        }
+    }
+
     // ----------------------------- initialization of ships -----------------------------
 
     private fun initShips(): List<ShipViewModel> {
         return shipSizes.mapIndexed { index, size ->
-
             ShipViewModel(
                 index,
                 Point(0, index),

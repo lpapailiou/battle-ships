@@ -9,6 +9,10 @@ class Point (val col: Int, val row: Int) {
         return true
     }
 
+    fun getRandom():Point {
+        return Point((0..BOARD_SIZE-1).shuffled().first(), (0..BOARD_SIZE-1).shuffled().first())
+    }
+
     override fun equals(other: Any?): Boolean {
         var otherP: Point = (other as Point)
         return this.col == otherP.col && this.row == otherP.row

@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var isFirstLogin: Boolean = true        // temporary global variable to check if user is logged in for the first time
         var isGameStarted: Boolean = false      // check if current game is ready to start or not
+        var strictOverlapRule = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
