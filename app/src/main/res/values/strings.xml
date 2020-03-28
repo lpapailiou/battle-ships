@@ -13,6 +13,7 @@
     <string name="change_user_name">Change user name</string>
     <string name="start_the_war">start the war!</string>
     <string name="positioning_hint_board_preparation"><![CDATA[drag&drop to move, click to rotate]]></string>
+    <string name="prepare_opponent_board">PREPARE OPPONENT BOARD</string>
 
     <string-array
         name="staticgamedata">
