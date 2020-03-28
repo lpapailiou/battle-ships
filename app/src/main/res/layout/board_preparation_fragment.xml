@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="battleships.esa.ffhs.ch.ui.game.BoardMineFragment"
+        android:name="battleships.esa.ffhs.ch.ui.game.BoardOtherFragment"
         android:layout_width="378dp"
         android:layout_height="378dp"
         android:layout_marginStart="10dp"

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameStarted
+import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
 
 class BoardFragment : Fragment() {
@@ -49,5 +50,4 @@ class BoardFragment : Fragment() {
     fun switchToGameFragment() {
         childFragmentManager.beginTransaction().replace(R.id.fragment_container_board, BoardGameFragment(), "game").commit()
     }
-
 }

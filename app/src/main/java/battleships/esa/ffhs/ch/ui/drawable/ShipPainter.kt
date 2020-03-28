@@ -23,10 +23,12 @@ class ShipPainter(
 
     val paint: Paint
     val errPaint: Paint
+    val hiddenPaint: Paint
 
     init {
         paint = initPaint(R.color.colorAccent)
         errPaint = initPaint(R.color.colorComplementary)
+        hiddenPaint = initPaint(R.color.colorPrimaryDark)       // shlightly visible for easier testing, can be set to black after
     }
 
     private fun initPaint(id: Int): Paint {
@@ -75,7 +77,9 @@ class ShipPainter(
         val insetWith: Float = STROKE_WIDTH * (3/2)
         oval.inset(insetWith,insetWith)                 // resize ships to create padding effect
 
-        if (shipViewModel.isPositionValid()) {
+        if (shipViewModel.isHidden()) {
+            canvas.drawOval(oval, hiddenPaint)
+        } else if (shipViewModel.isPositionValid() && !shipViewModel.isSunk()) {
             canvas.drawOval(oval, paint)
         } else {
             canvas.drawOval(oval, errPaint)

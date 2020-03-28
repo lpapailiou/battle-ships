@@ -5,13 +5,33 @@ import battleships.esa.ffhs.ch.ui.drawable.Point
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
 import java.lang.Math.abs
 
-class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: Set<Point> = setOf()) {
+class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: MutableSet<Point> = mutableSetOf()) {
 
     private var isPositionValid = true
+    private var isHidden = false
     var posPoints: MutableList<Point> = mutableListOf<Point>()
 
     init {
         updatePoints()
+    }
+
+    fun hide() {
+        isHidden = true
+    }
+
+    fun hit (p: Point) {
+        hits.add(p)
+        isSunk()
+    }
+    fun isHidden(): Boolean {
+        return isHidden
+    }
+    fun isSunk(): Boolean {
+        var isSunk = hits.size == posPoints.size
+        if (isSunk) {
+            isHidden = false
+        }
+        return isSunk
     }
 
     fun setRandomly() {

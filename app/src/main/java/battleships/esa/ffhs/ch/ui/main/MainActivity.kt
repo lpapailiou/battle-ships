@@ -9,6 +9,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.ui.drawable.BoardOpponent
+import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 import kotlinx.android.synthetic.main.main_activity.*
 
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline
@@ -18,7 +20,10 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var isFirstLogin: Boolean = true        // temporary global variable to check if user is logged in for the first time
         var isGameStarted: Boolean = false      // check if current game is ready to start or not
+        var isGameFinished: Boolean = false
         var strictOverlapRule = true
+        var preparedShips: List<ShipViewModel> = listOf()
+        var opponentBoard: BoardOpponent? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

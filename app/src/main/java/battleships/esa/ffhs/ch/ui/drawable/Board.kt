@@ -10,12 +10,16 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.game.BoardPreparationFragment
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameFinished
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameStarted
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.preparedShips
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 import kotlinx.android.synthetic.main.board_preparation_fragment.view.*
 
 
-class Board(
+open class Board (
     context: Context, attributes: AttributeSet
 ) : View(context, attributes) {
 
@@ -24,10 +28,12 @@ class Board(
     }
 
     // TODO: outsource into viewmodel
-    var ships: List<ShipViewModel>
-    var currentShip: ShipViewModel?
+    var ships: List<ShipViewModel> = listOf()
+    var shots: MutableList<Shot> = mutableListOf()
+    var currentShip: ShipViewModel? = null
     val shipSizes: IntArray = intArrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
     val shipPainter: ShipPainter
+    val shotPainter: ShotPainter
     val CLICK_LIMIT: Int = 6        // makes difference between click and move
 
     var paint: Paint
@@ -37,12 +43,18 @@ class Board(
     var offset = Point(0,0)
 
     init {
-        ships = initShips()
-        setShipsRandomly()          // set ships randomly on board
-        currentShip = null
         shipPainter = ShipPainter(context, attributes)
+        shotPainter = ShotPainter(context, attributes)
         paint = initPaint(R.color.colorAccent)
         paintBackground = initBackgroundPaint()
+    }
+
+    protected fun endGameCheck(): Boolean {
+        var sunkenShips = ships.filter { s -> s.isSunk() }.count()
+        if (sunkenShips == ships.size) {
+            isGameFinished = true
+        }
+        return isGameFinished
     }
 
     // ----------------------------- basic view handling -----------------------------
@@ -62,91 +74,39 @@ class Board(
             shipPainter.draw(shipViewModel, canvas)
         }
 
+        shots.forEach { shot ->
+            shotPainter.draw(shot, canvas)
+        }
+
         // drawing grid over ships for shadow effect
         drawGrid(canvas)
     }
 
+    // ----------------------------- shot handling -----------------------------
 
-    fun validateStart(): Boolean {
-        if (ships.filter{s -> !s.isPositionValid()}.count() > 0) {
-            return false
+    protected fun hit (shot: Shot) {
+        hit(null, shot)
+    }
+
+    protected fun hit(ship: ShipViewModel?, shot: Shot) {
+        if (ship != null) {
+            shot.isHit(true)
+            ship!!.hit(shot.point)
         }
-        return true
+        shots.add(shot)
+        endGameCheck()
     }
 
     // ----------------------------- ship handling -----------------------------
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        var refresh: Boolean = false
-        if (event == null) {
-            return false
-        }
-
-        if (currentShip != null) {
-            refresh = true
-        }
-
-        var xTouch: Float = event.getX(0)
-        var yTouch: Float = event.getY(0)
-
-        var pointerPosition: Point = Point((xTouch/gridWidth).toInt(), (yTouch/gridWidth).toInt())
-
-        for (ship in ships) {
-            if (ship.isHere(pointerPosition) && currentShip == null) {
-                currentShip = ship.getShip(pointerPosition)
-                offset = currentShip!!.getOffset(pointerPosition)
-                refresh = true
-            }
-        }
-
-        when (event.getActionMasked()) {
-            MotionEvent.ACTION_MOVE -> {            // move ship around
-                clickCounter++
-                if (currentShip != null && clickCounter > CLICK_LIMIT) {
-                    var oldPos = currentShip!!.getPoint()
-                    currentShip!!.set(pointerPosition, offset)
-                    if (!currentShip!!.isShipOnBoard()) {
-                        currentShip!!.set(oldPos)
-                    }
-                }
-                refreshView(refresh)
-                return true
-            }
-            MotionEvent.ACTION_UP -> {              // rotate ship
-                if (currentShip != null && clickCounter <= CLICK_LIMIT) {
-                    currentShip!!.rotate(pointerPosition)
-                }
-                refreshView(refresh)
-                clickCounter = 0
-                offset = Point(0,0)
-                currentShip = null
-            }
-        }
-        return super.onTouchEvent(event) || refresh
+        return super.onTouchEvent(event)
     }
 
-    private fun refreshView(refresh: Boolean) {     // refresh canvas if necessary
-        if (shipInvalidPositionValidityCheck() || refresh) {
+    protected open fun refreshView(refresh: Boolean) {     // refresh canvas if necessary
+        if (refresh) {
             invalidate()
         }
-    }
-
-    private fun shipInvalidPositionValidityCheck(): Boolean {
-        var changed = false
-        var overlapList = getOverlappingShips()
-        for (ship in ships) {
-            var isPosValid = true
-
-            if (!ship.isShipOnBoard() || overlapList.contains(ship)) {
-                isPosValid = false
-            }
-
-            if (isPosValid != ship.isPositionValid()) {
-                ship.isPositionValid(isPosValid)
-                changed = true
-            }
-        }
-        return changed
     }
 
     fun getOverlappingShips(): List<ShipViewModel> {
@@ -187,27 +147,27 @@ class Board(
 
     // ----------------------------- initialization of ships -----------------------------
 
-    private fun initShips(): List<ShipViewModel> {
+    protected fun initShips(): List<ShipViewModel> {
         return shipSizes.mapIndexed { index, size ->
             ShipViewModel(
                 index,
                 Point(0, index),
                 size,
                 Direction.RIGHT,
-                setOf()
+                mutableSetOf()
             )
         }.toList()
     }
 
     // ----------------------------- create grid -----------------------------
 
-    private fun drawGrid(canvas: Canvas) {
+    protected fun drawGrid(canvas: Canvas) {
         // painting two grids here to obtain shadow effect
         drawGrid(canvas, paintBackground)       // wider strokes in black
         drawGrid(canvas, paint)                 // narrower strokes in radar green
     }
 
-    private fun drawGrid(canvas: Canvas, customPaint: Paint) {
+    protected fun drawGrid(canvas: Canvas, customPaint: Paint) {
         // vertical lines
         for(i in 0..BOARD_SIZE) {
             val x = gridWidth * i
@@ -223,7 +183,7 @@ class Board(
 
     // ----------------------------- create paints -----------------------------
 
-    private fun initPaint(id: Int): Paint {
+    protected fun initPaint(id: Int): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.STROKE
@@ -231,7 +191,7 @@ class Board(
         }
     }
 
-    private fun initBackgroundPaint(
+    protected fun initBackgroundPaint(
     ): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.BLACK

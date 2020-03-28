@@ -11,10 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.ui.drawable.SNACKBAR_DURATION
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameStarted
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.preparedShips
+import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.board_mine_fragment.*
+import kotlinx.android.synthetic.main.board_other_fragment.*
 import kotlinx.android.synthetic.main.board_preparation_fragment.*
 
 
@@ -35,7 +36,9 @@ class BoardPreparationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // triggered when game is supposed to start. will change the state of the game and navigate to the actual game fragment
         startgame_button.setOnClickListener{
-            if (preparationBoard.validateStart()) {
+            var opponentShips:List<ShipViewModel> = preparationBoard.validateStart()
+            if (!opponentShips.isEmpty()) {
+                preparedShips = opponentShips
                 isGameStarted = true
                 var parent: BoardFragment = (parentFragment as BoardFragment)
                 parent.switchToGameFragment()
