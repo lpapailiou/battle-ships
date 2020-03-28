@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.game.BoardPreparationFragment
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameFinished
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameStarted
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.opponentBoard
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.preparedShips
@@ -24,6 +25,7 @@ class BoardMine(
 ) : Board(context, attributes) {
 
     init {
+        //Game(this, opponentBoard!!)
         ships = initShips()
         setShipsRandomly()
         ships.forEach {it.hide()}
@@ -33,13 +35,13 @@ class BoardMine(
     // ----------------------------- ship handling -----------------------------
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event == null) {
+        if (event == null || isGameFinished) {
             return false
         }
         var refresh: Boolean = false
 
-        var xTouch: Float = event.getX(0)
-        var yTouch: Float = event.getY(0)
+        var xTouch: Float = event!!.getX(0)
+        var yTouch: Float = event!!.getY(0)
 
         var pointerPosition: Point = Point((xTouch/gridWidth).toInt(), (yTouch/gridWidth).toInt())
 
@@ -74,7 +76,7 @@ class BoardMine(
     }
 
     fun randomShot(): Boolean {
-        if (opponentBoard != null) {
+        if (opponentBoard != null && !isGameFinished) {
             var success = opponentBoard!!.shoot(Shot(Point(0,0).getRandom(), null))
             if (!success) {
                 randomShot()

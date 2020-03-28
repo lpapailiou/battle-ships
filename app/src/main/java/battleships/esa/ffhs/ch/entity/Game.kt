@@ -1,3 +1,7 @@
 package battleships.esa.ffhs.ch.entity
 
-//data class Game() { }
+import battleships.esa.ffhs.ch.ui.drawable.Board
+/*
+data class Game() {
+
+}*/

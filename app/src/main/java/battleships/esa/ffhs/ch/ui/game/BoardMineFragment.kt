@@ -11,7 +11,7 @@ import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 
 
-class BoardMineFragment : Fragment() {
+class BoardMineFragment : BoardGameChildFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

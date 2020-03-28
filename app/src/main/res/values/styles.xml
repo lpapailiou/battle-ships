@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -26,6 +26,10 @@
     </style>
 
     <!-- #################### helper styles #################### -->
+
+    <style name="AppDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 
     <style name="ToolBarTextTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/colorAccent</item>

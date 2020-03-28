@@ -52,6 +52,7 @@ open class Board (
     protected fun endGameCheck(): Boolean {
         var sunkenShips = ships.filter { s -> s.isSunk() }.count()
         if (sunkenShips == ships.size) {
+            CustomDialog().showEndGameDialog(context, (ships != preparedShips))
             isGameFinished = true
         }
         return isGameFinished
@@ -91,7 +92,7 @@ open class Board (
     protected fun hit(ship: ShipViewModel?, shot: Shot) {
         if (ship != null) {
             shot.isHit(true)
-            ship!!.hit(shot.point)
+            ship!!.hit(shot)
         }
         shots.add(shot)
         endGameCheck()

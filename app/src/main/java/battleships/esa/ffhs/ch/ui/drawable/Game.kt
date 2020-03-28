@@ -1,4 +1,4 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-class Game {
+class Game(val myBoard: Board, val opponentBoard: Board) {
 }

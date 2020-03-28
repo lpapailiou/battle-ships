@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.game.BoardPreparationFragment
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameFinished
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameStarted
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.opponentBoard
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.preparedShips
@@ -36,6 +37,9 @@ class BoardOpponent  (
     }
 
     fun shoot(shot: Shot): Boolean {
+        if (isGameFinished) {
+            return true
+        }
         var refresh: Boolean = false
         var pointerPosition: Point = shot.point
         println("opponent board shot at " + pointerPosition.toString())

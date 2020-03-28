@@ -65,8 +65,10 @@ class ShotPainter(
         innerShotOval.inset(innerInsetWith,innerInsetWith)
         outerShotOval.inset(outerInsetWidth,outerInsetWidth)
         if (shot.isHit) {
-            canvas.drawOval(innerShotOval, shotInnerPaint)
-            canvas.drawOval(outerShotOval, shotOuterPaint)
+            if (shot.isDrawable()) {
+                canvas.drawOval(innerShotOval, shotInnerPaint)
+                canvas.drawOval(outerShotOval, shotOuterPaint)
+            }
         } else {
             drawWater(startX, endX, startY, endY, canvas)
         }

@@ -1,11 +1,12 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.drawable.Direction
 import battleships.esa.ffhs.ch.ui.drawable.Point
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
 import java.lang.Math.abs
 
-class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: MutableSet<Point> = mutableSetOf()) {
+class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: MutableSet<Shot> = mutableSetOf()) {
 
     private var isPositionValid = true
     private var isHidden = false
@@ -19,8 +20,8 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         isHidden = true
     }
 
-    fun hit (p: Point) {
-        hits.add(p)
+    fun hit (shot: Shot) {
+        hits.add(shot)
         isSunk()
     }
     fun isHidden(): Boolean {
@@ -29,6 +30,7 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
     fun isSunk(): Boolean {
         var isSunk = hits.size == posPoints.size
         if (isSunk) {
+            hits.forEach { h -> h.undraw() }
             isHidden = false
         }
         return isSunk
