@@ -9,12 +9,12 @@
 
     <FrameLayout
         android:id="@+id/fragment_container_game_active"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fragment_container_game_inactive"
@@ -22,12 +22,12 @@
 
     <FrameLayout
         android:id="@+id/fragment_container_game_inactive"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fragment_container_game_active"
         app:layout_constraintStart_toStartOf="parent"
