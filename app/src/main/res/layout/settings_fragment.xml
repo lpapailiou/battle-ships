@@ -6,43 +6,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="ui.settings.SettingsFragment">
 
-    <TextView
-        android:id="@+id/change_user_name_label"
-        android:layout_width="299dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="376dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="17dp"
-        android:text="@string/change_user_name"
-        app:layout_constraintBottom_toTopOf="@+id/username_layout_settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_layout_settings"
+        android:id="@+id/username_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="374dp"
-        android:layout_height="55dp"
-
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="450dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="31dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
 
         android:hint="@string/username"
         android:textColorHint="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
         app:hintEnabled="true"
+
         app:hintTextColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/save_username_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_input_settings"
+            android:id="@+id/username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
@@ -54,14 +37,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <Button
         android:id="@+id/save_username_button"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
 
         android:layout_marginStart="162dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="162dp"
         android:layout_marginBottom="198dp"
         android:text="@string/save_username"
@@ -69,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_layout_settings" />
+        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"
@@ -91,6 +73,4 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.51" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
