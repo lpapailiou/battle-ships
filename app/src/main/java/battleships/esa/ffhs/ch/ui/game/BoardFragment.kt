@@ -1,17 +1,14 @@
 package battleships.esa.ffhs.ch.ui.game
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isGameStarted
-import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 
 class BoardFragment : Fragment() {
@@ -38,7 +35,7 @@ class BoardFragment : Fragment() {
     // check if the current game is ready to play or if the 'game preparation area' should be loaded
     private fun initBoardFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_board) != null) {
-            if (!isGameStarted) {
+            if (activeGame!!.state != GameState.ACTIVE) {
                 childFragmentManager.beginTransaction().replace(R.id.fragment_container_board, BoardPreparationFragment(), "prep").commit()
             } else {
                 switchToGameFragment()

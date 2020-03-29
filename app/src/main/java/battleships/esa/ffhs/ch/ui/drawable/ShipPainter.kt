@@ -28,12 +28,11 @@ class ShipPainter(
     init {
         paint = initPaint(R.color.colorAccent)
         errPaint = initPaint(R.color.colorComplementary)
-        hiddenPaint = initPaint(R.color.colorPrimaryDark)       // shlightly visible for easier testing, can be set to black after
+        hiddenPaint = initPaint(R.color.colorPrimaryDark)       // TODO: switch to black later. shlightly visible now for easier testing
     }
 
     private fun initPaint(id: Int): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            //color = Color.BLUE
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.FILL
             strokeWidth = STROKE_WIDTH

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
 
-class BoardOtherFragment : BoardGameChildFragment() {
+class BoardOtherFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

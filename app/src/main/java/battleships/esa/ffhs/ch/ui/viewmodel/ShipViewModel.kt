@@ -1,10 +1,9 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.drawable.Direction
 import battleships.esa.ffhs.ch.ui.drawable.Point
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
-import java.lang.Math.abs
 
 class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: MutableSet<Shot> = mutableSetOf()) {
 

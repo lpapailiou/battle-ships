@@ -1,18 +1,13 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.Shot
-import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
 class ShotPainter(
     context: Context, attributes: AttributeSet
@@ -64,6 +59,9 @@ class ShotPainter(
         val outerInsetWidth: Float = STROKE_WIDTH*2
         innerShotOval.inset(innerInsetWith,innerInsetWith)
         outerShotOval.inset(outerInsetWidth,outerInsetWidth)
+
+        // TODO: stroke size somehow not scaling yet
+
         if (shot.isHit) {
             if (shot.isDrawable()) {
                 canvas.drawOval(innerShotOval, shotInnerPaint)

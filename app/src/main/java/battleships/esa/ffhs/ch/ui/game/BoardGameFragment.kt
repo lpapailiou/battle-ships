@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.drawable.BoardMine
 import battleships.esa.ffhs.ch.ui.main.MainActivity
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import kotlinx.android.synthetic.main.board_game_fragment.*
 import kotlinx.android.synthetic.main.board_mine_fragment.*
 
@@ -20,9 +21,6 @@ import kotlinx.android.synthetic.main.board_mine_fragment.*
 class BoardGameFragment : Fragment() {
 
     var screenShot: ImageView? = null
-    var fragmentBoardMine: BoardMineFragment? = null
-    var fragmentBoardOther: BoardOtherFragment? = null
-    var activeFragment: BoardGameChildFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,30 +46,24 @@ class BoardGameFragment : Fragment() {
 
 
     private fun initGameFragments() {
-        fragmentBoardMine = BoardMineFragment()
-        fragmentBoardOther = BoardOtherFragment()
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_game_active) != null) {
-            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_active, fragmentBoardMine!!, "mine").commit()
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_active, BoardMineFragment(), "mine").commit()
         }
-        activeFragment = fragmentBoardMine
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_game_inactive) != null) {
-            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_inactive, fragmentBoardOther!!, "other").commit()
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_inactive, BoardOtherFragment(), "other").commit()
         }
     }
 
     // will be accessed as well from child fragments
     fun switchFragments() {
-        println("switch fragment")
-        if (activeFragment == fragmentBoardMine) {
-            println("switch fragment if")
-            boardMine.translationX
-            boardMine.scaleX = 20f
-            activeFragment = fragmentBoardOther
+        if (activeGame!!.isActivePlayerMe) {
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_active, BoardOtherFragment(), "other").commit()
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_inactive, BoardMineFragment(), "mine").commit()
+            activeGame!!.isActivePlayerMe = false
         } else {
-            println("switch fragment else")
-            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_active, fragmentBoardMine!!, "mine").commit()
-            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_inactive, fragmentBoardOther!!, "other").commit()
-            activeFragment = fragmentBoardMine
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_active, BoardMineFragment(), "mine").commit()
+            childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_inactive, BoardOtherFragment(), "other").commit()
+            activeGame!!.isActivePlayerMe = true
         }
     }
 
