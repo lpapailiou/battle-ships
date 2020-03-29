@@ -114,6 +114,7 @@ open class BoardViewModel : ViewModel() {
         }.toList()
     }
 
+    // TODO: unstable, should be refactored
     fun setShipsRandomly() {
         ships.forEach{s -> s.setRandomly()}
         var overlapList = getOverlappingShips()

@@ -66,6 +66,7 @@ class BoardMineViewModel : BoardViewModel() {
                 )
             )
             if (!success) {
+                // TODO: refactor, replace with bot (and more stable version)
                 randomShot()
             } else {
                 return true
