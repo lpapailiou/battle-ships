@@ -36,6 +36,8 @@ class ShipPainter(
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.FILL
             strokeWidth = STROKE_WIDTH
+            isAntiAlias = true
+            isDither = true
         }
     }
 

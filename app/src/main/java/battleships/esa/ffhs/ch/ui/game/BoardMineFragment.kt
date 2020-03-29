@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.game
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.main.MainActivity
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
+import kotlinx.android.synthetic.main.board_mine_fragment.*
 
 
 class BoardMineFragment : Fragment() {
@@ -18,6 +21,15 @@ class BoardMineFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.board_mine_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        boardMine.setOnClickListener {
+            if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                (parentFragment as BoardGameFragment).switchFragments()
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

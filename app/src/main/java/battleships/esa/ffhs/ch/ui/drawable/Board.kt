@@ -113,6 +113,8 @@ open class Board (
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.STROKE
             strokeWidth = Companion.STROKE_WIDTH
+            isAntiAlias = true
+            isDither = true
         }
     }
 
@@ -122,6 +124,8 @@ open class Board (
             color = Color.BLACK
             style = Paint.Style.STROKE
             strokeWidth = Companion.STROKE_WIDTH*6f
+            isAntiAlias = true
+            isDither = true
         }
     }
 }

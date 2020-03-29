@@ -33,6 +33,8 @@ class ShotPainter(
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.FILL
             strokeWidth = STROKE_WIDTH
+            isAntiAlias = true
+            isDither = true
         }
     }
 
@@ -41,6 +43,8 @@ class ShotPainter(
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.STROKE
             strokeWidth = STROKE_WIDTH/4
+            isAntiAlias = true
+            isDither = true
         }
     }
 
@@ -53,14 +57,14 @@ class ShotPainter(
         var endX = startX + gridWidth
         var endY = startY + gridWidth
 
+        var with = endX-startX
+
         var innerShotOval: RectF = RectF(startX, startY, endX, endY)
         var outerShotOval: RectF = RectF(startX, startY, endX, endY)
-        val innerInsetWith: Float = STROKE_WIDTH*5
-        val outerInsetWidth: Float = STROKE_WIDTH*2
+        val innerInsetWith: Float = with*0.3f
+        val outerInsetWidth: Float = with*0.15f
         innerShotOval.inset(innerInsetWith,innerInsetWith)
         outerShotOval.inset(outerInsetWidth,outerInsetWidth)
-
-        // TODO: stroke size somehow not scaling yet
 
         if (shot.isHit) {
             if (shot.isDrawable()) {

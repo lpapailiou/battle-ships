@@ -7,28 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".ui.game.BoardGameFragment">
 
-    <GridView
-        android:layout_width="303dp"
-        android:layout_height="303dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="59dp"
-        android:layout_marginEnd="400dp"
-        android:layout_marginBottom="50dp"
+    <FrameLayout
+        android:id="@+id/fragment_container_game_active"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="31dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/fragment_container_game_inactive"
+        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
-    <GridView
-        android:layout_width="303dp"
-        android:layout_height="303dp"
-        android:layout_marginStart="400dp"
-        android:layout_marginTop="58dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="50dp"
+    <FrameLayout
+        android:id="@+id/fragment_container_game_inactive"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="31dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_container_game_active"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.game
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.drawable.BoardMine
@@ -32,11 +34,7 @@ class BoardGameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // initialize child fragments depending on 'do we know you already'
         initGameFragments()
-        switchBoard.setOnClickListener {
-            switchFragments()
-        }
     }
 
     // fragment_container_game_active
@@ -56,6 +54,9 @@ class BoardGameFragment : Fragment() {
 
     // will be accessed as well from child fragments
     fun switchFragments() {
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return
+        }
         if (activeGame!!.isActivePlayerMe) {
             childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_active, BoardOtherFragment(), "other").commit()
             childFragmentManager.beginTransaction().replace(R.id.fragment_container_game_inactive, BoardMineFragment(), "mine").commit()

@@ -9,6 +9,7 @@ import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
+import kotlinx.android.synthetic.main.board_mine_fragment.*
 
 
 class BoardFragment : Fragment() {

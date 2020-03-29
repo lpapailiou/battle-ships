@@ -1,6 +1,7 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -28,7 +29,7 @@ class BoardMine(
         if (event == null || activeGame!!.state == GameState.ENDED) {
             return false
         }
-        if (!activeGame!!.isActivePlayerMe) {
+        if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
             return false
         }
 
