@@ -63,7 +63,6 @@ class BoardOtherViewModel : BoardViewModel() {
         }
         var refresh: Boolean = false
         var pointerPosition: Point = shot.point
-        println("opponent board shot at " + pointerPosition.toString())
         if (shots.filter{s -> s.point.equals(pointerPosition)}.count() > 0) {
             return false
         }
@@ -86,12 +85,12 @@ class BoardOtherViewModel : BoardViewModel() {
         }
         if (refresh && activeGame != null && activeGame!!.opponentBoardDrawable != null) {
             activeGame!!.opponentBoardDrawable!!.invalidate()
+            activeGame!!.opponentBoardDrawable!!.endGameCheck()
             return true
         }
         return false
     }
 
-    // TODO: trigger on refresh
     fun shipInvalidPositionValidityCheck(): Boolean {
         var changed = false
         var overlapList = getOverlappingShips()

@@ -75,7 +75,7 @@ open class Board (
 
     // ----------------------------- end game check -----------------------------
 
-    protected open fun endGameCheck(): Boolean {
+    open fun endGameCheck(): Boolean {
         if (boardModel!!.endGameCheck()) {
             var gameResult = boardModel!!.getGameResult()
             CustomDialog().showEndGameDialog(context, gameResult)

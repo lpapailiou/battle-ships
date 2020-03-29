@@ -48,6 +48,7 @@ class BoardMine(
         if (handled) {
             invalidate()
         }
+        endGameCheck()
         return super.onTouchEvent(event) || handled
     }
 

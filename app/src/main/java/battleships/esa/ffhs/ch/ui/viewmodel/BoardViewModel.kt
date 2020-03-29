@@ -71,7 +71,6 @@ open class BoardViewModel : ViewModel() {
             ship!!.hit(shot)
         }
         shots.add(shot)
-        endGameCheck()
     }
 
     fun getOverlappingShips(): List<ShipViewModel> {
