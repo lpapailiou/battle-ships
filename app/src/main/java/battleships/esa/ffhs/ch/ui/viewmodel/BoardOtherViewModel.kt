@@ -80,8 +80,6 @@ class BoardOtherViewModel : BoardViewModel() {
                 hit(shot)
                 refresh = true
             }
-
-
         }
         if (refresh && activeGame != null && activeGame!!.opponentBoardDrawable != null) {
             activeGame!!.opponentBoardDrawable!!.invalidate()

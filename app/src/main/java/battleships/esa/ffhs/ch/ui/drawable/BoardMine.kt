@@ -27,7 +27,7 @@ class BoardMine(
     // ----------------------------- ship handling -----------------------------
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event == null || activeGame!!.state == GameState.ENDED) {
+        if (event == null || (event != null && activeGame!!.state == GameState.ENDED)) {
             return false
         }
         if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {

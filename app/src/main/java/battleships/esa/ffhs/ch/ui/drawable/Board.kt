@@ -96,7 +96,7 @@ open class Board (
         if (boardModel!!.endGameCheck() && activeGame!!.state != GameState.ENDED) {
             var gameResult = boardModel!!.getGameResult()
             CustomDialog().showEndGameDialog(context, gameResult)
-            activeGame!!.state == GameState.ENDED
+            activeGame!!.state = GameState.ENDED
             vibrate()
         }
         return false
