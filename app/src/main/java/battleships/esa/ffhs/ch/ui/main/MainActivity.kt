@@ -1,6 +1,10 @@
 package battleships.esa.ffhs.ch.ui.main
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem

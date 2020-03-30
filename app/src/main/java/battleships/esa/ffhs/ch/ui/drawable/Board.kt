@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -18,6 +19,8 @@ import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
+import kotlinx.android.synthetic.main.board_game_fragment.view.*
+import kotlinx.android.synthetic.main.main_activity.view.*
 import androidx.core.content.ContextCompat.getSystemService as getSystemService1
 
 open class Board (
@@ -30,7 +33,6 @@ open class Board (
     }
 
     var boardModel: BoardViewModel? = null
-    var opponentBoardDrawable: Board? = null
 
     val shipPainter: ShipPainter
     val shotPainter: ShotPainter
@@ -77,7 +79,7 @@ open class Board (
         return super.onTouchEvent(event)
     }
 
-    // ----------------------------- enable vibrations for shots -----------------------------
+    // ----------------------------- enable vibrations -----------------------------
 
     open fun vibrate() {
         val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator

@@ -31,16 +31,6 @@ class ShipPainter(
         hiddenPaint = initPaint(R.color.colorPrimaryDark)       // TODO: switch to black later. shlightly visible now for easier testing
     }
 
-    private fun initPaint(id: Int): Paint {
-        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, id)
-            style = Paint.Style.FILL
-            strokeWidth = STROKE_WIDTH
-            isAntiAlias = true
-            isDither = true
-        }
-    }
-
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
@@ -84,6 +74,18 @@ class ShipPainter(
             canvas.drawOval(oval, paint)
         } else {
             canvas.drawOval(oval, errPaint)
+        }
+    }
+
+    // ----------------------------- create paints -----------------------------
+
+    private fun initPaint(id: Int): Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, id)
+            style = Paint.Style.FILL
+            strokeWidth = STROKE_WIDTH
+            isAntiAlias = true
+            isDither = true
         }
     }
 }

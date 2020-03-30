@@ -7,35 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.game.BoardGameFragment">
 
-
-    <!--
-    <fragment
-        android:id="@+id/other_fragment"
-        android:name="battleships.esa.ffhs.ch.ui.game.BoardOtherFragment"
-        android:layout_width="304dp"
-        android:layout_height="272dp"
-        android:layout_marginStart="54dp"
-        android:layout_marginTop="114dp"
-        android:layout_marginEnd="53dp"
-        android:layout_marginBottom="27dp"
-        app:layout_constraintBottom_toTopOf="@+id/mine_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <fragment
-        android:id="@+id/mine_fragment"
-        android:name="battleships.esa.ffhs.ch.ui.game.BoardMineFragment"
-        android:layout_width="303dp"
-        android:layout_height="270dp"
-        android:layout_marginStart="54dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="54dp"
-        app:layout_constraintBottom_toTopOf="@+id/switchBoard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/other_fragment" />-->
-
     <FrameLayout
         android:id="@+id/fragment_container_game_active"
         android:layout_width="350dp"

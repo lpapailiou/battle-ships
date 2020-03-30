@@ -22,30 +22,9 @@ class ShotPainter(
     val shotOuterPaint: Paint
 
     init {
-        //waterPaint = initPaint(R.color.colorAccent)
         waterPaint = initLinePaint(R.color.colorAccent)
         shotInnerPaint = initPaint(R.color.colorComplementary)
         shotOuterPaint = initLinePaint(R.color.colorComplementary)
-    }
-
-    private fun initPaint(id: Int): Paint {
-        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, id)
-            style = Paint.Style.FILL
-            strokeWidth = STROKE_WIDTH
-            isAntiAlias = true
-            isDither = true
-        }
-    }
-
-    private fun initLinePaint(id: Int): Paint {
-        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = ContextCompat.getColor(context, id)
-            style = Paint.Style.STROKE
-            strokeWidth = STROKE_WIDTH/4
-            isAntiAlias = true
-            isDither = true
-        }
     }
 
     fun draw(shot: Shot, canvas: Canvas) {
@@ -87,6 +66,28 @@ class ShotPainter(
         }
         for(i in yList) {
             canvas.drawLine(startX, i, endX, i, waterPaint)
+        }
+    }
+
+    // ----------------------------- create paints -----------------------------
+
+    private fun initPaint(id: Int): Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, id)
+            style = Paint.Style.FILL
+            strokeWidth = STROKE_WIDTH
+            isAntiAlias = true
+            isDither = true
+        }
+    }
+
+    private fun initLinePaint(id: Int): Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, id)
+            style = Paint.Style.STROKE
+            strokeWidth = STROKE_WIDTH/4
+            isAntiAlias = true
+            isDither = true
         }
     }
 }
