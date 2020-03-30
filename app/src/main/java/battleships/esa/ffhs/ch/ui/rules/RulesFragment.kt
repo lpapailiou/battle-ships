@@ -1,15 +1,14 @@
-package battleships.esa.ffhs.ch.ui.main
+package battleships.esa.ffhs.ch.ui.rules
 
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.databinding.adapters.TextViewBindingAdapter
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.ui.main.MainActivity
 
 
 class RulesFragment : Fragment() {

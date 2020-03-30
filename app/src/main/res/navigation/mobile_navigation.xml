@@ -19,9 +19,6 @@
         <action
             android:id="@+id/action_mainFragment_to_settings_fragment"
             app:destination="@id/settings_fragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_rules_fragment"
-            app:destination="@id/rules_fragment" />
     </fragment>
 
     <fragment
@@ -41,7 +38,7 @@
         tools:layout="@layout/settings_fragment" />
     <fragment
         android:id="@+id/rules_fragment"
-        android:name="battleships.esa.ffhs.ch.ui.main.RulesFragment"
+        android:name="battleships.esa.ffhs.ch.ui.rules.RulesFragment"
         android:label="Rules"
         tools:layout="@layout/rules_fragment" />
 </navigation>
