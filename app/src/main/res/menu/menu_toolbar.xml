@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar">
 
     <item
         android:id="@+id/settings_fragment"
         android:icon="@drawable/ic_settings"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/main_fragment"
-        android:icon="@drawable/ic_home"
-        android:title="Home screen">
-    </item>
+        android:title="@string/control_bridge" />
 
     <item
         android:id="@+id/board_fragment"
-        android:icon="@drawable/ic_boat"
-        android:title="Current game" />
+        android:title="@string/current_game" />
 
     <item
         android:id="@+id/score_fragment"
-        android:icon="@drawable/ic_star"
-        android:title="Scores" />
-    <!--app:showAsAction="ifRoom" -->
-    <!--app:showAsAction="always" -->
+        android:title="@string/scores" />
 
-
+    <item
+        android:id="@+id/rules_fragment"
+        android:title="@string/Rules" />
 </menu>

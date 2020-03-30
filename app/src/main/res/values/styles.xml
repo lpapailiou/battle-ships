@@ -6,26 +6,35 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorOnSurface">#0a2a00</item>
-        <!-- <item name="android:windowBackground">@color/colorBackground</item> black background -->
+        <item name="colorOnSurface">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorAccent</item>
+
+        <!-- background image: sonar grid -->
+        <item name="android:windowBackground">@drawable/sonar_grid</item>
+
+        <!-- button styles -->
         <item name="android:buttonStyle">@style/ButtonStyle</item>
-        <item name="android:windowBackground">@drawable/sonar_grid</item> <!--    background image: sonar grid -->
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="colorOnPrimary">@color/colorAccent</item>  <!-- button text color -->
 
+        <!-- toolbar styles -->
+        <item name="theme">@style/ToolBarTextTheme</item>
+        <item name="popupMenuBackground">@color/colorPrimary</item>
+
+        <!-- error styles -->
+        <item name="colorError">@color/colorComplementary</item>
+        <item name="colorOnError">@color/colorComplementary</item>
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+    <!-- #################### helper styles #################### -->
+
+    <style name="ToolBarTextTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/colorAccent</item>
-        <item name="android:background">@color/colorPrimary</item>
     </style>
 
-    <style name="ButtonStyle" parent="@android:style/Widget.Button">
-        <item name="android:layout_width">fill_parent</item>
+    <style name="ButtonStyle" parent="android:Widget.Button">
         <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:padding">8dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:gravity">center</item>

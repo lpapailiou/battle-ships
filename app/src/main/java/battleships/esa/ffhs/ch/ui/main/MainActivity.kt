@@ -2,41 +2,44 @@ package battleships.esa.ffhs.ch.ui.main
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
 import kotlinx.android.synthetic.main.main_activity.*
 
+// https://material.io/resources/icons/?icon=directions_boat&style=baseline
+
 class MainActivity : AppCompatActivity() {
+
+    // temporary global variable to check if user is logged in for the first time
+    companion object {
+        var isFirstLogin: Boolean = true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.main_activity)
-            setSupportActionBar(toolbar)
-
-            /*if (savedInstanceState == null) { // blocks navigation
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
-            }*/
 
             val navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment
             )
+
             setupActionBar(navController)
+
         } catch (e: Exception) {
             println(e.stackTrace)
         }
     }
 
+    // ----------------------------- navigation -----------------------------
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationIcon(null)
+        val inflater: MenuInflater = menuInflater
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true
     }
