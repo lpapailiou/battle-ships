@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import battleships.esa.ffhs.ch.ui.drawable.Board
 import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.drawable.Point
@@ -24,7 +25,7 @@ class BoardMineViewModel : BoardViewModel() {
         return false
     }
 
-    override fun clickAction(pointerPosition: Point): Boolean {
+    override fun clickAction(pointerPosition: Point, board: Board): Boolean {
         var handled = false
 
         var shot = Shot(pointerPosition, null)
@@ -37,6 +38,7 @@ class BoardMineViewModel : BoardViewModel() {
 
         if (currentShip != null) {
             hit(currentShip!!, shot)
+            board.vibrate()
             currentShip = null
         } else {
             hit(shot)

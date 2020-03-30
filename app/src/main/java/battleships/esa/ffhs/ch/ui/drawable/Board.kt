@@ -4,16 +4,21 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.game.BoardGameFragment
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
+import androidx.core.content.ContextCompat.getSystemService as getSystemService1
 
 open class Board (
     context: Context, attributes: AttributeSet
@@ -72,13 +77,27 @@ open class Board (
         return super.onTouchEvent(event)
     }
 
+    // ----------------------------- enable vibrations for shots -----------------------------
+
+    open fun vibrate() {
+        val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                vibrator.vibrate(200)
+            }
+        }
+    }
+
     // ----------------------------- end game check -----------------------------
 
     open fun endGameCheck(): Boolean {
-        if (boardModel!!.endGameCheck()) {
+        if (boardModel!!.endGameCheck() && activeGame!!.state != GameState.ENDED) {
             var gameResult = boardModel!!.getGameResult()
             CustomDialog().showEndGameDialog(context, gameResult)
             activeGame!!.state == GameState.ENDED
+            vibrate()
         }
         return false
     }

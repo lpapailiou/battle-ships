@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.findFragment
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.game.BoardGameFragment
@@ -44,7 +45,7 @@ class BoardMine(
             return handled
         }
 
-        handled = boardModel!!.clickAction(pointerPosition)
+        handled = boardModel!!.clickAction(pointerPosition, this)
         if (handled) {
             invalidate()
         }

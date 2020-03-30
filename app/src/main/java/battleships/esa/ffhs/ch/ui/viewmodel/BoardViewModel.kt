@@ -1,7 +1,13 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import battleships.esa.ffhs.ch.ui.drawable.Board
 import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.drawable.Direction
 import battleships.esa.ffhs.ch.ui.drawable.Point
@@ -52,6 +58,10 @@ open class BoardViewModel : ViewModel() {
     }
 
     open fun clickAction(pointerPosition: Point): Boolean {
+        return false
+    }
+
+    open fun clickAction(pointerPosition: Point, board: Board): Boolean {
         return false
     }
 
