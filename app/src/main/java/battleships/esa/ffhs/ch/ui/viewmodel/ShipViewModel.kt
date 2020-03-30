@@ -15,26 +15,45 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         updatePoints()
     }
 
-    fun hide() {
-        isHidden = true
+    // ----------------------------- ship body location handling -----------------------------
+
+    fun getPoint(): Point {
+        return position
     }
 
-    fun hit (shot: Shot) {
-        hits.add(shot)
-        isSunk()
+    fun getPoints(): MutableList<Point> {
+        return posPoints
     }
-    fun isHidden(): Boolean {
-        return isHidden
-    }
-    fun isSunk(): Boolean {
-        var isSunk = hits.size == posPoints.size
-        if (isSunk) {
-            hits.forEach { h -> h.undraw() }
-            isHidden = false
+
+    fun updatePoints() {
+        posPoints.clear()
+        posPoints.add(position)
+        for (i in 1..size-1) {
+            posPoints.add(Point(position.col + i*direction.getNextX(), position.row+i*direction.getNextY()))
         }
-        return isSunk
     }
 
+    // ----------------------------- get ship -----------------------------
+
+    fun getShip(p: Point): ShipViewModel? {
+        if (isHere(p)) {
+            return this
+        }
+        return null
+    }
+
+    fun isHere(p: Point): Boolean {
+        for (point in posPoints) {
+            if (p.equals(point)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    // ----------------------------- ship location actions -----------------------------
+
+    // TODO: probably better to refactor
     fun setRandomly() {
         position = position.getRandom()
         direction = direction.getRandom()
@@ -42,13 +61,6 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         if (!isShipOnBoard()) {
             setRandomly()
         }
-    }
-
-    fun getShip(p: Point): ShipViewModel? {
-        if (isHere(p)) {
-            return this
-        }
-        return null
     }
 
     fun set(p: Point) {
@@ -69,13 +81,32 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         updatePoints()
     }
 
-    fun getOffset(p: Point):Point {
-        return Point(p.col - position.col, p.row - position.row)
+    // ----------------------------- hit handling -----------------------------
+
+    fun hit (shot: Shot) {
+        hits.add(shot)
+        isSunk()
     }
 
+    fun isSunk(): Boolean {
+        var isSunk = hits.size == posPoints.size
+        if (isSunk) {
+            hits.forEach { h -> h.undraw() }
+            isHidden = false
+        }
+        return isSunk
+    }
 
-    fun getPoints(): MutableList<Point> {
-        return posPoints
+    // ----------------------------- positioning and check helper methods -----------------------------
+
+    fun isShipOnBoard(): Boolean {
+        var isOnBoard = true
+        for (p in posPoints) {
+            if (!p.isValid()) {
+                isOnBoard = false
+            }
+        }
+        return isOnBoard
     }
 
     fun getOverlapArea(): MutableList<Point> {
@@ -96,18 +127,7 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         return posPoints
     }
 
-    fun getPoint(): Point {
-        return position
-    }
-
-    fun updatePoints() {
-        posPoints.clear()
-        posPoints.add(position)
-        for (i in 1..size-1) {
-            posPoints.add(Point(position.col + i*direction.getNextX(), position.row+i*direction.getNextY()))
-        }
-    }
-
+    // TODO: check if can be replaced with getOffset method
     fun getIndex(p:Point): Int {
         var pos: Point = position
         var index: Int = 0
@@ -122,23 +142,19 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
         return -1
     }
 
-    fun isHere(p: Point): Boolean {
-        for (point in posPoints) {
-            if (p.equals(point)) {
-                return true
-            }
-        }
-        return false
+    // used for more intuitive moving
+    fun getOffset(p: Point):Point {
+        return Point(p.col - position.col, p.row - position.row)
     }
 
-    fun isShipOnBoard(): Boolean {
-        var isOnBoard = true
-        for (p in posPoints) {
-            if (!p.isValid()) {
-                isOnBoard = false
-            }
-        }
-        return isOnBoard
+    // ----------------------------- generic getters and setters -----------------------------
+
+    fun hide() {
+        isHidden = true
+    }
+
+    fun isHidden(): Boolean {
+        return isHidden
     }
 
     fun isPositionValid(): Boolean {

@@ -48,7 +48,6 @@ open class Board (
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        // TODO: adjustment issue - board seems to be too large on real device. check if widht is actual fragment width
         gridWidth = (w.toFloat() / BOARD_SIZE)
     }
 
