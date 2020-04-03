@@ -17,7 +17,7 @@
         <item name="colorOnPrimary">@color/colorAccent</item>  <!-- button text color -->
 
         <!-- toolbar styles -->
-        <item name="theme">@style/ToolBarTextTheme</item>
+        <item name="android:theme">@style/ToolBarTextTheme</item>
         <item name="popupMenuBackground">@color/colorPrimary</item>
 
         <!-- error styles -->
