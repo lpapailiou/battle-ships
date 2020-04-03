@@ -32,8 +32,8 @@ class ShipPainter(
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shipViewModel.bowCell.col
-        var startY = gridWidth * shipViewModel.bowCell.row
+        var startX = gridWidth * shipViewModel.bowCell.x
+        var startY = gridWidth * shipViewModel.bowCell.y
 
         var endX: Float = 0f
         var endY: Float = 0f

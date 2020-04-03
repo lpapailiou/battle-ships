@@ -27,7 +27,7 @@ class ShipViewModel(
         shipCells.clear()
         shipCells.add(bowCell)
         for (i in 1 until size) {
-            shipCells.add(Cell(bowCell.col + i * direction.x, bowCell.row + i * direction.y))
+            shipCells.add(Cell(bowCell.x + i * direction.x, bowCell.y + i * direction.y))
         }
     }
 
@@ -66,14 +66,14 @@ class ShipViewModel(
     }
 
     fun set(p: Cell, offset: Cell) {
-        set(Cell(p.col - offset.col, p.row - offset.row))
+        set(Cell(p.x - offset.x, p.y - offset.y))
     }
 
     fun rotate(p: Cell) {
         val index = getIndex(p)
 
         direction = direction.getNextClockwiseNondiagonalDirection()
-        bowCell = Cell(p.col - (direction.x * index), p.row - (direction.y * index))
+        bowCell = Cell(p.x - (direction.x * index), p.y - (direction.y * index))
         updateCells()
     }
 
@@ -135,14 +135,14 @@ class ShipViewModel(
             if (pos.equals(p)) {
                 return index
             }
-            pos = Cell(pos.col + direction.x, pos.row + direction.y)
+            pos = Cell(pos.x + direction.x, pos.y + direction.y)
         }
         return -1
     }
 
     // used for more intuitive moving
     fun getOffset(p: Cell): Cell {
-        return Cell(p.col - bowCell.col, p.row - bowCell.row)
+        return Cell(p.x - bowCell.x, p.y - bowCell.y)
     }
 
     // ----------------------------- generic getters and setters -----------------------------
