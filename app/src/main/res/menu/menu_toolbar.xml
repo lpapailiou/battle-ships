@@ -21,5 +21,7 @@
         android:id="@+id/score_fragment"
         android:title="@string/scores" />
 
-
+    <item
+        android:id="@+id/rules_fragment"
+        android:title="@string/Rules" />
 </menu>

@@ -39,4 +39,9 @@
         android:name="battleships.esa.ffhs.ch.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/rules_fragment"
+        android:name="battleships.esa.ffhs.ch.ui.rules.RulesFragment"
+        android:label="Rules"
+        tools:layout="@layout/rules_fragment" />
 </navigation>
