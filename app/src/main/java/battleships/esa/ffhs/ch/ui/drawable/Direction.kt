@@ -12,33 +12,30 @@ enum class Direction(val tag: String, val x: Int, val y: Int) {
     DOWN_RIGHT("DOWN_RIGHT", 1, 1),
     DOWN_LEFT("DOWN_LEFT", -1, 1);
 
-    fun getNextX(): Int {
-        return x
-    }
-    fun getNextY(): Int {
-        return y
-    }
-
-    fun getNext(): Direction {
-        if (this == UP) {
-            return RIGHT
-        } else if (this == RIGHT) {
-            return DOWN
-        } else if (this == DOWN) {
-            return LEFT
-        } else if (this == LEFT) {
-            return UP
+    fun getNextClockwiseNondiagonalDirection(): Direction {
+        return when {
+            this == UP -> {
+                RIGHT
+            }
+            this == RIGHT -> {
+                DOWN
+            }
+            this == DOWN -> {
+                LEFT
+            }
+            this == LEFT -> {
+                UP
+            }
+            else -> this
         }
-        return this
     }
 
-    fun getOpposite(): Direction {
-        return this.getNext().getNext()
+    fun getOppositeDirection(): Direction {
+        return this.getNextClockwiseNondiagonalDirection().getNextClockwiseNondiagonalDirection()
     }
 
-    fun getRandom():Direction {
-        var directions:List<Direction> = listOf(UP, DOWN, LEFT, RIGHT)
-        return directions[(0..3).shuffled().first()]
+    fun getRandomDirection(): Direction {
+        return listOf(UP, DOWN, LEFT, RIGHT).random()
     }
 
 }

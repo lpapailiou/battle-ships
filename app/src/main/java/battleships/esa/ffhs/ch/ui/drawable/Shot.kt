@@ -2,7 +2,7 @@ package battleships.esa.ffhs.ch.ui.drawable
 
 import battleships.esa.ffhs.ch.entity.Player
 
-data class Shot(val point: Point, val player: Player?) {
+data class Shot(val cell: Cell, val player: Player?) {
 
     var isHit = false
     var drawable: Boolean = true

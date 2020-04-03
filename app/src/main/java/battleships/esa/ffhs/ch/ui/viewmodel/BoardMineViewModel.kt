@@ -1,9 +1,9 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
 import battleships.esa.ffhs.ch.ui.drawable.Board
+import battleships.esa.ffhs.ch.ui.drawable.Cell
 import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.drawable.Shot
-import battleships.esa.ffhs.ch.ui.drawable.Point
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 class BoardMineViewModel : BoardViewModel() {
@@ -11,30 +11,26 @@ class BoardMineViewModel : BoardViewModel() {
     fun lateInit() {
         ships = initShips()
         setShipsRandomly()
-        ships.forEach {it.hide()}
+        ships.forEach { it.hide() }
         currentShip = null
     }
 
     // ----------------------------- handle click action from UI -----------------------------
 
-    override fun repeatClickCheck(pointerPosition: Point): Boolean {
-        return (shots.filter{s -> s.point.equals(pointerPosition)}.count() > 0)
+    override fun repeatClickCheck(pointerPosition: Cell): Boolean {
+        return (shots.filter { s -> s.cell == pointerPosition }.count() > 0)
     }
 
-    override fun identifyShip(pointerPosition: Point): Boolean {
+    override fun identifyShip(pointerPosition: Cell): Boolean {
         return false
     }
 
-    override fun clickAction(pointerPosition: Point, board: Board): Boolean {
+    override fun clickAction(pointerPosition: Cell, board: Board): Boolean {
         var handled = false
 
         var shot = Shot(pointerPosition, null)
 
-        for (ship in ships) {
-            if (ship.isHere(pointerPosition)) {
-                currentShip = ship.getShip(pointerPosition)
-            }
-        }
+        currentShip = findShipAtPosition(pointerPosition)
 
         if (currentShip != null) {
             hit(currentShip!!, shot)
@@ -52,7 +48,18 @@ class BoardMineViewModel : BoardViewModel() {
         return handled
     }
 
-    override fun moveAction(pointerPosition: Point): Boolean {
+    fun findShipAtPosition(position: Cell): ShipViewModel? {
+        for (ship in ships) {
+            if (ship.isCellOnShip(position)) {
+
+                return ship
+            }
+        }
+
+        return null
+    }
+
+    override fun moveAction(pointerPosition: Cell): Boolean {
         var handled = false
         return handled
     }
@@ -63,7 +70,7 @@ class BoardMineViewModel : BoardViewModel() {
         if (activeGame!!.opponentBoard != null && activeGame!!.state != GameState.ENDED) {
             var success = activeGame!!.opponentBoard!!.shoot(
                 Shot(
-                    Point(0, 0).getRandom(),
+                    Cell(0, 0).getRandomCell(),
                     null
                 )
             )

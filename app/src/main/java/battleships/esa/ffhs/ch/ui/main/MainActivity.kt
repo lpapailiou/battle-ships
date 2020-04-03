@@ -1,10 +1,6 @@
 package battleships.esa.ffhs.ch.ui.main
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,9 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.ui.drawable.BoardOpponent
 import battleships.esa.ffhs.ch.ui.drawable.Game
-import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 import kotlinx.android.synthetic.main.main_activity.*
 
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline
@@ -23,8 +17,10 @@ import kotlinx.android.synthetic.main.main_activity.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        var isFirstLogin: Boolean = true        // temporary global variable to check if user is logged in for the first time
-        var strictOverlapRule = true            // positioned ships are valid when there is space of 1 cell between ships if true; if false, no extra gap is needed
+        var isFirstLogin: Boolean =
+            true        // temporary global variable to check if user is logged in for the first time
+        var strictOverlapRule =
+            true            // positioned ships are valid when there is space of 1 cell between ships if true; if false, no extra gap is needed
         var activeGame: Game? = null
     }
 
@@ -33,7 +29,8 @@ class MainActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.main_activity)
 
-            val navController = Navigation.findNavController(this,
+            val navController = Navigation.findNavController(
+                this,
                 R.id.nav_host_fragment
             )
 
@@ -53,7 +50,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val navController = Navigation.findNavController(this,
+        val navController = Navigation.findNavController(
+            this,
             R.id.nav_host_fragment
         )
         val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
@@ -61,7 +59,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = Navigation.findNavController(this,
+        val navController = Navigation.findNavController(
+            this,
             R.id.nav_host_fragment
         )
         return navController.navigateUp()

@@ -30,8 +30,8 @@ class ShotPainter(
     fun draw(shot: Shot, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shot.point.col
-        var startY = gridWidth * shot.point.row
+        var startX = gridWidth * shot.cell.col
+        var startY = gridWidth * shot.cell.row
 
         var endX = startX + gridWidth
         var endY = startY + gridWidth

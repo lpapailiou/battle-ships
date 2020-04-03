@@ -30,7 +30,7 @@ class BoardPreparationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // triggered when game is supposed to start. will change the state of the game and navigate to the actual game fragment
-        startgame_button.setOnClickListener{
+        startgame_button.setOnClickListener {
             if (preparationBoard.validateStart()) {
                 activeGame!!.state = GameState.ACTIVE
                 (parentFragment as BoardFragment).switchToGameFragment()
@@ -40,7 +40,7 @@ class BoardPreparationFragment : Fragment() {
         }
     }
 
-    private fun showSnackBar(view:View) {
+    private fun showSnackBar(view: View) {
         val snackbar = Snackbar.make(view, "board must be in valid state", 1000)
         snackbar.setBackgroundTint(ContextCompat.getColor(view.context, R.color.colorComplementary))
         snackbar.show()

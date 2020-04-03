@@ -1,50 +1,48 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import battleships.esa.ffhs.ch.ui.drawable.Shot
+import battleships.esa.ffhs.ch.ui.drawable.Cell
 import battleships.esa.ffhs.ch.ui.drawable.Direction
-import battleships.esa.ffhs.ch.ui.drawable.Point
+import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
 
-class ShipViewModel(val id : Int, var position: Point, val size: Int, var direction: Direction, val hits: MutableSet<Shot> = mutableSetOf()) {
+class ShipViewModel(
+    val id: Int,
+    var bowCell: Cell,
+    val size: Int,
+    var direction: Direction,
+    val hits: MutableSet<Shot> = mutableSetOf()
+) {
 
     private var isPositionValid = true
     private var isHidden = false
-    var posPoints: MutableList<Point> = mutableListOf<Point>()
+    var shipCells: MutableList<Cell> = mutableListOf<Cell>()
 
     init {
-        updatePoints()
+        updateCells()
     }
 
     // ----------------------------- ship body location handling -----------------------------
 
-    fun getPoint(): Point {
-        return position
-    }
-
-    fun getPoints(): MutableList<Point> {
-        return posPoints
-    }
-
-    fun updatePoints() {
-        posPoints.clear()
-        posPoints.add(position)
-        for (i in 1..size-1) {
-            posPoints.add(Point(position.col + i*direction.getNextX(), position.row+i*direction.getNextY()))
+    fun updateCells() {
+        shipCells.clear()
+        shipCells.add(bowCell)
+        for (i in 1 until size) {
+            shipCells.add(Cell(bowCell.col + i * direction.x, bowCell.row + i * direction.y))
         }
     }
 
     // ----------------------------- get ship -----------------------------
 
-    fun getShip(p: Point): ShipViewModel? {
-        if (isHere(p)) {
+    fun getShip(p: Cell): ShipViewModel? {
+        if (isCellOnShip(p)) {
             return this
         }
         return null
     }
 
-    fun isHere(p: Point): Boolean {
-        for (point in posPoints) {
-            if (p.equals(point)) {
+    fun isCellOnShip(cellToFind: Cell): Boolean {
+        for (shipCell in shipCells) {
+            if (cellToFind.equals(shipCell)) {
                 return true
             }
         }
@@ -55,96 +53,96 @@ class ShipViewModel(val id : Int, var position: Point, val size: Int, var direct
 
     // TODO: probably better to refactor
     fun setRandomly() {
-        position = position.getRandom()
-        direction = direction.getRandom()
-        updatePoints()
-        if (!isShipOnBoard()) {
-            setRandomly()
-        }
+        do {
+            bowCell = bowCell.getRandomCell()
+            direction = direction.getRandomDirection()
+            updateCells()
+        } while (!isShipCompletelyOnBoard())
     }
 
-    fun set(p: Point) {
-        position = p
-        updatePoints()
+    fun set(p: Cell) {
+        bowCell = p
+        updateCells()
     }
 
-    fun set(p: Point, offset: Point) {
-        set(Point(p.col-offset.col, p.row-offset.row))
+    fun set(p: Cell, offset: Cell) {
+        set(Cell(p.col - offset.col, p.row - offset.row))
     }
 
-    fun rotate(p: Point) {
-        var siz = size-1
-        var index = getIndex(p)
+    fun rotate(p: Cell) {
+        val index = getIndex(p)
 
-        direction = direction.getNext()
-        position = Point(p.col-(direction.getNextX() * index), p.row-(direction.getNextY() * index))
-        updatePoints()
+        direction = direction.getNextClockwiseNondiagonalDirection()
+        bowCell = Cell(p.col - (direction.x * index), p.row - (direction.y * index))
+        updateCells()
     }
 
     // ----------------------------- hit handling -----------------------------
 
-    fun hit (shot: Shot) {
+    fun hit(shot: Shot) {
         hits.add(shot)
-        isSunk()
+        isSunken()
     }
 
-    fun isSunk(): Boolean {
-        var isSunk = hits.size == posPoints.size
-        if (isSunk) {
-            hits.forEach { h -> h.undraw() }
+    fun isSunken(): Boolean {
+        val isSunken = hits.size == shipCells.size
+        if (isSunken) {
+            hits.forEach { h -> h.undraw() } // TODO: @lena, so gsehtme doch gar nimm, dass da s schiff versenkt isch, und dänkt me heig dert eifach no gar nie häregschosse?
             isHidden = false
         }
-        return isSunk
+        return isSunken
     }
 
     // ----------------------------- positioning and check helper methods -----------------------------
 
-    fun isShipOnBoard(): Boolean {
-        var isOnBoard = true
-        for (p in posPoints) {
+    fun isShipCompletelyOnBoard(): Boolean {
+        for (p in shipCells) {
             if (!p.isValid()) {
-                isOnBoard = false
+                return false
             }
         }
-        return isOnBoard
+        return true
     }
 
-    fun getOverlapArea(): MutableList<Point> {
+    /**
+     * Returns all Cells which are occupied / taken by the current ship. These are all cells where
+     * there must not be another ship.
+     */
+    fun getOccupiedCells(): HashSet<Cell> {
         if (strictOverlapRule) {
-            var posAreaPoints: MutableList<Point> = mutableListOf<Point>()
-            var dirs: Array<Direction> = Direction.values()
-            posAreaPoints.addAll(posPoints)
-            posPoints.forEach { p ->
-                dirs.forEach { d ->
-                    var point: Point = Point(p.col+d.getNextX(), p.row+d.getNextY())
-                    if (!posAreaPoints.contains(point)) {
-                        posAreaPoints.add(point)
-                    }
-                }
+            val occupiedCells: HashSet<Cell> = linkedSetOf()
+            occupiedCells.addAll(shipCells)
+            shipCells.forEach { shipCell ->
+                occupiedCells.addAll(shipCell.getSurroundingCells())
             }
-            return posAreaPoints
+            return occupiedCells
         }
-        return posPoints
+        throw NotImplementedError("The game mode without strict overlapping rule has not been implemented yet!")
+    }
+
+    fun isWithinOccupiedAreaOfOtherShip(otherShip: ShipViewModel): Boolean {
+        val occupiedArea = otherShip.getOccupiedCells()
+        val otherShipCells = otherShip.shipCells
+
+        return occupiedArea.intersect(shipCells).isNotEmpty()
     }
 
     // TODO: check if can be replaced with getOffset method
-    fun getIndex(p:Point): Int {
-        var pos: Point = position
-        var index: Int = 0
+    fun getIndex(p: Cell): Int {
+        var pos: Cell = bowCell
 
-        for (i in 0..size-1) {
+        for ((index, i) in (0 until size).withIndex()) {
             if (pos.equals(p)) {
                 return index
             }
-            pos = Point(pos.col+direction.getNextX(), pos.row+direction.getNextY())
-            index++
+            pos = Cell(pos.col + direction.x, pos.row + direction.y)
         }
         return -1
     }
 
     // used for more intuitive moving
-    fun getOffset(p: Point):Point {
-        return Point(p.col - position.col, p.row - position.row)
+    fun getOffset(p: Cell): Cell {
+        return Cell(p.col - bowCell.col, p.row - bowCell.row)
     }
 
     // ----------------------------- generic getters and setters -----------------------------

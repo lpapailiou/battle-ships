@@ -1,9 +1,8 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import android.app.Application
+import battleships.esa.ffhs.ch.ui.drawable.Cell
 import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.drawable.Shot
-import battleships.esa.ffhs.ch.ui.drawable.Point
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 class BoardOtherViewModel() : BoardViewModel() {
@@ -20,36 +19,35 @@ class BoardOtherViewModel() : BoardViewModel() {
 
     // ----------------------------- handle click action from UI -----------------------------
 
-    override fun repeatClickCheck(pointerPosition: Point): Boolean {
+    override fun repeatClickCheck(pointerPosition: Cell): Boolean {
         return false
     }
 
-    override fun identifyShip(pointerPosition: Point): Boolean {
-        var handled = false
+    override fun identifyShip(pointerPosition: Cell): Boolean {
         if (currentShip != null) {
-            handled = true
+            return true
         }
         for (ship in ships) {
-            if (ship.isHere(pointerPosition) && currentShip == null) {
+            if (ship.isCellOnShip(pointerPosition) && currentShip == null) {
                 currentShip = ship.getShip(pointerPosition)
                 offset = currentShip!!.getOffset(pointerPosition)
-                handled = true
+                return true
             }
         }
-        return handled
+        return false
     }
 
-    override fun clickAction(pointerPosition: Point): Boolean {
+    override fun clickAction(pointerPosition: Cell): Boolean {
         currentShip!!.rotate(pointerPosition)
         shipInvalidPositionValidityCheck()
         currentShip = null
         return true
     }
 
-    override fun moveAction(pointerPosition: Point): Boolean {
-        var oldPos = currentShip!!.getPoint()
+    override fun moveAction(pointerPosition: Cell): Boolean {
+        var oldPos = currentShip!!.bowCell
         currentShip!!.set(pointerPosition, offset)
-        if (!currentShip!!.isShipOnBoard()) {
+        if (!currentShip!!.isShipCompletelyOnBoard()) {
             currentShip!!.set(oldPos)
         }
         shipInvalidPositionValidityCheck()
@@ -63,13 +61,13 @@ class BoardOtherViewModel() : BoardViewModel() {
             return true
         }
         var refresh: Boolean = false
-        var pointerPosition: Point = shot.point
-        if (shots.filter{s -> s.point.equals(pointerPosition)}.count() > 0) {
+        var pointerPosition: Cell = shot.cell
+        if (shots.filter { s -> s.cell == pointerPosition }.count() > 0) {
             return false
         }
 
         for (ship in ships) {
-            if (ship.isHere(pointerPosition)) {
+            if (ship.isCellOnShip(pointerPosition)) {
                 currentShip = ship.getShip(pointerPosition)
                 if (currentShip != null) {
                     hit(currentShip!!, shot)
@@ -96,7 +94,7 @@ class BoardOtherViewModel() : BoardViewModel() {
         for (ship in ships) {
             var isPosValid = true
 
-            if (!ship.isShipOnBoard() || overlapList.contains(ship)) {
+            if (!ship.isShipCompletelyOnBoard() || overlapList.contains(ship)) {
                 isPosValid = false
             }
 

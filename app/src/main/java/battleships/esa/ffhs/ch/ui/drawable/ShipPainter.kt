@@ -1,10 +1,7 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -35,8 +32,8 @@ class ShipPainter(
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shipViewModel.position.col
-        var startY = gridWidth * shipViewModel.position.row
+        var startX = gridWidth * shipViewModel.bowCell.col
+        var startY = gridWidth * shipViewModel.bowCell.row
 
         var endX: Float = 0f
         var endY: Float = 0f
@@ -71,7 +68,7 @@ class ShipPainter(
 
         if (shipViewModel.isHidden()) {
             canvas.drawOval(oval, hiddenPaint)
-        } else if (shipViewModel.isPositionValid() && !shipViewModel.isSunk()) {
+        } else if (shipViewModel.isPositionValid() && !shipViewModel.isSunken()) {
             canvas.drawOval(oval, paint)
         } else {
             canvas.drawOval(oval, errPaint)

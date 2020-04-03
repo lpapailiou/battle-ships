@@ -1,18 +1,11 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import android.app.Application
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import battleships.esa.ffhs.ch.ui.drawable.Board
-import battleships.esa.ffhs.ch.ui.drawable.Shot
+import battleships.esa.ffhs.ch.ui.drawable.Cell
 import battleships.esa.ffhs.ch.ui.drawable.Direction
-import battleships.esa.ffhs.ch.ui.drawable.Point
+import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 open class BoardViewModel() : ViewModel() {
@@ -24,12 +17,12 @@ open class BoardViewModel() : ViewModel() {
     var shots: MutableList<Shot> = mutableListOf()
 
     var currentShip: ShipViewModel? = null
-    var offset = Point(0,0)
+    var offset = Cell(0, 0)
 
     // ----------------------------- game handling -----------------------------
 
     fun endGameCheck(): Boolean {
-        var sunkenShips = ships.filter { s -> s.isSunk() }.count()
+        var sunkenShips = ships.filter { s -> s.isSunken() }.count()
         return (sunkenShips == ships.size)
     }
 
@@ -48,68 +41,58 @@ open class BoardViewModel() : ViewModel() {
     // ----------------------------- handle click action from UI -----------------------------
     open fun releaseShip() {
         currentShip = null
-        offset = Point(0,0)
+        offset = Cell(0, 0)
     }
 
-    open fun repeatClickCheck(pointerPosition: Point): Boolean {
+    open fun repeatClickCheck(pointerPosition: Cell): Boolean {
         return false
     }
 
-    open fun identifyShip(pointerPosition: Point): Boolean {
+    open fun identifyShip(pointerPosition: Cell): Boolean {
         return false
     }
 
-    open fun clickAction(pointerPosition: Point): Boolean {
+    open fun clickAction(pointerPosition: Cell): Boolean {
         return false
     }
 
-    open fun clickAction(pointerPosition: Point, board: Board): Boolean {
+    open fun clickAction(pointerPosition: Cell, board: Board): Boolean {
         return false
     }
 
-    open fun moveAction(pointerPosition: Point): Boolean {
+    open fun moveAction(pointerPosition: Cell): Boolean {
         return false
     }
 
     // ----------------------------- shot handling -----------------------------
 
-    protected fun hit (shot: Shot) {
+    protected fun hit(shot: Shot) {
         hit(null, shot)
     }
 
     protected fun hit(ship: ShipViewModel?, shot: Shot) {
         if (ship != null) {
             shot.isHit(true)
-            ship!!.hit(shot)
+            ship.hit(shot)
         }
         shots.add(shot)
     }
 
-    fun getOverlappingShips(): List<ShipViewModel> {
-        val overlapList = mutableListOf<ShipViewModel>()
+    fun getOverlappingShips(): HashSet<ShipViewModel> {
+        val overlappingShips = hashSetOf<ShipViewModel>()
         for (ship in ships) {
-            val shipPoints = ship.getOverlapArea()
-            var doesOverlap = false
+            if(overlappingShips.contains(ship)) continue
 
             for (otherShip in ships) {
-                if (ship != otherShip) {
-                    val otherShipPoints = otherShip.getPoints()
-                    for (shipPoint in shipPoints) {
-                        for (otherShipPoint in otherShipPoints) {
-                            if (shipPoint.equals(otherShipPoint)) {
-                                doesOverlap = true
-                                break
-                            }
-                        }
-                    }
+                if (ship == otherShip) continue
+
+                if (ship.isWithinOccupiedAreaOfOtherShip(otherShip)) {
+                    overlappingShips.add(ship)
+                    overlappingShips.add(otherShip)
                 }
             }
-
-            if (doesOverlap) {
-                overlapList.add(ship)
-            }
         }
-        return overlapList
+        return overlappingShips
     }
 
     // ----------------------------- initialization of ships -----------------------------
@@ -118,7 +101,7 @@ open class BoardViewModel() : ViewModel() {
         return shipSizes.mapIndexed { index, size ->
             ShipViewModel(
                 index,
-                Point(0, index),
+                Cell(0, index),
                 size,
                 Direction.RIGHT,
                 mutableSetOf()
@@ -128,7 +111,7 @@ open class BoardViewModel() : ViewModel() {
 
     // TODO: unstable, should be refactored
     fun setShipsRandomly() {
-        ships.forEach{s -> s.setRandomly()}
+        ships.forEach { s -> s.setRandomly() }
         var overlapList = getOverlappingShips()
         while (!overlapList.isEmpty()) {
             overlapList.first().setRandomly()

@@ -1,6 +1,5 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,18 +11,11 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.ui.game.BoardGameFragment
-import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
-import kotlinx.android.synthetic.main.board_game_fragment.view.*
-import kotlinx.android.synthetic.main.main_activity.view.*
-import androidx.core.content.ContextCompat.getSystemService as getSystemService1
 
-open class Board (
+open class Board(
     context: Context, attributes: AttributeSet
 ) : View(context, attributes) {
 
@@ -85,7 +77,12 @@ open class Board (
         val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        200,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
             } else {
                 vibrator.vibrate(200)
             }
@@ -114,13 +111,13 @@ open class Board (
 
     protected fun drawGrid(canvas: Canvas, customPaint: Paint) {
         // vertical lines
-        for(i in 0..BOARD_SIZE) {
+        for (i in 0..BOARD_SIZE) {
             val x = gridWidth * i
             canvas.drawLine(x, 0f, x, height.toFloat(), customPaint)
         }
 
         // horizontal lines
-        for(i in 0..BOARD_SIZE) {
+        for (i in 0..BOARD_SIZE) {
             val y = gridWidth * i
             canvas.drawLine(0f, y, width.toFloat(), y, customPaint)
         }
@@ -143,7 +140,7 @@ open class Board (
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.BLACK
             style = Paint.Style.STROKE
-            strokeWidth = Companion.STROKE_WIDTH*6f
+            strokeWidth = Companion.STROKE_WIDTH * 6f
             isAntiAlias = true
             isDither = true
         }
