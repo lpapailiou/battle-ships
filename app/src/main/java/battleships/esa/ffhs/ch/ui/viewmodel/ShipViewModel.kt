@@ -87,8 +87,8 @@ class ShipViewModel(
     fun isSunken(): Boolean {
         val isSunken = hits.size == shipCells.size
         if (isSunken) {
-            hits.forEach { h -> h.undraw() } // TODO: @lena, so gsehtme doch gar nimm, dass da s schiff versenkt isch, und dänkt me heig dert eifach no gar nie häregschosse?
-            isHidden = false
+            hits.forEach { h -> h.undraw() }    // shots of ships get invisible (as they overlap ship)
+            isHidden = false                    // ships gets visible again; drawn in red to vizualize it is completely sunk
         }
         return isSunken
     }
