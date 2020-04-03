@@ -117,6 +117,7 @@ class ShipViewModel(
             }
             return occupiedCells
         }
+        // TODO: can be implemented by just returning shipCells
         throw NotImplementedError("The game mode without strict overlapping rule has not been implemented yet!")
     }
 
