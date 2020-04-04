@@ -10,6 +10,8 @@
         android:name="battleships.esa.ffhs.ch.ui.main.MainFragment"
         android:label="Welcome to Battle Ships"
         tools:layout="@layout/main_fragment">
+
+        <!-- actions used to navigate manually (via buttons) -->
         <action
             android:id="@+id/action_mainFragment_to_boardFragment"
             app:destination="@id/board_fragment" />
@@ -21,9 +23,10 @@
             app:destination="@id/settings_fragment" />
     </fragment>
 
+    <!-- fragments used for navigation with nav host -->
     <fragment
         android:id="@+id/board_fragment"
-        android:name="battleships.esa.ffhs.ch.ui.main.BoardFragment"
+        android:name="battleships.esa.ffhs.ch.ui.game.BoardFragment"
         android:label="Current game"
         tools:layout="@layout/board_fragment" />
     <fragment

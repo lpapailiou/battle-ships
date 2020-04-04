@@ -9,15 +9,19 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.ui.drawable.Game
 import kotlinx.android.synthetic.main.main_activity.*
 
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline
 
 class MainActivity : AppCompatActivity() {
 
-    // temporary global variable to check if user is logged in for the first time
     companion object {
-        var isFirstLogin: Boolean = true
+        var isFirstLogin: Boolean =
+            true        // temporary global variable to check if user is logged in for the first time
+        var strictOverlapRule =
+            true            // positioned ships are valid when there is space of 1 cell between ships if true; if false, no extra gap is needed
+        var activeGame: Game? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +29,8 @@ class MainActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.main_activity)
 
-            val navController = Navigation.findNavController(this,
+            val navController = Navigation.findNavController(
+                this,
                 R.id.nav_host_fragment
             )
 
@@ -45,7 +50,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val navController = Navigation.findNavController(this,
+        val navController = Navigation.findNavController(
+            this,
             R.id.nav_host_fragment
         )
         val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
@@ -53,7 +59,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = Navigation.findNavController(this,
+        val navController = Navigation.findNavController(
+            this,
             R.id.nav_host_fragment
         )
         return navController.navigateUp()
