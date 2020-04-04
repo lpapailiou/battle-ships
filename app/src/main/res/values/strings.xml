@@ -16,8 +16,7 @@
     <string name="prepare_opponent_board">PREPARE OPPONENT BOARD</string>
     <string name="rules">Rules</string>
 
-    <string-array
-        name="staticgamedata">
+    <string-array name="staticgamedata">
         <item>"2020-03-15 T00:00:00Z me vs bot"</item>
         <item>"2020-03-15 T00:00:00Z me vs trump"</item>
         <item>"2020-03-14 T00:00:00Z me vs putin"</item>
@@ -33,8 +32,7 @@
         <item>"2020-01-07 T00:00:00Z me vs corona"</item>
     </string-array>
 
-    <string-array
-        name="staticscoredata">
+    <string-array name="staticscoredata">
         <item>"2020-03-15 me vs bot: 1:0"</item>
         <item>"2020-03-15 me vs bot: 0:1"</item>
         <item>"2020-03-15 me vs bot: 0:1"</item>

@@ -1,27 +1,19 @@
 package battleships.esa.ffhs.ch.ui.main
 
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
-import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.drawable.Game
 import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
-import kotlinx.android.synthetic.main.intro_fragment.*
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isFirstLogin
-import androidx.core.widget.doAfterTextChanged as doAfterTextChanged1
+import kotlinx.android.synthetic.main.intro_fragment.*
 
 
 class IntroFragment : Fragment() {
@@ -45,8 +37,10 @@ class IntroFragment : Fragment() {
         username_input.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
             }
+
             override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
             }
+
             override fun afterTextChanged(editable: Editable) {
                 var text = username_input.text
                 if (text != null && text.length > 0) {

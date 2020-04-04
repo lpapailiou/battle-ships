@@ -1,7 +1,6 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
 import java.util.*
-import kotlin.collections.HashSet
 
 
 class Cell(val col: Int, val row: Int) {
@@ -14,7 +13,7 @@ class Cell(val col: Int, val row: Int) {
     }
 
     fun getRandomCell(): Cell {
-        return Cell((0..BOARD_SIZE - 1).random(), (0..BOARD_SIZE - 1).random())
+        return Cell((0 until BOARD_SIZE).random(), (0 until BOARD_SIZE).random())
     }
 
     fun getSurroundingCells(): HashSet<Cell> {
@@ -24,7 +23,7 @@ class Cell(val col: Int, val row: Int) {
         }.toHashSet()
     }
 
-    // ----------------------------- ovverriding equals, hashCode and toString -----------------------------
+    // ----------------------------- overriding equals, hashCode and toString -----------------------------
 
     override fun equals(other: Any?): Boolean {
         val otherP: Cell = (other as Cell)
@@ -36,6 +35,6 @@ class Cell(val col: Int, val row: Int) {
     }
 
     override fun toString(): String {
-        return "(" + col + ", " + row + ")"
+        return "($col, $row)"
     }
 }

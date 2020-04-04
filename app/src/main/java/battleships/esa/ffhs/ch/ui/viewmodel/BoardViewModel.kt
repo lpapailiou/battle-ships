@@ -81,7 +81,7 @@ open class BoardViewModel() : ViewModel() {
     fun getOverlappingShips(): HashSet<ShipViewModel> {
         val overlappingShips = hashSetOf<ShipViewModel>()
         for (ship in ships) {
-            if(overlappingShips.contains(ship)) continue
+            if (overlappingShips.contains(ship)) continue
 
             for (otherShip in ships) {
                 if (ship == otherShip) continue

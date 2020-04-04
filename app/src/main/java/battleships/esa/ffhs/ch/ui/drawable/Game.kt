@@ -1,6 +1,5 @@
 package battleships.esa.ffhs.ch.ui.drawable
 
-import android.app.Application
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardOtherViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel

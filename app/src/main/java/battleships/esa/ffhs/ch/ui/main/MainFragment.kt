@@ -40,9 +40,11 @@ class MainFragment : Fragment() {
     private fun initMainFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
             if (!isFirstLogin) {
-                childFragmentManager.beginTransaction().replace(R.id.fragment_container_main, BridgeFragment(), "bridge").commit()
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_main, BridgeFragment(), "bridge").commit()
             } else {
-                childFragmentManager.beginTransaction().replace(R.id.fragment_container_main, IntroFragment(), "intro").commit()
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_main, IntroFragment(), "intro").commit()
             }
         }
     }

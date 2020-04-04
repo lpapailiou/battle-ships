@@ -88,7 +88,8 @@ class ShipViewModel(
         val isSunken = hits.size == shipCells.size
         if (isSunken) {
             hits.forEach { h -> h.undraw() }    // shots of ships get invisible (as they overlap ship)
-            isHidden = false                    // ships gets visible again; drawn in red to vizualize it is completely sunk
+            isHidden =
+                false                    // ships gets visible again; drawn in red to vizualize it is completely sunk
         }
         return isSunken
     }
