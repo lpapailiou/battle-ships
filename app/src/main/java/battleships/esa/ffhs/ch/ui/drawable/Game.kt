@@ -4,10 +4,8 @@ import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardOtherViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
-class Game() {
-    companion object {
-
-    }
+class Game {
+    companion object
 
     var opponentBoard: BoardOtherViewModel
     var myBoard: BoardMineViewModel

@@ -5,7 +5,7 @@ import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-class BoardOtherViewModel() : BoardViewModel() {
+class BoardOtherViewModel : BoardViewModel() {
 
     fun lateInit() {
         if (activeGame!!.preparedShips.isEmpty()) {

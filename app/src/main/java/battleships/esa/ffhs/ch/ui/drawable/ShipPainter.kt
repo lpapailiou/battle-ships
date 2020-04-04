@@ -38,7 +38,7 @@ class ShipPainter(
         var endX: Float = 0f
         var endY: Float = 0f
 
-        when(shipViewModel.direction) {
+        when (shipViewModel.direction) {
             Direction.UP -> {
                 endY = startY + gridWidth
                 startY = startY + gridWidth - (gridWidth * shipViewModel.size)
@@ -63,8 +63,8 @@ class ShipPainter(
         }
 
         var oval: RectF = RectF(startX, startY, endX, endY)
-        val insetWith: Float = STROKE_WIDTH * (3/2)
-        oval.inset(insetWith,insetWith)                 // resize ships to create padding effect
+        val insetWith: Float = STROKE_WIDTH * (3 / 2)
+        oval.inset(insetWith, insetWith)                 // resize ships to create padding effect
 
         if (shipViewModel.isHidden()) {
             canvas.drawOval(oval, hiddenPaint)

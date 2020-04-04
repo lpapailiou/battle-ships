@@ -24,10 +24,6 @@ class BoardPreparationFragment : Fragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // triggered when game is supposed to start. will change the state of the game and navigate to the actual game fragment
         startgame_button.setOnClickListener {

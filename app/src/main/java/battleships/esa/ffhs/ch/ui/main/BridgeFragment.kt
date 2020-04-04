@@ -1,19 +1,13 @@
 package battleships.esa.ffhs.ch.ui.main
 
-import MainViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import battleships.esa.ffhs.ch.R
-import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.android.synthetic.main.main_fragment.*
 
 
 class BridgeFragment : Fragment() {
@@ -42,7 +36,7 @@ class BridgeFragment : Fragment() {
                 resources.getStringArray(R.array.staticgamedata)
             )
         val listView: ListView = (activity as MainActivity).findViewById(R.id.listId) as ListView
-        listView.setAdapter(itemsAdapter)
+        listView.adapter = itemsAdapter
     }
 
 }

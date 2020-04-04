@@ -8,7 +8,7 @@ import battleships.esa.ffhs.ch.ui.drawable.Direction
 import battleships.esa.ffhs.ch.ui.drawable.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-open class BoardViewModel() : ViewModel() {
+open class BoardViewModel : ViewModel() {
 
     val username = MutableLiveData<String>()
 

@@ -33,8 +33,9 @@ class ScoreFragment : Fragment() {
                 android.R.layout.simple_list_item_1,
                 resources.getStringArray(R.array.staticscoredata)
             )
-        val listView: ListView = (activity as MainActivity).findViewById(R.id.scoreListId) as ListView
-        listView.setAdapter(itemsAdapter)
+        val listView: ListView =
+            (activity as MainActivity).findViewById(R.id.scoreListId) as ListView
+        listView.adapter = itemsAdapter
     }
 
 

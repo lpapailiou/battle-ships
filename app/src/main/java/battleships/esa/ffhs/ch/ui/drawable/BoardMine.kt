@@ -29,8 +29,8 @@ class BoardMine(
 
         var handled: Boolean = false
 
-        var xTouch: Float = event!!.getX(0)
-        var yTouch: Float = event!!.getY(0)
+        var xTouch: Float = event.getX(0)
+        var yTouch: Float = event.getY(0)
 
         var pointerPosition: Cell = Cell((xTouch / gridWidth).toInt(), (yTouch / gridWidth).toInt())
 

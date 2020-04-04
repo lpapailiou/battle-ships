@@ -24,7 +24,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // hide NavigationDrawerIcon when we see main fragment, as we can't navigate back anywhere from here
-        (activity as MainActivity).getSupportActionBar()?.setDisplayHomeAsUpEnabled(false)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         // initialize child fragments depending on 'do we know you already'
         initMainFragment()

@@ -9,7 +9,6 @@ import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.drawable.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
-import kotlinx.android.synthetic.main.board_mine_fragment.*
 
 
 class BoardFragment : Fragment() {
@@ -29,15 +28,13 @@ class BoardFragment : Fragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     // check if the current game is ready to play or if the 'game preparation area' should be loaded
     private fun initBoardFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_board) != null) {
             if (activeGame!!.state != GameState.ACTIVE) {
-                childFragmentManager.beginTransaction().replace(R.id.fragment_container_board, BoardPreparationFragment(), "prep").commit()
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_board, BoardPreparationFragment(), "prep")
+                    .commit()
             } else {
                 switchToGameFragment()
             }
@@ -46,6 +43,7 @@ class BoardFragment : Fragment() {
 
     // will be accessed as well from child fragment to start a game (BoardPreparationFragment to BoardGameFragment)
     fun switchToGameFragment() {
-        childFragmentManager.beginTransaction().replace(R.id.fragment_container_board, BoardGameFragment(), "game").commit()
+        childFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_board, BoardGameFragment(), "game").commit()
     }
 }

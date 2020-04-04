@@ -36,14 +36,14 @@ class ShotPainter(
         var endX = startX + gridWidth
         var endY = startY + gridWidth
 
-        var with = endX-startX
+        var with = endX - startX
 
         var innerShotOval: RectF = RectF(startX, startY, endX, endY)
         var outerShotOval: RectF = RectF(startX, startY, endX, endY)
-        val innerInsetWith: Float = with*0.3f
-        val outerInsetWidth: Float = with*0.15f
-        innerShotOval.inset(innerInsetWith,innerInsetWith)
-        outerShotOval.inset(outerInsetWidth,outerInsetWidth)
+        val innerInsetWith: Float = with * 0.3f
+        val outerInsetWidth: Float = with * 0.15f
+        innerShotOval.inset(innerInsetWith, innerInsetWith)
+        outerShotOval.inset(outerInsetWidth, outerInsetWidth)
 
         if (shot.isHit) {
             if (shot.isDrawable()) {
@@ -58,13 +58,13 @@ class ShotPainter(
     fun drawWater(startX: Float, endX: Float, startY: Float, endY: Float, canvas: Canvas) {
         var yList: MutableList<Float> = mutableListOf()
         var lineCount: Int = 3
-        var yOffset = (endY - startY) / (lineCount+1)
-        var y = startY + ((endY - startY)/lineCount)/1.3f
-        for (i: Int in 0..lineCount-1) {
+        var yOffset = (endY - startY) / (lineCount + 1)
+        var y = startY + ((endY - startY) / lineCount) / 1.3f
+        for (i: Int in 0..lineCount - 1) {
             yList.add(y)
             y += yOffset
         }
-        for(i in yList) {
+        for (i in yList) {
             canvas.drawLine(startX, i, endX, i, waterPaint)
         }
     }
@@ -85,7 +85,7 @@ class ShotPainter(
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = ContextCompat.getColor(context, id)
             style = Paint.Style.STROKE
-            strokeWidth = STROKE_WIDTH/4
+            strokeWidth = STROKE_WIDTH / 4
             isAntiAlias = true
             isDither = true
         }

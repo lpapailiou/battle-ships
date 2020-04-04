@@ -2,11 +2,9 @@ package battleships.esa.ffhs.ch.ui.drawable
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.widget.Toast
 import battleships.esa.ffhs.ch.R
 
-class CustomDialog() {
+class CustomDialog {
 
     fun showEndGameDialog(context: Context, youWin: Boolean) {
         var dialog: AlertDialog.Builder = AlertDialog.Builder(context, R.style.AppDialogTheme)
@@ -23,7 +21,6 @@ class CustomDialog() {
     }
 
     // CustomDialog().showEndGameDialog()
-
 
 
 }

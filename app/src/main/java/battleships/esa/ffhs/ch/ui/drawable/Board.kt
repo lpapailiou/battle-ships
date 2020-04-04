@@ -67,10 +67,6 @@ open class Board(
         drawGrid(canvas)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return super.onTouchEvent(event)
-    }
-
     // ----------------------------- enable vibrations -----------------------------
 
     open fun vibrate() {

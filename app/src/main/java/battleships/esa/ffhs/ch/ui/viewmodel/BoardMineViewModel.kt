@@ -68,7 +68,7 @@ class BoardMineViewModel : BoardViewModel() {
 
     fun randomShot(): Boolean {
         if (activeGame!!.opponentBoard != null && activeGame!!.state != GameState.ENDED) {
-            var success = activeGame!!.opponentBoard!!.shoot(
+            var success = activeGame!!.opponentBoard.shoot(
                 Shot(
                     Cell(0, 0).getRandomCell(),
                     null

@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-class BoardOpponent  (
+class BoardOpponent(
     context: Context, attributes: AttributeSet
 ) : Board(context, attributes) {
 
@@ -39,11 +39,11 @@ class BoardOpponent  (
         var xTouch: Float = event.getX(0)
         var yTouch: Float = event.getY(0)
 
-        var pointerPosition: Cell = Cell((xTouch/gridWidth).toInt(), (yTouch/gridWidth).toInt())
+        var pointerPosition: Cell = Cell((xTouch / gridWidth).toInt(), (yTouch / gridWidth).toInt())
 
         handled = boardModel!!.identifyShip(pointerPosition)
 
-        when (event.getActionMasked()) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_MOVE -> {            // move ship around
                 clickCounter++
                 if (handled && clickCounter > CLICK_LIMIT) {
