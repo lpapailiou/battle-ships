@@ -10,9 +10,11 @@ import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
 class ShipViewModel(val ship: Ship) {
 
     private var shipCells: MutableList<Cell> = mutableListOf<Cell>()
+    private var isSunken = false
 
     init {
         updateCells()
+        isSunken = ship.hits.size == shipCells.size
     }
 
     // ----------------------------- ship body location handling -----------------------------
@@ -92,16 +94,19 @@ class ShipViewModel(val ship: Ship) {
 
     fun hit(shot: Shot) {
         ship.hits.add(shot)
-        isSunken()
+        sinkCheck()
     }
 
-    fun isSunken(): Boolean {
-        val isSunken = ship.hits.size == shipCells.size
+    private fun sinkCheck() {
+        isSunken = ship.hits.size == shipCells.size
         if (isSunken) {
             ship.hits.forEach { h -> h.undraw() }   // shots of ships get invisible (as they overlap ship)
             ship.isHidden =
                 false                               // ships gets visible again; drawn in red to vizualize it is completely sunk
         }
+    }
+
+    fun isSunken(): Boolean {
         return isSunken
     }
 
@@ -121,7 +126,7 @@ class ShipViewModel(val ship: Ship) {
      * there must not be another ship.
      */
     fun getOccupiedCells(): HashSet<Cell> {
-        if (strictOverlapRule) {
+        if (strictOverlapRule) {        // ships must not touch each other
             val occupiedCells: HashSet<Cell> = linkedSetOf()
             occupiedCells.addAll(shipCells)
             shipCells.forEach { shipCell ->
@@ -129,14 +134,11 @@ class ShipViewModel(val ship: Ship) {
             }
             return occupiedCells
         }
-        // TODO: can be implemented by just returning shipCells
-        throw NotImplementedError("The game mode without strict overlapping rule has not been implemented yet!")
+        return shipCells.toHashSet()    // ships can touch each other
     }
 
     fun isWithinOccupiedAreaOfOtherShip(otherShip: ShipViewModel): Boolean {
         val occupiedArea = otherShip.getOccupiedCells()
-        val otherShipCells = otherShip.shipCells        // TODO: not used?
-
         return occupiedArea.intersect(shipCells).isNotEmpty()
     }
 

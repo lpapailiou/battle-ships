@@ -20,12 +20,6 @@ class BoardOpponent(
         }
     }
 
-    // ----------------------------- jump to game validation -----------------------------
-
-    fun validateStart(): Boolean {
-        return boardModel!!.validateStart()
-    }
-
     // ----------------------------- ship positioning handling -----------------------------
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

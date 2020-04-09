@@ -14,7 +14,7 @@ import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 
-class BoardGameFragment : Fragment() {
+class GameActiveFragment : Fragment() {
 
     var screenShot: ImageView? = null
 
@@ -22,7 +22,7 @@ class BoardGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.board_game_fragment, container, false)
+        return inflater.inflate(R.layout.game_active_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,11 +35,11 @@ class BoardGameFragment : Fragment() {
     private fun initGameFragments() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_game_active) != null) {
             childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_game_active, BoardMineFragment(), "mine").commit()
+                .replace(R.id.fragment_container_game_active, GameBoardMineFragment(), "mine").commit()
         }
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_game_inactive) != null) {
             childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_game_inactive, BoardOtherFragment(), "other")
+                .replace(R.id.fragment_container_game_inactive, GameBoardOpponentFragment(), "other")
                 .commit()
         }
     }
@@ -51,17 +51,17 @@ class BoardGameFragment : Fragment() {
         }
         if (activeGame!!.isActivePlayerMe) {
             childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_game_active, BoardOtherFragment(), "other")
+                .replace(R.id.fragment_container_game_active, GameBoardOpponentFragment(), "other")
                 .commit()
             childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_game_inactive, BoardMineFragment(), "mine")
+                .replace(R.id.fragment_container_game_inactive, GameBoardMineFragment(), "mine")
                 .commit()
             activeGame!!.isActivePlayerMe = false
         } else {
             childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_game_active, BoardMineFragment(), "mine").commit()
+                .replace(R.id.fragment_container_game_active, GameBoardMineFragment(), "mine").commit()
             childFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_game_inactive, BoardOtherFragment(), "other")
+                .replace(R.id.fragment_container_game_inactive, GameBoardOpponentFragment(), "other")
                 .commit()
             activeGame!!.isActivePlayerMe = true
         }

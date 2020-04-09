@@ -11,13 +11,13 @@ import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 
-class BoardFragment : Fragment() {
+class GameFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.board_fragment, container, false)
+        return inflater.inflate(R.layout.game_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,10 +30,10 @@ class BoardFragment : Fragment() {
 
     // check if the current game is ready to play or if the 'game preparation area' should be loaded
     private fun initBoardFragment() {
-        if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_board) != null) {
+        if ((activity as MainActivity).findViewById<View>(R.id.game_fragment_container) != null) {
             if (activeGame!!.state != GameState.ACTIVE) {
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_board, BoardPreparationFragment(), "prep")
+                    .replace(R.id.game_fragment_container, GamePreparationFragment(), "prep")
                     .commit()
             } else {
                 switchToGameFragment()
@@ -41,9 +41,9 @@ class BoardFragment : Fragment() {
         }
     }
 
-    // will be accessed as well from child fragment to start a game (BoardPreparationFragment to BoardGameFragment)
+    // will be accessed as well from child fragment to start a game (GamePreparationFragment to GameActiveFragment)
     fun switchToGameFragment() {
         childFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_board, BoardGameFragment(), "game").commit()
+            .replace(R.id.game_fragment_container, GameActiveFragment(), "game").commit()
     }
 }

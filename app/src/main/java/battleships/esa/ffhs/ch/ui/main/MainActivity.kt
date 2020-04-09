@@ -18,9 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var isFirstLogin: Boolean =
-            true        // temporary global variable to check if user is logged in for the first time
+            true                        // temporary global variable to check if user is logged in for the first time
         var strictOverlapRule =
-            true            // positioned ships are valid when there is space of 1 cell between ships if true; if false, no extra gap is needed
+            true                        // if true: no ships are allowed to touch each other, else: ships can touch, but not overlap
         var activeGame: Game? = null
     }
 

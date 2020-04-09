@@ -2,15 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/boardPreparation"
+    android:id="@+id/game_preparation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.game.BoardPreparationFragment">
+    tools:context=".ui.game.GamePreparationFragment">
 
 
     <fragment
         android:id="@+id/fragment"
-        android:name="battleships.esa.ffhs.ch.ui.game.BoardOtherFragment"
+        android:name="battleships.esa.ffhs.ch.ui.game.GameBoardOpponentFragment"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_marginStart="30dp"
