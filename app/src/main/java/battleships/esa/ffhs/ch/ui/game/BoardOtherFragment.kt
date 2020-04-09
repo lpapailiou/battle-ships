@@ -22,7 +22,7 @@ class BoardOtherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        boardOther.setOnClickListener {
+        board_opponent.setOnClickListener {
             if (activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && activeGame!!.state != GameState.PREPARATION) {
                 (parentFragment as BoardGameFragment).switchFragments()
             }

@@ -100,8 +100,7 @@ open class BoardViewModel : ViewModel() {
     // ----------------------------- initialization of ships -----------------------------
 
     protected fun initShips(): List<ShipViewModel> {
-        return shipSizes.mapIndexed { index, size ->
-            ShipViewModel(
+        val newShips =  shipSizes.mapIndexed { index, size ->
                 Ship(
                     index,
                     Coordinate(0, index),
@@ -109,7 +108,10 @@ open class BoardViewModel : ViewModel() {
                     Direction.RIGHT,
                     mutableSetOf()
                 )
-            )
+        }.toList()
+
+        return newShips.map { ship  ->
+            ShipViewModel(ship)
         }.toList()
     }
 

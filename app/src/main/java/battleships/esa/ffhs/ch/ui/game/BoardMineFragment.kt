@@ -22,7 +22,7 @@ class BoardMineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        boardMine.setOnClickListener {
+        board_mine.setOnClickListener {
             if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                 (parentFragment as BoardGameFragment).switchFragments()
             }

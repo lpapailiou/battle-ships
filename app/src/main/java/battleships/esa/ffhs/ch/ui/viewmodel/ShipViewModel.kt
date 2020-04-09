@@ -80,7 +80,6 @@ class ShipViewModel(val ship: Ship) {
 
     fun rotate(cell: Cell) {
         val index = getIndex(cell)
-
         ship.direction = DirectionHandler(ship.direction).getNextClockwiseNondiagonalDirection()
         ship.bowCoordinate = Coordinate(
             cell.coordinate.x - (ship.direction.x * index),
@@ -143,15 +142,15 @@ class ShipViewModel(val ship: Ship) {
 
     // TODO: check if can be replaced with getOffset method
     fun getIndex(cell: Cell): Int {
-        var pos: Coordinate = ship.bowCoordinate
+        var pos: Cell = Cell(ship.bowCoordinate.x, ship.bowCoordinate.y)
 
         for ((index, i) in (0 until ship.size).withIndex()) {
             if (pos.equals(cell)) {
                 return index
             }
-            pos = Coordinate(
-                pos.x + ship.direction.x,
-                pos.y + ship.direction.y
+            pos = Cell(
+                pos.coordinate.x + ship.direction.x,
+                pos.coordinate.y + ship.direction.y
             )
         }
         return -1
