@@ -8,14 +8,15 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.BOARD_SIZE
+import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 
-open class Board(
+open class BoardPainter(
     context: Context, attributes: AttributeSet
 ) : View(context, attributes) {
 

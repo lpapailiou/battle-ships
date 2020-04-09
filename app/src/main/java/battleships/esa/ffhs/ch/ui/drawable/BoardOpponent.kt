@@ -3,11 +3,13 @@ package battleships.esa.ffhs.ch.ui.drawable
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 class BoardOpponent(
     context: Context, attributes: AttributeSet
-) : Board(context, attributes) {
+) : BoardPainter(context, attributes) {
 
 
     init {
@@ -20,7 +22,7 @@ class BoardOpponent(
 
     // ----------------------------- jump to game validation -----------------------------
 
-    open fun validateStart(): Boolean {
+    fun validateStart(): Boolean {
         return boardModel!!.validateStart()
     }
 
@@ -34,12 +36,16 @@ class BoardOpponent(
             return false
         }
 
-        var handled: Boolean = false
+        var handled: Boolean
 
         var xTouch: Float = event.getX(0)
         var yTouch: Float = event.getY(0)
 
-        var pointerPosition: Cell = Cell((xTouch / gridWidth).toInt(), (yTouch / gridWidth).toInt())
+        var pointerPosition: Cell =
+            Cell(
+                (xTouch / gridWidth).toInt(),
+                (yTouch / gridWidth).toInt()
+            )
 
         handled = boardModel!!.identifyShip(pointerPosition)
 

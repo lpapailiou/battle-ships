@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.ui.drawable.Game
-import battleships.esa.ffhs.ch.ui.drawable.GameState
+import battleships.esa.ffhs.ch.entity.Game
+import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isFirstLogin
 import kotlinx.android.synthetic.main.intro_fragment.*
@@ -62,7 +62,7 @@ class IntroFragment : Fragment() {
         )
 
         if (score_button != null) {
-            score_button.setOnClickListener(
+            score_button!!.setOnClickListener(
                 Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_scoreFragment)
             )
         }

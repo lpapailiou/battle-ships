@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.BOARD_SIZE
+import battleships.esa.ffhs.ch.entity.Shot
 
 class ShotPainter(
     context: Context, attributes: AttributeSet
@@ -30,8 +32,8 @@ class ShotPainter(
     fun draw(shot: Shot, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shot.cell.x
-        var startY = gridWidth * shot.cell.y
+        var startX = gridWidth * shot.cell.coordinate.x
+        var startY = gridWidth * shot.cell.coordinate.y
 
         var endX = startX + gridWidth
         var endY = startY + gridWidth

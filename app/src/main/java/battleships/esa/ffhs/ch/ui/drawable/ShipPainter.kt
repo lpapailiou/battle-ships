@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.BOARD_SIZE
+import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
 class ShipPainter(
@@ -30,31 +32,32 @@ class ShipPainter(
     }
 
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
+        val ship = shipViewModel.ship
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shipViewModel.bowCell.x
-        var startY = gridWidth * shipViewModel.bowCell.y
+        var startX = gridWidth * ship.bowCoordinate.x
+        var startY = gridWidth * ship.bowCoordinate.y
 
-        var endX: Float = 0f
-        var endY: Float = 0f
+        var endX: Float
+        var endY: Float
 
-        when (shipViewModel.direction) {
+        when (ship.direction) {
             Direction.UP -> {
                 endY = startY + gridWidth
-                startY = startY + gridWidth - (gridWidth * shipViewModel.size)
+                startY = startY + gridWidth - (gridWidth * ship.size)
                 endX = startX + gridWidth
             }
             Direction.DOWN -> {
-                endY = startY + gridWidth * shipViewModel.size
+                endY = startY + gridWidth * ship.size
                 endX = startX + gridWidth
             }
             Direction.RIGHT -> {
-                endX = startX + gridWidth * shipViewModel.size
+                endX = startX + gridWidth * ship.size
                 endY = startY + gridWidth
             }
             Direction.LEFT -> {
                 endX = startX + gridWidth
-                startX = startX + gridWidth - (gridWidth * shipViewModel.size)
+                startX = startX + gridWidth - (gridWidth * ship.size)
                 endY = startY + gridWidth
             }
             else -> {

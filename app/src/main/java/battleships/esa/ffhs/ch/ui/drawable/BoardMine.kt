@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.MotionEvent
+import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 class BoardMine(
     context: Context, attributes: AttributeSet
-) : Board(context, attributes) {
+) : BoardPainter(context, attributes) {
 
     init {
         if (activeGame != null) {
@@ -20,7 +22,7 @@ class BoardMine(
     // ----------------------------- ship handling -----------------------------
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event == null || (event != null && activeGame!!.state == GameState.ENDED)) {
+        if (event == null || activeGame!!.state == GameState.ENDED) {
             return false
         }
         if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -32,7 +34,11 @@ class BoardMine(
         var xTouch: Float = event.getX(0)
         var yTouch: Float = event.getY(0)
 
-        var pointerPosition: Cell = Cell((xTouch / gridWidth).toInt(), (yTouch / gridWidth).toInt())
+        var pointerPosition: Cell =
+            Cell(
+                (xTouch / gridWidth).toInt(),
+                (yTouch / gridWidth).toInt()
+            )
 
         if (boardModel!!.repeatClickCheck(pointerPosition)) {
             return handled

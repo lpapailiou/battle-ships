@@ -1,3 +1,4 @@
 package battleships.esa.ffhs.ch.entity
 
-//data class Ship() {}
+const val BOARD_SIZE = 10
+

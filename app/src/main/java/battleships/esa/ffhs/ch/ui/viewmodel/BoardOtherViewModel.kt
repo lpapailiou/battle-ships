@@ -1,8 +1,8 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import battleships.esa.ffhs.ch.ui.drawable.Cell
-import battleships.esa.ffhs.ch.ui.drawable.GameState
-import battleships.esa.ffhs.ch.ui.drawable.Shot
+import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 class BoardOtherViewModel : BoardViewModel() {
@@ -45,10 +45,15 @@ class BoardOtherViewModel : BoardViewModel() {
     }
 
     override fun moveAction(pointerPosition: Cell): Boolean {
-        var oldPos = currentShip!!.bowCell
+        var oldPos = currentShip!!.ship.bowCoordinate
         currentShip!!.set(pointerPosition, offset)
         if (!currentShip!!.isShipCompletelyOnBoard()) {
-            currentShip!!.set(oldPos)
+            currentShip!!.set(
+                Cell(
+                    oldPos.x,
+                    oldPos.y
+                )
+            )
         }
         shipInvalidPositionValidityCheck()
         return true

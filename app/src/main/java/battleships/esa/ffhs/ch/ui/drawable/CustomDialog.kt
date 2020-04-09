@@ -14,13 +14,7 @@ class CustomDialog {
         } else {
             dialog.setMessage("Your wife will be very mad at you.")
         }
-
         dialog.show()
-
-
     }
-
-    // CustomDialog().showEndGameDialog()
-
 
 }

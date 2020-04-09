@@ -1,4 +1,4 @@
-package battleships.esa.ffhs.ch.ui.drawable
+package battleships.esa.ffhs.ch.model
 
 enum class GameState(val tag: String, val id: Int) {
     INIT("INIT", 0),

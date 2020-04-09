@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.ui.drawable.Game
+import battleships.esa.ffhs.ch.entity.Game
 import kotlinx.android.synthetic.main.main_activity.*
 
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline

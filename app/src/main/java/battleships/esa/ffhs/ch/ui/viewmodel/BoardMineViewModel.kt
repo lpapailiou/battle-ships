@@ -1,9 +1,9 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import battleships.esa.ffhs.ch.ui.drawable.Board
-import battleships.esa.ffhs.ch.ui.drawable.Cell
-import battleships.esa.ffhs.ch.ui.drawable.GameState
-import battleships.esa.ffhs.ch.ui.drawable.Shot
+import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
+import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 class BoardMineViewModel : BoardViewModel() {
@@ -25,8 +25,8 @@ class BoardMineViewModel : BoardViewModel() {
         return false
     }
 
-    override fun clickAction(pointerPosition: Cell, board: Board): Boolean {
-        var handled = false
+    override fun clickAction(pointerPosition: Cell, board: BoardPainter): Boolean {
+        var handled: Boolean
 
         var shot = Shot(pointerPosition, null)
 
@@ -67,7 +67,7 @@ class BoardMineViewModel : BoardViewModel() {
     // ----------------------------- trigger shot on opponents board -----------------------------
 
     fun randomShot(): Boolean {
-        if (activeGame!!.opponentBoard != null && activeGame!!.state != GameState.ENDED) {
+        if (activeGame!!.state != GameState.ENDED) {
             var success = activeGame!!.opponentBoard.shoot(
                 Shot(
                     Cell(0, 0).getRandomCell(),

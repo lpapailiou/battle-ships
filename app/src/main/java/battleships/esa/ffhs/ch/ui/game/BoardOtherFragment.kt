@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.ui.drawable.GameState
+import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import kotlinx.android.synthetic.main.board_other_fragment.*
 

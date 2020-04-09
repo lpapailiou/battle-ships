@@ -2,10 +2,12 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.ui.drawable.Board
-import battleships.esa.ffhs.ch.ui.drawable.Cell
-import battleships.esa.ffhs.ch.ui.drawable.Direction
-import battleships.esa.ffhs.ch.ui.drawable.Shot
+import battleships.esa.ffhs.ch.model.Coordinate
+import battleships.esa.ffhs.ch.model.Direction
+import battleships.esa.ffhs.ch.model.Ship
+import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
+import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
 open class BoardViewModel : ViewModel() {
@@ -56,7 +58,7 @@ open class BoardViewModel : ViewModel() {
         return false
     }
 
-    open fun clickAction(pointerPosition: Cell, board: Board): Boolean {
+    open fun clickAction(pointerPosition: Cell, board: BoardPainter): Boolean {
         return false
     }
 
@@ -100,11 +102,13 @@ open class BoardViewModel : ViewModel() {
     protected fun initShips(): List<ShipViewModel> {
         return shipSizes.mapIndexed { index, size ->
             ShipViewModel(
-                index,
-                Cell(0, index),
-                size,
-                Direction.RIGHT,
-                mutableSetOf()
+                Ship(
+                    index,
+                    Coordinate(0, index),
+                    size,
+                    Direction.RIGHT,
+                    mutableSetOf()
+                )
             )
         }.toList()
     }
