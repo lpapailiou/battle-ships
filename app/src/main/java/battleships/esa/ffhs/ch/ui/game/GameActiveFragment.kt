@@ -18,8 +18,6 @@ import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 
 class GameActiveFragment : Fragment() {
 
-    var screenShot: ImageView? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,15 +44,11 @@ class GameActiveFragment : Fragment() {
     }
 
     // will be accessed as well from child fragments
-    fun switchFragments() {
-        println("click 1")
+    fun switchFragments() {         // TODO: obsolete as fragment switch is not necessary anymore - switch of boardViewModel would be sufficient
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            println("click 2")
             return
         }
-        println("click 3")
         if (activeGame!!.isActivePlayerMe) {
-            println("click 4")
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardOpponentFragment(), "other")
                 .commit()
@@ -63,7 +57,6 @@ class GameActiveFragment : Fragment() {
                 .commit()
             activeGame!!.isActivePlayerMe = false
         } else {
-            println("click 5")
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardMineFragment(), "mine").commit()
             childFragmentManager.beginTransaction()
@@ -72,16 +65,4 @@ class GameActiveFragment : Fragment() {
             activeGame!!.isActivePlayerMe = true
         }
     }
-
-    fun screenShot(view: View) {
-        val bitmap = Bitmap.createBitmap(
-            view.width,
-            view.height, Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        view.draw(canvas)
-        screenShot?.setImageBitmap(bitmap)
-        //switchBoard.background = setImageDrawable(screenShot) // somehow set screenshot of other board as button
-    }
-
 }

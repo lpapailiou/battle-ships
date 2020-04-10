@@ -8,7 +8,7 @@
     tools:context=".ui.main.ScoreFragment">
 
     <ListView
-        android:id="@+id/scoreListId"
+        android:id="@+id/score_game_list"
         android:layout_width="336dp"
         android:layout_height="535dp"
         android:layout_marginStart="31dp"

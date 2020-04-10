@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.BOARD_SIZE
+import battleships.esa.ffhs.ch.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
@@ -23,22 +23,20 @@ open class BoardPainter(
     companion object {
         const val STROKE_WIDTH = 2f
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
-        //var gridWidth = 0f
     }
 
     var boardModel: BoardViewModel? = null
-    var gridWidth: Float = 0f
-    val shipPainter: ShipPainter
-    val shotPainter: ShotPainter
 
+    var gridWidth: Float = 0f
     var clickCounter: Int = 0
+
+    val shipPainter: ShipPainter = ShipPainter(context, attributes)
+    val shotPainter: ShotPainter = ShotPainter(context, attributes)
 
     var paint: Paint
     var paintBackground: Paint
 
     init {
-        shipPainter = ShipPainter(context, attributes)
-        shotPainter = ShotPainter(context, attributes)
         paint = initPaint(R.color.colorAccent)
         paintBackground = initBackgroundPaint()
     }
@@ -56,15 +54,15 @@ open class BoardPainter(
     }
 
     override fun onDraw(canvas: Canvas) {
-
         // clear canvas
         canvas.drawColor(Color.BLACK)
+
         if (boardModel != null) {
             // drawing ships first
             boardModel!!.ships.forEach { shipViewModel ->
                 shipPainter.draw(shipViewModel, canvas)
             }
-
+            // drawing shots on ships
             boardModel!!.shots.forEach { shot ->
                 shotPainter.draw(shot, canvas)
             }
@@ -95,10 +93,10 @@ open class BoardPainter(
     // ----------------------------- end game check -----------------------------
 
     open fun endGameCheck(): Boolean {
-        if (boardModel != null && boardModel!!.endGameCheck() && activeGame!!.state != GameState.ENDED) {
+        if (boardModel != null && boardModel!!.endGameCheck() && activeGame!!.data.state != GameState.ENDED) {
             var gameResult = boardModel!!.getGameResult()
             CustomDialog().showEndGameDialog(context, gameResult)
-            activeGame!!.state = GameState.ENDED
+            activeGame!!.data.state = GameState.ENDED
             vibrate()
         }
         return false

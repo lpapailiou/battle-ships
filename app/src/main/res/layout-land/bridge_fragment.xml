@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
 
     <ListView
-        android:id="@+id/listId"
+        android:id="@+id/bridge_game_list"
         android:layout_width="299dp"
         android:layout_height="303dp"
         android:layout_marginStart="58dp"

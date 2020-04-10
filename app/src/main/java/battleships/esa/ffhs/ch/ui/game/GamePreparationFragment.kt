@@ -27,7 +27,7 @@ class GamePreparationFragment : Fragment() {
         // triggered when game is supposed to start. will change the state of the game and navigate to the actual game fragment
         startgame_button.setOnClickListener {
             if (activeGame!!.opponentBoard.validateStart()) {
-                activeGame!!.state = GameState.ACTIVE
+                activeGame!!.data.state = GameState.ACTIVE
                 (parentFragment as GameFragment).switchToGameFragment()
             } else {
                 showSnackBar(it)

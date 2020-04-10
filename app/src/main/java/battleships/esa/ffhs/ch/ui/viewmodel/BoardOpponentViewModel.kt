@@ -5,7 +5,7 @@ import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-class BoardOtherViewModel : BoardViewModel() {
+class BoardOpponentViewModel : BoardViewModel() {
 
     fun lateInit() {
         if (activeGame!!.preparedShips.isEmpty()) {
@@ -62,7 +62,7 @@ class BoardOtherViewModel : BoardViewModel() {
     // ----------------------------- take a shot on opponents board -----------------------------
 
     fun shoot(shot: Shot): Boolean {
-        if (activeGame!!.state == GameState.ENDED) {
+        if (activeGame!!.data.state == GameState.ENDED) {
             return true
         }
         var refresh: Boolean = false

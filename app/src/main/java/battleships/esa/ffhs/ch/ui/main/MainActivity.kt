@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.Game
+import battleships.esa.ffhs.ch.entity.GameInstance
 import kotlinx.android.synthetic.main.main_activity.*
 
 // https://material.io/resources/icons/?icon=directions_boat&style=baseline
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             true                        // temporary global variable to check if user is logged in for the first time
         var strictOverlapRule =
             true                        // if true: no ships are allowed to touch each other, else: ships can touch, but not overlap
-        var activeGame: Game? = null
+        var activeGame: GameInstance? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

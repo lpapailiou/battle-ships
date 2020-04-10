@@ -10,13 +10,13 @@ import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.BoardOtherViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.BoardOpponentViewModel
 
 
 class GameFragment : Fragment() {
 
     lateinit var myBoard: BoardMineViewModel
-    lateinit var opponentBoard: BoardOtherViewModel
+    lateinit var opponentBoard: BoardOpponentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +38,7 @@ class GameFragment : Fragment() {
     // check if the current game is ready to play or if the 'game preparation area' should be loaded
     private fun initBoardFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.game_fragment_container) != null) {
-            if (activeGame!!.state != GameState.ACTIVE) {
+            if (activeGame!!.data.state != GameState.ACTIVE) {
                 childFragmentManager.beginTransaction()
                     .replace(R.id.game_fragment_container, GamePreparationFragment(), "prep")
                     .commit()

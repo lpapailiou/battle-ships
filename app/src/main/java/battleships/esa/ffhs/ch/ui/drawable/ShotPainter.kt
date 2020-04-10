@@ -8,7 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.BOARD_SIZE
+import battleships.esa.ffhs.ch.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.entity.Shot
 
 class ShotPainter(

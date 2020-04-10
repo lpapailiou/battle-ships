@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.entity
 
+import battleships.esa.ffhs.ch.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.model.Coordinate
 import battleships.esa.ffhs.ch.model.Direction
 import java.util.*

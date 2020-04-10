@@ -29,7 +29,7 @@ class GameBoardOpponentFragment : Fragment() {
     ): View {
         boardModel = activeGame!!.opponentBoard
         v = inflater.inflate(R.layout.game_board_opponent_fragment, container, false)
-        if (activeGame!!.state == GameState.PREPARATION) {
+        if (activeGame!!.data.state == GameState.PREPARATION) {
             boardPainter = v
             (boardPainter as BoardPainter).setBoardViewModel(boardModel)
         }
@@ -39,7 +39,7 @@ class GameBoardOpponentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (activeGame!!.state != GameState.PREPARATION) {
+        if (activeGame!!.data.state != GameState.PREPARATION) {
             boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_opponent)
             (boardPainter as BoardPainter).setBoardViewModel(boardModel)
             activeGame!!.opponentBoardDrawable = (boardPainter as BoardPainter)
@@ -47,14 +47,14 @@ class GameBoardOpponentFragment : Fragment() {
 
         v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && activeGame!!.state != GameState.PREPARATION) {
+                if (activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && activeGame!!.data.state != GameState.PREPARATION) {
                     (parentFragment as GameActiveFragment).switchFragments()
                     return true
                 } else {
-                    if (event == null || activeGame!!.state != GameState.PREPARATION) {
+                    if (event == null || activeGame!!.data.state != GameState.PREPARATION) {
                         return false
                     }
-                    if (activeGame!!.isActivePlayerMe && activeGame!!.state != GameState.PREPARATION) {
+                    if (activeGame!!.isActivePlayerMe && activeGame!!.data.state != GameState.PREPARATION) {
                         return false
                     }
 
@@ -69,7 +69,7 @@ class GameBoardOpponentFragment : Fragment() {
                             (yTouch / (v as BoardPainter).gridWidth).toInt()
                         )
                     handled = boardModel!!.identifyShip(pointerPosition)
-                    println(event.actionMasked)
+
                     when (event.actionMasked) {
                         MotionEvent.ACTION_MOVE -> {            // move ship around
                             (v as BoardPainter).clickCounter++

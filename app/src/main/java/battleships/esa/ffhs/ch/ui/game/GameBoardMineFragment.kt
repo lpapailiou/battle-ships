@@ -40,8 +40,9 @@ class GameBoardMineFragment : Fragment() {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                     (parentFragment as GameActiveFragment).switchFragments()
+                    return true
                 } else {
-                    if (event == null || activeGame!!.state == GameState.ENDED) {
+                    if (event == null || activeGame!!.data.state == GameState.ENDED) {
                         return false
                     }
                     if (!activeGame!!.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -74,7 +75,7 @@ class GameBoardMineFragment : Fragment() {
                     //endGameCheck()    TODO: implement
                     return v?.onTouchEvent(event) ?: handled
                 }
-                return true
+                return false
             }
         })
     }
