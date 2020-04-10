@@ -1,20 +1,24 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.entity.GameInstance
+import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.entity.Shot
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-class BoardOpponentViewModel : BoardViewModel() {
+class BoardOpponentViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) {
 
-    fun lateInit() {
-        if (activeGame!!.preparedShips.isEmpty()) {
-            ships = initShips()
-            setShipsRandomly()
-        } else {
-            ships = activeGame!!.preparedShips
-        }
-        currentShip = null
+    init {
+        //if (activeGame!= null) {
+            if (activeGame.preparedShips.isEmpty()) {
+                ships = initShips()
+                setShipsRandomly()
+            } else {
+                ships = activeGame.preparedShips
+            }
+        //}
     }
 
     // ----------------------------- handle click action from UI -----------------------------
@@ -62,7 +66,7 @@ class BoardOpponentViewModel : BoardViewModel() {
     // ----------------------------- take a shot on opponents board -----------------------------
 
     fun shoot(shot: Shot): Boolean {
-        if (activeGame!!.data.state == GameState.ENDED) {
+        if (activeGame.data.state == GameState.ENDED) {
             return true
         }
         var refresh: Boolean = false
@@ -85,9 +89,9 @@ class BoardOpponentViewModel : BoardViewModel() {
                 refresh = true
             }
         }
-        if (refresh && activeGame != null && activeGame!!.opponentBoardDrawable != null) {
-            activeGame!!.opponentBoardDrawable!!.invalidate()
-            activeGame!!.opponentBoardDrawable!!.endGameCheck()
+        if (refresh && activeGame.opponentBoardDrawable != null) {
+            activeGame.opponentBoardDrawable!!.invalidate()
+            //activeGame.opponentBoardDrawable!!.endGameCheck() TODO: move up
             return true
         }
         return false
@@ -95,7 +99,7 @@ class BoardOpponentViewModel : BoardViewModel() {
 
     fun shipInvalidPositionValidityCheck(): Boolean {
         var changed = false
-        var overlapList = getOverlappingShips()
+        val overlapList = getOverlappingShips()
         for (ship in ships) {
             var isPosValid = true
 

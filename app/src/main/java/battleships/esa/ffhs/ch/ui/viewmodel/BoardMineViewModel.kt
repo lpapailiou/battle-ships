@@ -1,14 +1,17 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.entity.GameInstance
+import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.entity.Shot
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-class BoardMineViewModel : BoardViewModel() {
+class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) {
 
-    fun lateInit() {
+    init {
         ships = initShips()
         setShipsRandomly()
         ships.forEach { it.hide() }
@@ -67,8 +70,8 @@ class BoardMineViewModel : BoardViewModel() {
     // ----------------------------- trigger shot on opponents board -----------------------------
 
     fun randomShot(): Boolean {
-        if (activeGame!!.data.state != GameState.ENDED) {
-            var success = activeGame!!.opponentBoard.shoot(
+        if (activeGame.data.state != GameState.ENDED) {
+            var success = activeGame.opponentBoard.shoot(
                 Shot(
                     Cell(0, 0).getRandomCell(),
                     null

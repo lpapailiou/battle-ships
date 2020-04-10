@@ -14,15 +14,15 @@ class GameDao {
 
     fun addGame(game: GameInstance) {
         gameList.add(game)
-        games.value = gameList                          // triggers observers
+        games.value = gameList                                  // triggers observers
     }
 
     fun getGames() = games as LiveData<List<GameInstance>>      // do not change live data outside of this class
 
-    fun getActiveGame(): LiveData<GameInstance>? {
+    fun getActiveGame(): GameInstance? {                        // not sure if good idea to return game instance here
         val activeGames = gameList.filter { game ->  game.isActive() }.toList()
-        if (!activeGames.isEmpty()) {
-            return activeGames.first() as LiveData<GameInstance>
+        if (activeGames.isNotEmpty()) {
+            return activeGames.first()
         }
         return null
     }

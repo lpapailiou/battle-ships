@@ -40,14 +40,9 @@ class GameInstance (gameData: Game) {
     private var active: Boolean = false
 
     init {
-        opponentBoard =
-            BoardOpponentViewModel()
-        myBoard = BoardMineViewModel()
-    }
-
-    fun start() {
-        opponentBoard.lateInit()
-        myBoard.lateInit()
+        opponentBoard = BoardOpponentViewModel(this)
+        myBoard = BoardMineViewModel(this)
+        data.state = GameState.PREPARATION
     }
 
     fun isActive(): Boolean {
@@ -63,7 +58,7 @@ class GameInstance (gameData: Game) {
     }
 
     fun printActive(): String {
-        var gameState = ""
+        var gameState: String
         if (data.state == GameState.PREPARATION) {
             gameState = "(preparing)"
         } else {

@@ -7,10 +7,10 @@ import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.model.Ship
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.entity.GameInstance
 import battleships.esa.ffhs.ch.entity.Shot
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
 
-open class BoardViewModel : ViewModel() {
+open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
 
     val username = MutableLiveData<String>()
 
@@ -29,14 +29,14 @@ open class BoardViewModel : ViewModel() {
     }
 
     fun getGameResult(): Boolean {
-        return (ships != activeGame!!.preparedShips)
+        return (ships != activeGame.preparedShips)
     }
 
     fun validateStart(): Boolean {
         if (ships.filter { s -> !s.isPositionValid() }.count() > 0) {
             return false
         }
-        activeGame!!.preparedShips = ships
+        activeGame.preparedShips = ships
         return true
     }
 

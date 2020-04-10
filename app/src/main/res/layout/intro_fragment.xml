@@ -8,6 +8,18 @@
     tools:context=".ui.main.IntroFragment">
 
     <fragment
+        android:id="@+id/start_game_fragment"
+        android:name="battleships.esa.ffhs.ch.ui.main.StartGameFragment"
+        android:layout_width="350dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
+
+    <fragment
         android:id="@+id/gif_intro_container"
         android:name="battleships.esa.ffhs.ch.ui.main.GifFragment"
         android:layout_width="206dp"
@@ -22,7 +34,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -30,12 +41,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
 
+        android:layout_marginBottom="18dp"
         android:hint="@string/username"
         android:textColorHint="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
-        app:hintEnabled="true"
 
+        app:hintEnabled="true"
         app:hintTextColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/start_game_fragment"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
@@ -53,39 +66,6 @@
             app:colorOnSurface="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/offline_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-
-        android:text="@string/practice"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/online_button"
-        app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/username_layout"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/online_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/online"
-
-        app:layout_constraintLeft_toRightOf="@id/offline_button"
-        app:layout_constraintRight_toLeftOf="@+id/score_button"
-        app:layout_constraintTop_toTopOf="@id/offline_button" />
-
-    <Button
-        android:id="@+id/score_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/score"
-
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintLeft_toRightOf="@id/online_button"
-        app:layout_constraintTop_toTopOf="@id/online_button" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

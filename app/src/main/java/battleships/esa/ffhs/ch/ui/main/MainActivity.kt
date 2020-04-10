@@ -12,8 +12,6 @@ import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.GameInstance
 import kotlinx.android.synthetic.main.main_activity.*
 
-// https://material.io/resources/icons/?icon=directions_boat&style=baseline
-
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -21,7 +19,6 @@ class MainActivity : AppCompatActivity() {
             true                        // temporary global variable to check if user is logged in for the first time
         var strictOverlapRule =
             true                        // if true: no ships are allowed to touch each other, else: ships can touch, but not overlap
-        var activeGame: GameInstance? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +40,10 @@ class MainActivity : AppCompatActivity() {
 
     // ----------------------------- navigation -----------------------------
 
+    // TODO: remove 'current game' menu item if there is no current game
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
+        val inflater: MenuInflater = menuInflater       // TODO: inflater not used, remove
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true
     }
