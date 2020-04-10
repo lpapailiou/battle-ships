@@ -9,14 +9,21 @@ import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.activeGame
+import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.BoardOtherViewModel
 
 
 class GameFragment : Fragment() {
+
+    lateinit var myBoard: BoardMineViewModel
+    lateinit var opponentBoard: BoardOtherViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        opponentBoard = activeGame!!.opponentBoard
+        myBoard = activeGame!!.myBoard
         return inflater.inflate(R.layout.game_fragment, container, false)
     }
 

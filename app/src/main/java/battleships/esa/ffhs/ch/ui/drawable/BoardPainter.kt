@@ -23,10 +23,11 @@ open class BoardPainter(
     companion object {
         const val STROKE_WIDTH = 2f
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
+        //var gridWidth = 0f
     }
 
     var boardModel: BoardViewModel? = null
-
+    var gridWidth: Float = 0f
     val shipPainter: ShipPainter
     val shotPainter: ShotPainter
 
@@ -34,14 +35,17 @@ open class BoardPainter(
 
     var paint: Paint
     var paintBackground: Paint
-    var gridWidth = 0f
-
 
     init {
         shipPainter = ShipPainter(context, attributes)
         shotPainter = ShotPainter(context, attributes)
         paint = initPaint(R.color.colorAccent)
         paintBackground = initBackgroundPaint()
+    }
+
+    open fun setBoardViewModel(viewModel: BoardViewModel) {
+        boardModel = viewModel
+        invalidate()
     }
 
     // ----------------------------- basic view handling -----------------------------
@@ -52,16 +56,18 @@ open class BoardPainter(
     }
 
     override fun onDraw(canvas: Canvas) {
+
         // clear canvas
         canvas.drawColor(Color.BLACK)
+        if (boardModel != null) {
+            // drawing ships first
+            boardModel!!.ships.forEach { shipViewModel ->
+                shipPainter.draw(shipViewModel, canvas)
+            }
 
-        // drawing ships first
-        boardModel!!.ships.forEach { shipViewModel ->
-            shipPainter.draw(shipViewModel, canvas)
-        }
-
-        boardModel!!.shots.forEach { shot ->
-            shotPainter.draw(shot, canvas)
+            boardModel!!.shots.forEach { shot ->
+                shotPainter.draw(shot, canvas)
+            }
         }
 
         // drawing grid over ships
@@ -89,7 +95,7 @@ open class BoardPainter(
     // ----------------------------- end game check -----------------------------
 
     open fun endGameCheck(): Boolean {
-        if (boardModel!!.endGameCheck() && activeGame!!.state != GameState.ENDED) {
+        if (boardModel != null && boardModel!!.endGameCheck() && activeGame!!.state != GameState.ENDED) {
             var gameResult = boardModel!!.getGameResult()
             CustomDialog().showEndGameDialog(context, gameResult)
             activeGame!!.state = GameState.ENDED
