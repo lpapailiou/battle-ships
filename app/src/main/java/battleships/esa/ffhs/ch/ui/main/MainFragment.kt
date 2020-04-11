@@ -4,13 +4,9 @@ import MainViewModel
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isFirstLogin
-import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 
 
 class MainFragment : Fragment() {

@@ -9,4 +9,5 @@ class ViewModelFactory(private val gameRepository: GameRepository): ViewModelPro
     override fun <T: ViewModel?> create(modelClass: Class<T>): T {
         return GameListViewModel(gameRepository) as T
     }
+
 }

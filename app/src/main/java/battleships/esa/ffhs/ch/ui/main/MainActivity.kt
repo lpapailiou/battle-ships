@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -42,22 +42,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun vibrate() {
-        val vibrator = applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrator.hasVibrator()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(
-                    VibrationEffect.createOneShot(
-                        200,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
-                )
-            } else {
-                vibrator.vibrate(200)
-            }
-        }
-    }
-
     // ----------------------------- navigation -----------------------------
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -65,15 +49,10 @@ class MainActivity : AppCompatActivity() {
         val item: MenuItem? = menu?.getItem(2)
         if (item != null) {
             val factory = InjectorUtils.provideGameViewModelFactory()
-            val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
-            viewModel.getGames().observe(this, Observer { games ->          // remove 'current game' menu item if there is no current game
-                val currentGame = viewModel.getActiveGame()
-                if (currentGame == null) {
-                    item.setVisible(false)
-                } else {
-                    item.setVisible(true)
-                }
-                invalidateOptionsMenu()
+            val viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
+            viewModel.getGames().observe(this, Observer {           // remove 'current game' menu item if there is no current game
+                item.setVisible(viewModel.hasActiveGame().value == true)
+                invalidateOptionsMenu()     // TODO: not clean yet, menu item is still visible when game was ended
             })
         }
         return true
@@ -98,6 +77,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupActionBar(navController: NavController) {
         NavigationUI.setupActionBarWithNavController(this, navController, container)
+    }
+
+    // ----------------------------- hardware connector -----------------------------
+
+    fun vibrate() {
+        val vibrator = applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        200,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            } else {
+                vibrator.vibrate(200)
+            }
+        }
     }
 
 }

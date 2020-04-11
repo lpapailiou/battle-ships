@@ -31,32 +31,32 @@ class ShipPainter(
     }
 
     fun draw(shipViewModel: ShipViewModel, canvas: Canvas) {
-        val ship = shipViewModel.ship
+        val ship = shipViewModel
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * ship.bowCoordinate.x
-        var startY = gridWidth * ship.bowCoordinate.y
+        var startX = gridWidth * ship.getBowCoordinate().x
+        var startY = gridWidth * ship.getBowCoordinate().y
 
         var endX: Float
         var endY: Float
 
-        when (ship.direction) {
+        when (ship.getDirection()) {
             Direction.UP -> {
                 endY = startY + gridWidth
-                startY = startY + gridWidth - (gridWidth * ship.size)
+                startY = startY + gridWidth - (gridWidth * ship.getShipSize())
                 endX = startX + gridWidth
             }
             Direction.DOWN -> {
-                endY = startY + gridWidth * ship.size
+                endY = startY + gridWidth * ship.getShipSize()
                 endX = startX + gridWidth
             }
             Direction.RIGHT -> {
-                endX = startX + gridWidth * ship.size
+                endX = startX + gridWidth * ship.getShipSize()
                 endY = startY + gridWidth
             }
             Direction.LEFT -> {
                 endX = startX + gridWidth
-                startX = startX + gridWidth - (gridWidth * ship.size)
+                startX = startX + gridWidth - (gridWidth * ship.getShipSize())
                 endY = startY + gridWidth
             }
             else -> {

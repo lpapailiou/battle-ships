@@ -1,13 +1,14 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
 import android.app.Activity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import battleships.esa.ffhs.ch.model.Coordinate
 import battleships.esa.ffhs.ch.model.Direction
-import battleships.esa.ffhs.ch.model.Ship
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.entity.GameDao
+import battleships.esa.ffhs.ch.entity.ShipDao
 import battleships.esa.ffhs.ch.entity.Shot
 
 open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
@@ -15,27 +16,55 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
     val username = MutableLiveData<String>()
 
     val shipSizes: IntArray = intArrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
-    var ships: List<ShipViewModel> = listOf()
-    var shots: MutableList<Shot> = mutableListOf()
+    private var ships: MutableLiveData<MutableList<ShipViewModel>> = MutableLiveData<MutableList<ShipViewModel>>()
+    private var shots: MutableLiveData<MutableList<Shot>> = MutableLiveData<MutableList<Shot>>()
 
     var currentShip: ShipViewModel? = null
     var offset = Cell(0, 0)
 
-    // ----------------------------- game handling -----------------------------
-
-
-
-    open fun endGameCheck(): Boolean {
-        var sunkenShips = ships.filter { s -> s.isSunken() }.count()
-        return (sunkenShips == ships.size)
+    init {
+        ships.value = mutableListOf()
+        shots.value = mutableListOf()
+        setShips(initShips())
+        setShipsRandomly()
     }
 
-    fun getGameResult(): Boolean {
-        return (ships != activeGame.getOpponentBoard().value!!.ships)
+    // ----------------------------- game handling -----------------------------
+    fun getObservableShips(): LiveData<List<ShipViewModel>> {
+        return ships as LiveData<List<ShipViewModel>>
+    }
+
+    fun getObservableShots(): LiveData<List<Shot>> {
+        return shots as LiveData<List<Shot>>
+    }
+
+    fun getShips(): List<ShipViewModel> {
+        return ships.value!!
+    }
+
+    fun getShots(): List<Shot> {
+        return shots.value!!
+    }
+
+    fun setShips(newShips: List<ShipViewModel>) {
+        var newShipList = mutableListOf<ShipViewModel>()
+        newShipList.addAll(newShips)
+        ships.value = newShipList
+    }
+
+    fun addShot(shot: Shot) {
+        var shotList = shots.value!!
+        shotList.add(shot)
+        shots.value = shotList      // extra complicated so 'mr. observer' gets triggered - you are welcome.
+    }
+
+    open fun endGameCheck(): Boolean {
+        var sunkenShips = getShips().filter { s -> s.isSunken() }.count()
+        return (sunkenShips == getShips().size)
     }
 
     fun validateStart(): Boolean {
-        if (ships.filter { s -> !s.isPositionValid() }.count() > 0) {
+        if (getShips().filter { s -> !s.isPositionValid() }.count() > 0) {
             return false
         }
         return true
@@ -78,15 +107,16 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
             shot.isHit(true)
             ship.hit(shot)
         }
-        shots.add(shot)
+        addShot(shot)
     }
 
     fun getOverlappingShips(): HashSet<ShipViewModel> {
         val overlappingShips = hashSetOf<ShipViewModel>()
-        for (ship in ships) {
+        var shipList = getShips()
+        for (ship in shipList) {
             if (overlappingShips.contains(ship)) continue
 
-            for (otherShip in ships) {
+            for (otherShip in shipList) {
                 if (ship == otherShip) continue
 
                 if (ship.isWithinOccupiedAreaOfOtherShip(otherShip)) {
@@ -102,12 +132,11 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
 
     protected fun initShips(): List<ShipViewModel> {
         val newShips =  shipSizes.mapIndexed { index, size ->
-                Ship(
+            ShipDao(
                     index,
                     Coordinate(0, index),
                     size,
-                    Direction.RIGHT,
-                    mutableSetOf()
+                    Direction.RIGHT
                 )
         }.toList()
 
@@ -118,7 +147,7 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
 
     // TODO: unstable, should be refactored
     fun setShipsRandomly() {
-        ships.forEach { s -> s.setRandomly() }
+        getShips().forEach { s -> s.setRandomly() }
         var overlapList = getOverlappingShips()
         while (!overlapList.isEmpty()) {
             overlapList.first().setRandomly()

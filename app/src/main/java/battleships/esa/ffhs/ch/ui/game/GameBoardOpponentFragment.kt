@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.model.GameState
@@ -19,6 +20,7 @@ import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 class GameBoardOpponentFragment : Fragment() {
 
     var boardPainter: View? = null
+    var observerSet = false
     lateinit var boardModel: BoardViewModel
     lateinit var v: View
 
@@ -28,39 +30,39 @@ class GameBoardOpponentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        boardModel = currentGame.getOpponentBoard().value!!
+        boardModel = currentGame.getOpponentBoard()
         v = inflater.inflate(R.layout.game_board_opponent_fragment, container, false)
         boardPainter = v
-        if (currentGame.getState().value == GameState.PREPARATION) {
-
-            (boardPainter as BoardPainter).setBoardViewModel(boardModel)
+        if (currentGame.equalsState(GameState.PREPARATION)) {
+            setObserver()
         }
         return v
     }
 
+    // ----------------------------- set observers and click handler -----------------------------
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (currentGame.getState().value != GameState.PREPARATION) {
+        if (currentGame.notEqualsState(GameState.PREPARATION)) {
             if (boardPainter == null) {
                 boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_opponent)
             }
-
-            println("board painter is null: " + (boardPainter == null))
-            println("board model is null: " + (boardModel == null))
-            (boardPainter as BoardPainter).setBoardViewModel(boardModel)        // TODO: game status not correct (prep instead of started)
-            //currentGame.opponentBoardDrawable = (boardPainter as BoardPainter)
+            if (!observerSet) {
+                setObserver()
+            }
         }
 
         v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (currentGame.isMyTurn().value!! && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.getState().value!! != GameState.PREPARATION) {
+                if (currentGame.isMyTurn() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.notEqualsState(GameState.PREPARATION)) {
+                    // if this fragment is displayed as small fragment (portrait mode), this click will trigger a board switch
                     (parentFragment as GameActiveFragment).switchFragments()
-                    return true
+                    return false
                 } else {
-                    if (event == null || currentGame.getState().value!! != GameState.PREPARATION) {
+                    if (event == null || currentGame.notEqualsState(GameState.PREPARATION)) {
                         return false
                     }
-                    if (currentGame.isMyTurn().value!! && currentGame.getState().value!! != GameState.PREPARATION) {
+                    if (currentGame.isMyTurn() && currentGame.notEqualsState(GameState.PREPARATION)) {
                         return false
                     }
 
@@ -69,9 +71,11 @@ class GameBoardOpponentFragment : Fragment() {
                     val xTouch: Float = event.getX(0)
                     val yTouch: Float = event.getY(0)
 
+                    (v as BoardPainter)
+
                     val pointerPosition: Cell =
                         Cell(
-                            (xTouch / (v as BoardPainter).gridWidth).toInt(),
+                            (xTouch / v.gridWidth).toInt(),
                             (yTouch / v.gridWidth).toInt()
                         )
                     handled = boardModel.identifyShip(pointerPosition)
@@ -82,7 +86,6 @@ class GameBoardOpponentFragment : Fragment() {
                             if (handled && v.clickCounter > CLICK_LIMIT) {
                                 boardModel.moveAction(pointerPosition)
                             }
-                            v.invalidate()
                             return true
                         }
                         MotionEvent.ACTION_UP -> {              // rotate ship
@@ -91,7 +94,6 @@ class GameBoardOpponentFragment : Fragment() {
                             } else {
                                 boardModel.releaseShip()
                             }
-                            v.invalidate()
                             v.clickCounter = 0
                         }
                     }
@@ -99,6 +101,23 @@ class GameBoardOpponentFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setObserver() {
+        boardModel.getShips().forEach{ ship ->
+            ship.getObservableShip().value!!.getObservableCoordinate().observe(viewLifecycleOwner, Observer {
+                (boardPainter as BoardPainter).setShips(boardModel.getShips())
+            })
+
+            ship.getObservableShip().value!!.getObservableDirection().observe(viewLifecycleOwner, Observer {
+                (boardPainter as BoardPainter).setShips(boardModel.getShips())
+            })
+        }
+
+        boardModel.getObservableShots().observe(viewLifecycleOwner, Observer { shots ->
+            (boardPainter as BoardPainter).setShots(shots)
+        })
+        observerSet = true
     }
 
 }

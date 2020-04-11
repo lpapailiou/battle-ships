@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
@@ -33,7 +33,7 @@ class ScoreFragment : Fragment() {
 
     private fun initializeObserver() {
         val factory = InjectorUtils.provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
+        val viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             val finishedGames = games.filter { game -> game.getState().value == GameState.ENDED }
             val itemsAdapter: ArrayAdapter<String> =

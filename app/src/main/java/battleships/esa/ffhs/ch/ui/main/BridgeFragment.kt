@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.GameDao
 import battleships.esa.ffhs.ch.entity.InjectorUtils.provideGameViewModelFactory
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 import kotlinx.android.synthetic.main.bridge_fragment.*
 
 class BridgeFragment : Fragment() {
@@ -35,7 +38,7 @@ class BridgeFragment : Fragment() {
 
     private fun initializeGameList() {
         val factory = provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
+        val viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             val ongoingGames = games.filter { game -> game.getState().value != GameState.ENDED }
             itemsAdapter =
@@ -49,15 +52,11 @@ class BridgeFragment : Fragment() {
 
         bridge_game_list.setOnItemClickListener { parent, view, position, id ->
             val factory = provideGameViewModelFactory()
-            val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
+            val viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
             val gameList = viewModel.getGames().value?.filter{ game -> game.getState().value != GameState.ENDED}
             val clickedGame = gameList?.get(position)
             if (clickedGame != null) {
-                val activeGame = viewModel.getActiveGame()
-                if (activeGame.value != null) {
-                    activeGame.value!!.setActive(false)
-                }
-                clickedGame.setActive(true)
+                viewModel.setGameActive(clickedGame)
                 findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
             }
 

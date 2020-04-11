@@ -1,7 +1,7 @@
 package battleships.esa.ffhs.ch.model
 
 import battleships.esa.ffhs.ch.entity.Shot
-
+/*
 data class Ship(
     val id: Int,
     var bowCoordinate: Coordinate,
@@ -11,4 +11,4 @@ data class Ship(
 ) {
     var isPositionValid = true
     var isHidden = false
-}
+}*/

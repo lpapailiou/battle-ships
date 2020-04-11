@@ -1,20 +1,73 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import battleships.esa.ffhs.ch.model.Coordinate
-import battleships.esa.ffhs.ch.model.Ship
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.entity.DirectionHandler
+import battleships.esa.ffhs.ch.entity.ShipDao
 import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.model.STRICT_OVERLAP_RULE
 
-class ShipViewModel(val ship: Ship) {
+class ShipViewModel(shipData: ShipDao) {
 
     private var shipCells: MutableList<Cell> = mutableListOf<Cell>()
     private var isSunken = false
+    private var ship = MutableLiveData<ShipDao>()
 
     init {
+        ship.value = shipData
         updateCells()
-        isSunken = ship.hits.size == shipCells.size
+        isSunken = ship.value!!.getHitCount() == shipCells.size
+    }
+
+    private fun getShip(): ShipDao {
+        return ship.value!!
+    }
+
+    fun getBowCoordinate(): Coordinate {
+        return ship.value!!.getBowCoordinate()
+    }
+
+    fun setBowCoordinate(coordinate: Coordinate) {
+        ship.value!!.setCoordinate(coordinate)
+    }
+
+    fun getDirection(): Direction {
+        return ship.value!!.getDirection()
+    }
+
+    fun setDirection(direction: Direction) {
+        ship.value!!.setDirection(direction)
+    }
+
+    fun getObservableShip(): LiveData<ShipDao> {
+        return ship
+    }
+
+    fun getShipSize(): Int {
+        return ship.value!!.getShipSize()
+    }
+
+    fun addHit(hit: Shot) {
+        ship.value!!.addHit(hit)
+    }
+
+    fun getHits(): Set<Shot> {
+        return ship.value!!.getHits()
+    }
+
+    fun hide(hide: Boolean) {
+        ship.value!!.hide(hide)
+    }
+
+    fun getObservableDirection(): LiveData<Direction> {
+        return ship.value!!.getObservableDirection()
+    }
+
+    fun getObservableCoordinate(): LiveData<Coordinate> {
+        return ship.value!!.getObservableCoordinate()
     }
 
     // ----------------------------- ship body location handling -----------------------------
@@ -23,15 +76,15 @@ class ShipViewModel(val ship: Ship) {
         shipCells.clear()
         shipCells.add(
             Cell(
-                ship.bowCoordinate.x,
-                ship.bowCoordinate.y
+                getBowCoordinate().x,
+                getBowCoordinate().y
             )
         )
-        for (i in 1 until ship.size) {
+        for (i in 1 until getShipSize()) {
             shipCells.add(
                 Cell(
-                    ship.bowCoordinate.x + i * ship.direction.x,
-                    ship.bowCoordinate.y + i * ship.direction.y
+                    getBowCoordinate().x + i * getDirection().x,
+                    getBowCoordinate().y + i * getDirection().y
                 )
             )
         }
@@ -60,14 +113,14 @@ class ShipViewModel(val ship: Ship) {
     // TODO: probably better to refactor
     fun setRandomly() {
         do {
-            ship.bowCoordinate = Cell(0,0).getRandomCoordinate()
-            ship.direction = DirectionHandler(ship.direction).getRandomDirection()
+            setBowCoordinate(Cell(0,0).getRandomCoordinate())
+            setDirection(DirectionHandler(getDirection()).getRandomDirection())
             updateCells()
         } while (!isShipCompletelyOnBoard())
     }
 
     fun set(cell: Cell) {
-        ship.bowCoordinate = cell.coordinate
+        setBowCoordinate(cell.coordinate)
         updateCells()
     }
 
@@ -82,27 +135,26 @@ class ShipViewModel(val ship: Ship) {
 
     fun rotate(cell: Cell) {
         val index = getIndex(cell)
-        ship.direction = DirectionHandler(ship.direction).getNextClockwiseNondiagonalDirection()
-        ship.bowCoordinate = Coordinate(
-            cell.coordinate.x - (ship.direction.x * index),
-            cell.coordinate.y - (ship.direction.y * index)
-        )
+        setDirection(DirectionHandler(getDirection()).getNextClockwiseNondiagonalDirection())
+        setBowCoordinate(Coordinate(
+            cell.coordinate.x - (getDirection().x * index),
+            cell.coordinate.y - (getDirection().y * index)
+        ))
         updateCells()
     }
 
     // ----------------------------- hit handling -----------------------------
 
     fun hit(shot: Shot) {
-        ship.hits.add(shot)
+        addHit(shot)
         sinkCheck()
     }
 
     private fun sinkCheck() {
-        isSunken = ship.hits.size == shipCells.size
+        isSunken = getHits().size == shipCells.size
         if (isSunken) {
-            ship.hits.forEach { h -> h.undraw() }   // shots of ships get invisible (as they overlap ship)
-            ship.isHidden =
-                false                               // ships gets visible again; drawn in red to vizualize it is completely sunk
+            getHits().forEach { h -> h.undraw() }   // shots of ships get invisible (as they overlap ship)
+            hide(false)                                // ships gets visible again; drawn in red to vizualize it is completely sunk
         }
     }
 
@@ -144,15 +196,15 @@ class ShipViewModel(val ship: Ship) {
 
     // TODO: check if can be replaced with getOffset method
     fun getIndex(cell: Cell): Int {
-        var pos: Cell = Cell(ship.bowCoordinate.x, ship.bowCoordinate.y)
+        var pos: Cell = Cell(getBowCoordinate().x, getBowCoordinate().y)
 
-        for ((index, i) in (0 until ship.size).withIndex()) {
+        for ((index, i) in (0 until getShipSize()).withIndex()) {
             if (pos.equals(cell)) {
                 return index
             }
             pos = Cell(
-                pos.coordinate.x + ship.direction.x,
-                pos.coordinate.y + ship.direction.y
+                pos.coordinate.x + getDirection().x,
+                pos.coordinate.y + getDirection().y
             )
         }
         return -1
@@ -161,27 +213,23 @@ class ShipViewModel(val ship: Ship) {
     // used for more intuitive moving
     fun getOffset(cell: Cell): Cell {
         return Cell(
-            cell.coordinate.x - ship.bowCoordinate.x,
-            cell.coordinate.y - ship.bowCoordinate.y
+            cell.coordinate.x - getBowCoordinate().x,
+            cell.coordinate.y - getBowCoordinate().y
         )
     }
 
     // ----------------------------- generic getters and setters -----------------------------
 
-    fun hide() {
-        ship.isHidden = true
-    }
-
     fun isHidden(): Boolean {
-        return ship.isHidden
+        return ship.value!!.isHidden()
     }
 
     fun isPositionValid(): Boolean {
-        return ship.isPositionValid
+        return ship.value!!.isPositionValid()
     }
 
     fun isPositionValid(valid: Boolean) {
-        ship.isPositionValid = valid
+        ship.value!!.setPositionValid(valid)
     }
 
 }

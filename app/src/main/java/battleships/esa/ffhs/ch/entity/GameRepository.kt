@@ -18,4 +18,6 @@ class GameRepository private constructor (private val gameListDao: GameListDao) 
 
     fun getActiveGame() = gameListDao.getActiveGame()
 
+    fun hasActiveGame() = gameListDao.hasActiveGame()
+
 }

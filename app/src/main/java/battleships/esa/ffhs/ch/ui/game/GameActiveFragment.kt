@@ -31,6 +31,8 @@ class GameActiveFragment : Fragment() {
         initGameFragments()
     }
 
+    // ----------------------------- child fragment control -----------------------------
+
     private fun initGameFragments() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_game_active) != null) {
             childFragmentManager.beginTransaction()
@@ -44,11 +46,11 @@ class GameActiveFragment : Fragment() {
     }
 
     // will be accessed as well from child fragments
-    fun switchFragments() {         // TODO: obsolete as fragment switch is not necessary anymore - switch of boardViewModel would be sufficient
+    fun switchFragments() {
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return
         }
-        if (currentGame.isMyTurn().value!!) {
+        if (currentGame.isMyTurn()) {
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardOpponentFragment(), "other")
                 .commit()

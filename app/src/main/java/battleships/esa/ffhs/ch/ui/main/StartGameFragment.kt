@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils
@@ -24,7 +24,7 @@ class StartGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         factory = InjectorUtils.provideGameViewModelFactory()
-        viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
         return inflater.inflate(R.layout.start_game_fragment, container, false)
     }
 
@@ -34,18 +34,12 @@ class StartGameFragment : Fragment() {
         // ----------------------------- button change listeners -----------------------------
 
         offline_button.setOnClickListener {
-            val currentGame = viewModel.getActiveGame().value
-            if (currentGame != null) {
-                currentGame.setActive(false)
-            }
+            viewModel.setGameActive(null)
             findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
         }
 
         online_button.setOnClickListener {
-            val currentGame = viewModel.getActiveGame().value
-            if (currentGame != null) {
-                currentGame.setActive(false)
-            }
+            viewModel.setGameActive(null)
             findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
         }
 

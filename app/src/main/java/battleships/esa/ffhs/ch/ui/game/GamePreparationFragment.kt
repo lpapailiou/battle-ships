@@ -26,7 +26,7 @@ class GamePreparationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // triggered when game is supposed to start. will change the state of the game and navigate to the actual game fragment
         startgame_button.setOnClickListener {
-            if (currentGame.getOpponentBoard().value!!.validateStart()) {
+            if (currentGame.getOpponentBoard().validateStart()) {
                 currentGame.setState(GameState.ACTIVE)
                 (parentFragment as GameFragment).switchToGameFragment()
             } else {

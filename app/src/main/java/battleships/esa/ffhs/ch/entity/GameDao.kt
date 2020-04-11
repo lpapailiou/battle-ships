@@ -12,7 +12,7 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GameDao {
+class GameDao { // Dao = Data Access Object
 
     private val id = MutableLiveData<Timestamp>()
     private var lastChange = MutableLiveData<String>()
@@ -73,6 +73,9 @@ class GameDao {
     private fun updateModificationDate() {
         lastChange.value = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
     }
+
+
+    // TODO: move to gameViewModel
 
     fun printActive(): String {
         var gameState: String = ""

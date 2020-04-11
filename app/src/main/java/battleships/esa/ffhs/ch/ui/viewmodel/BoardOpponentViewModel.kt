@@ -1,17 +1,9 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.*
 import battleships.esa.ffhs.ch.model.GameState
 
 class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
-
-    init {
-        ships = initShips()
-        setShipsRandomly()
-    }
 
     // ----------------------------- handle click action from UI -----------------------------
 
@@ -23,7 +15,7 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
         if (currentShip != null) {
             return true
         }
-        for (ship in ships) {
+        for (ship in getShips()) {
             if (ship.isCellOnShip(pointerPosition) && currentShip == null) {
                 currentShip = ship.getShip(pointerPosition)
                 offset = currentShip!!.getOffset(pointerPosition)
@@ -41,7 +33,7 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     }
 
     override fun moveAction(pointerPosition: Cell): Boolean {
-        var oldPos = currentShip!!.ship.bowCoordinate
+        var oldPos = currentShip!!.getBowCoordinate()
         currentShip!!.set(pointerPosition, offset)
         if (!currentShip!!.isShipCompletelyOnBoard()) {
             currentShip!!.set(
@@ -63,11 +55,11 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
         }
         var refresh: Boolean = false
         var pointerPosition: Cell = shot.cell
-        if (shots.filter { s -> s.cell == pointerPosition }.count() > 0) {
+        if (getShots().filter { s -> s.cell == pointerPosition }.count() > 0) {
             return false
         }
 
-        for (ship in ships) {
+        for (ship in getShips()) {
             if (ship.isCellOnShip(pointerPosition)) {
                 currentShip = ship.getShip(pointerPosition)
                 if (currentShip != null) {
@@ -82,7 +74,6 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
             }
         }
         if (refresh) {
-            //TODO: make change listener to invalidate in fragment
             endGameCheck()
             return true
         }
@@ -92,7 +83,6 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     override fun endGameCheck(): Boolean {
         val gameEnded = super.endGameCheck()
         if (gameEnded && activeGame.getState().value != GameState.ENDED) {
-            println("============END CHECK POSITIVE OPPONENT")
             activeGame.setState(GameState.ENDED)
             return true
         }
@@ -102,7 +92,7 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     fun shipInvalidPositionValidityCheck(): Boolean {
         var changed = false
         val overlapList = getOverlappingShips()
-        for (ship in ships) {
+        for (ship in getShips()) {
             var isPosValid = true
 
             if (!ship.isShipCompletelyOnBoard() || overlapList.contains(ship)) {

@@ -7,9 +7,14 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
 open class BoardPainter(
     context: Context, attributes: AttributeSet
@@ -19,6 +24,9 @@ open class BoardPainter(
         const val STROKE_WIDTH = 2f
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
     }
+
+    private var ships: MutableList<ShipViewModel> = mutableListOf()
+    private var shots: MutableList<Shot> = mutableListOf()
 
     var boardModel: BoardViewModel? = null
 
@@ -36,8 +44,15 @@ open class BoardPainter(
         paintBackground = initBackgroundPaint()
     }
 
-    open fun setBoardViewModel(viewModel: BoardViewModel) {
-        boardModel = viewModel
+    fun setShips(updatedShips: List<ShipViewModel>) {
+        println("ships set")
+        ships = updatedShips as MutableList<ShipViewModel>
+        invalidate()
+    }
+
+    fun setShots(updatedShots: List<Shot>) {
+        println("shots set")
+        shots = updatedShots as MutableList<Shot>
         invalidate()
     }
 
@@ -52,32 +67,18 @@ open class BoardPainter(
         // clear canvas
         canvas.drawColor(Color.BLACK)
 
-        if (boardModel != null) {
-            // drawing ships first
-            boardModel!!.ships.forEach { shipViewModel ->
-                shipPainter.draw(shipViewModel, canvas)
-            }
-            // drawing shots on ships
-            boardModel!!.shots.forEach { shot ->
-                shotPainter.draw(shot, canvas)
-            }
+        // drawing ships first
+        ships.forEach { shipViewModel ->
+            shipPainter.draw(shipViewModel, canvas)
+        }
+        // drawing shots on ships
+        shots.forEach { shot ->
+            shotPainter.draw(shot, canvas)
         }
 
         // drawing grid over ships
         drawGrid(canvas)
     }
-
-    // ----------------------------- end game check -----------------------------
-/* TODO: move up
-    open fun endGameCheck(): Boolean {
-        if (boardModel != null && boardModel!!.endGameCheck() && activeGame!!.data.state != GameState.ENDED) {
-            var gameResult = boardModel!!.getGameResult()
-            CustomDialog().showEndGameDialog(context, gameResult)
-            activeGame.data.state = GameState.ENDED
-            vibrate()
-        }
-        return false
-    }*/
 
     // ----------------------------- create grid -----------------------------
 

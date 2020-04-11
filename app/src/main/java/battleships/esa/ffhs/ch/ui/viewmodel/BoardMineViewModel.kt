@@ -1,27 +1,20 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
 import android.app.Activity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.entity.*
-import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.model.GameState
-import battleships.esa.ffhs.ch.ui.game.GameActiveFragment
-import battleships.esa.ffhs.ch.ui.game.GameBoardMineFragment
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 
 class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
 
     init {
-        ships = initShips()
-        setShipsRandomly()
-        ships.forEach { it.hide() }
+        getShips().forEach { it.hide(true) }
     }
 
     // ----------------------------- handle click action from UI -----------------------------
 
     override fun repeatClickCheck(pointerPosition: Cell): Boolean {
-        return (shots.filter { s -> s.cell == pointerPosition }.count() > 0)
+        return (getShots().filter { s -> s.cell == pointerPosition }.count() > 0)
     }
 
     override fun identifyShip(pointerPosition: Cell): Boolean {
@@ -54,7 +47,6 @@ class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     override fun endGameCheck(): Boolean {
         val gameEnded = super.endGameCheck()
         if (gameEnded && activeGame.getState().value!! != GameState.ENDED) {
-            println("============END CHECK POSITIVE ME")
             activeGame.setResult(1)
             activeGame.setState(GameState.ENDED)
             return true
@@ -63,7 +55,7 @@ class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     }
 
     fun findShipAtPosition(position: Cell): ShipViewModel? {
-        for (ship in ships) {
+        for (ship in getShips()) {
             if (ship.isCellOnShip(position)) {
 
                 return ship

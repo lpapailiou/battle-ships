@@ -54,6 +54,7 @@ dependencies {
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
 
     // View & Design
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
