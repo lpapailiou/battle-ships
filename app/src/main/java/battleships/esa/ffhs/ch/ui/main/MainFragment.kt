@@ -37,16 +37,6 @@ class MainFragment : Fragment() {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    private fun adaptMenuItems() {
-        val factory = InjectorUtils.provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
-        viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
-            if (games.filter { game -> game.isActive()}.count() == 0) {
-
-            }
-        })
-    }
-
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
     private fun initMainFragment() {

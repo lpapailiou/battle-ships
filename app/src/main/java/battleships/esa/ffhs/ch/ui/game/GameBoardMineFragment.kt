@@ -26,7 +26,7 @@ class GameBoardMineFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        boardModel = currentGame.myBoard
+        boardModel = currentGame.getMyBoard().value!!
         v = inflater.inflate(R.layout.game_board_mine_fragment, container, false)
         return v
     }
@@ -39,14 +39,14 @@ class GameBoardMineFragment : Fragment() {
 
         v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (!currentGame.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                if (!currentGame.isMyTurn().value!! && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                     (parentFragment as GameActiveFragment).switchFragments()
                     return false
                 } else {
-                    if (event == null || currentGame.data.state == GameState.ENDED) {
+                    if (event == null || currentGame.getState().value == GameState.ENDED) {
                         return false
                     }
-                    if (!currentGame.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    if (!currentGame.isMyTurn().value!! && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                         return false
                     }
 

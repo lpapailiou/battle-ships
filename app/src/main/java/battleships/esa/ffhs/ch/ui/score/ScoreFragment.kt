@@ -35,7 +35,7 @@ class ScoreFragment : Fragment() {
         val factory = InjectorUtils.provideGameViewModelFactory()
         val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
-            val finishedGames = games.filter { game -> game.data.state == GameState.ENDED }
+            val finishedGames = games.filter { game -> game.getState().value == GameState.ENDED }
             val itemsAdapter: ArrayAdapter<String> =
                 ArrayAdapter<String>(
                     (activity as MainActivity),
@@ -44,8 +44,8 @@ class ScoreFragment : Fragment() {
                 )
             score_game_list.adapter = itemsAdapter
 
-            val scoreMulti = finishedGames.filter { game -> game.opponent != "Bot" }.map { game -> game.data.result * WON_GAME_VALUE }.sum()
-            val scoreBot = finishedGames.filter { game -> game.opponent == "Bot" }.map { game -> game.data.result * WON_GAME_VALUE }.sum()
+            val scoreMulti = finishedGames.filter { game -> game.getOpponentName() != "Bot" }.map { game -> game.getResult().value!! * WON_GAME_VALUE }.sum()
+            val scoreBot = finishedGames.filter { game -> game.getOpponentName() == "Bot" }.map { game -> game.getResult().value!! * WON_GAME_VALUE }.sum()
             score_points_multiplayer.setText(scoreMulti.toString())
             score_points_bot.setText(scoreBot.toString())
         })

@@ -37,7 +37,7 @@ class BridgeFragment : Fragment() {
         val factory = provideGameViewModelFactory()
         val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
-            val ongoingGames = games.filter { game -> game.data.state != GameState.ENDED }
+            val ongoingGames = games.filter { game -> game.getState().value != GameState.ENDED }
             itemsAdapter =
                 ArrayAdapter<String>(
                     (activity as MainActivity),
@@ -50,7 +50,7 @@ class BridgeFragment : Fragment() {
         bridge_game_list.setOnItemClickListener { parent, view, position, id ->
             val factory = provideGameViewModelFactory()
             val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
-            val gameList = viewModel.getGames().value?.filter{ game -> game.data.state != GameState.ENDED}
+            val gameList = viewModel.getGames().value?.filter{ game -> game.getState().value != GameState.ENDED}
             val clickedGame = gameList?.get(position)
             if (clickedGame != null) {
                 val activeGame = viewModel.getActiveGame()

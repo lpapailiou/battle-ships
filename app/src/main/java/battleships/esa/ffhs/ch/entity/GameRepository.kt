@@ -10,7 +10,7 @@ class GameRepository private constructor (private val gameListDao: GameListDao) 
         }
     }
 
-    fun addGame(game: GameInstance) {
+    fun addGame(game: GameDao) {
         gameListDao.addGame(game)
     }
 

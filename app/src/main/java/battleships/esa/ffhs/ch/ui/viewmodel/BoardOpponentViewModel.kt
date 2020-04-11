@@ -3,13 +3,10 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.GameInstance
-import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.entity.*
 import battleships.esa.ffhs.ch.model.GameState
-import battleships.esa.ffhs.ch.entity.Shot
 
-class BoardOpponentViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) {
+class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
 
     init {
         ships = initShips()
@@ -61,7 +58,7 @@ class BoardOpponentViewModel(activeGame: GameInstance) : BoardViewModel(activeGa
     // ----------------------------- take a shot on opponents board -----------------------------
 
     fun shoot(shot: Shot): Boolean {
-        if (activeGame.data.state == GameState.ENDED) {
+        if (activeGame.getState().value == GameState.ENDED) {
             return true
         }
         var refresh: Boolean = false
@@ -94,10 +91,9 @@ class BoardOpponentViewModel(activeGame: GameInstance) : BoardViewModel(activeGa
 
     override fun endGameCheck(): Boolean {
         val gameEnded = super.endGameCheck()
-        if (gameEnded && activeGame.data.state != GameState.ENDED) {
-            activeGame.data.result = 0      // game lost
+        if (gameEnded && activeGame.getState().value != GameState.ENDED) {
             println("============END CHECK POSITIVE OPPONENT")
-            activeGame.data.state = GameState.ENDED
+            activeGame.setState(GameState.ENDED)
             return true
         }
         return false

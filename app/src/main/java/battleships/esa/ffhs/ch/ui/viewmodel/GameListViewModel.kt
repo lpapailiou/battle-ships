@@ -1,7 +1,7 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.entity.GameInstance
+import battleships.esa.ffhs.ch.entity.GameDao
 import battleships.esa.ffhs.ch.entity.GameRepository
 
 class GameListViewModel (private val gameRepository: GameRepository): ViewModel() {
@@ -10,5 +10,5 @@ class GameListViewModel (private val gameRepository: GameRepository): ViewModel(
 
     fun getActiveGame() = gameRepository.getActiveGame()
 
-    fun addGame(game: GameInstance) = gameRepository.addGame(game)
+    fun addGame(game: GameDao) = gameRepository.addGame(game)
 }

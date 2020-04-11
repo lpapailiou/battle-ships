@@ -3,17 +3,14 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 import android.app.Activity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import battleships.esa.ffhs.ch.entity.*
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
-import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.GameInstance
-import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
-import battleships.esa.ffhs.ch.entity.Shot
 import battleships.esa.ffhs.ch.ui.game.GameActiveFragment
 import battleships.esa.ffhs.ch.ui.game.GameBoardMineFragment
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 
-class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) {
+class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
 
     init {
         ships = initShips()
@@ -56,10 +53,10 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
 
     override fun endGameCheck(): Boolean {
         val gameEnded = super.endGameCheck()
-        if (gameEnded && activeGame.data.state != GameState.ENDED) {
+        if (gameEnded && activeGame.getState().value!! != GameState.ENDED) {
             println("============END CHECK POSITIVE ME")
-            activeGame.data.result = 1      // game won
-            activeGame.data.state = GameState.ENDED
+            activeGame.setResult(1)
+            activeGame.setState(GameState.ENDED)
             return true
         }
         return false
@@ -84,8 +81,8 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
     // ----------------------------- trigger shot on opponents board -----------------------------
 
     fun randomShot(): Boolean {
-        if (activeGame.data.state != GameState.ENDED) {
-            var success = activeGame.opponentBoard.shoot(
+        if (activeGame.getState().value != GameState.ENDED) {
+            var success = activeGame.getOpponentBoard().value!!.shoot(
                 Shot(
                     Cell(0, 0).getRandomCell()
                 )

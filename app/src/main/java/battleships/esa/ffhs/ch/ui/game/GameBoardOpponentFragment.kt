@@ -28,10 +28,11 @@ class GameBoardOpponentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        boardModel = currentGame.opponentBoard
+        boardModel = currentGame.getOpponentBoard().value!!
         v = inflater.inflate(R.layout.game_board_opponent_fragment, container, false)
-        if (currentGame.data.state == GameState.PREPARATION) {
-            boardPainter = v
+        boardPainter = v
+        if (currentGame.getState().value == GameState.PREPARATION) {
+
             (boardPainter as BoardPainter).setBoardViewModel(boardModel)
         }
         return v
@@ -39,22 +40,27 @@ class GameBoardOpponentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (currentGame.data.state != GameState.PREPARATION) {
-            boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_opponent)
-            (boardPainter as BoardPainter).setBoardViewModel(boardModel)
+        if (currentGame.getState().value != GameState.PREPARATION) {
+            if (boardPainter == null) {
+                boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_opponent)
+            }
+
+            println("board painter is null: " + (boardPainter == null))
+            println("board model is null: " + (boardModel == null))
+            (boardPainter as BoardPainter).setBoardViewModel(boardModel)        // TODO: game status not correct (prep instead of started)
             //currentGame.opponentBoardDrawable = (boardPainter as BoardPainter)
         }
 
         v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (currentGame.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.data.state != GameState.PREPARATION) {
+                if (currentGame.isMyTurn().value!! && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.getState().value!! != GameState.PREPARATION) {
                     (parentFragment as GameActiveFragment).switchFragments()
                     return true
                 } else {
-                    if (event == null || currentGame.data.state != GameState.PREPARATION) {
+                    if (event == null || currentGame.getState().value!! != GameState.PREPARATION) {
                         return false
                     }
-                    if (currentGame.isActivePlayerMe && currentGame.data.state != GameState.PREPARATION) {
+                    if (currentGame.isMyTurn().value!! && currentGame.getState().value!! != GameState.PREPARATION) {
                         return false
                     }
 

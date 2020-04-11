@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModel
 import battleships.esa.ffhs.ch.model.Coordinate
 import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.model.Ship
-import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.GameInstance
+import battleships.esa.ffhs.ch.entity.GameDao
 import battleships.esa.ffhs.ch.entity.Shot
-import battleships.esa.ffhs.ch.ui.game.GameActiveFragment
 
-open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
+open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
 
     val username = MutableLiveData<String>()
 
@@ -33,7 +31,7 @@ open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
     }
 
     fun getGameResult(): Boolean {
-        return (ships != activeGame.opponentBoard.ships)
+        return (ships != activeGame.getOpponentBoard().value!!.ships)
     }
 
     fun validateStart(): Boolean {

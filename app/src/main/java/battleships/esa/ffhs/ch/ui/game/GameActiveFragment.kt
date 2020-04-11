@@ -48,21 +48,21 @@ class GameActiveFragment : Fragment() {
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return
         }
-        if (currentGame.isActivePlayerMe) {
+        if (currentGame.isMyTurn().value!!) {
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardOpponentFragment(), "other")
                 .commit()
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_inactive, GameBoardMineFragment(), "mine")
                 .commit()
-            currentGame.isActivePlayerMe = false
+            currentGame.setMyTurn(false)
         } else {
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardMineFragment(), "mine").commit()
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_inactive, GameBoardOpponentFragment(), "other")
                 .commit()
-            currentGame.isActivePlayerMe = true
+            currentGame.setMyTurn(true)
         }
     }
 
