@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
-import kotlinx.android.synthetic.main.bridge_fragment.*
+import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
+import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import kotlinx.android.synthetic.main.score_fragment.*
 
 class ScoreFragment : Fragment() {
@@ -27,15 +26,14 @@ class ScoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //setList() // TODO: replace
-        initializeGameList()
+        initializeObserver()
     }
 
     // TODO: add score counter to view (bot games and real games), maybe ranking as soon as we made the connection
 
-    private fun initializeGameList() {
+    private fun initializeObserver() {
         val factory = InjectorUtils.provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             val finishedGames = games.filter { game -> game.data.state == GameState.ENDED }
             val itemsAdapter: ArrayAdapter<String> =
@@ -45,7 +43,13 @@ class ScoreFragment : Fragment() {
                     finishedGames.map{ game -> game.printScore()}
                 )
             score_game_list.adapter = itemsAdapter
+
+            val scoreMulti = finishedGames.filter { game -> game.opponent != "Bot" }.map { game -> game.data.result * WON_GAME_VALUE }.sum()
+            val scoreBot = finishedGames.filter { game -> game.opponent == "Bot" }.map { game -> game.data.result * WON_GAME_VALUE }.sum()
+            score_points_multiplayer.setText(scoreMulti.toString())
+            score_points_bot.setText(scoreBot.toString())
         })
+
     }
 
 }

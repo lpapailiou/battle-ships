@@ -6,12 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.game_preparation_fragment.*
 

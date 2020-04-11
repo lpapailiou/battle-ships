@@ -9,10 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils
-import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isFirstLogin
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
-import kotlinx.android.synthetic.main.bridge_fragment.*
+import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 
 
 class MainFragment : Fragment() {
@@ -41,7 +39,7 @@ class MainFragment : Fragment() {
 
     private fun adaptMenuItems() {
         val factory = InjectorUtils.provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             if (games.filter { game -> game.isActive()}.count() == 0) {
 

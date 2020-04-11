@@ -10,7 +10,7 @@ class MockDatabase private constructor() {
         }
     }
 
-    var gameDao = GameDao()
+    var gameListDao = GameListDao()
         private set
 
 }

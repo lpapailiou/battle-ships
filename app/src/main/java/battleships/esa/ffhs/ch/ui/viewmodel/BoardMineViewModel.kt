@@ -19,7 +19,6 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
         ships = initShips()
         setShipsRandomly()
         ships.forEach { it.hide() }
-        currentShip = null
     }
 
     // ----------------------------- handle click action from UI -----------------------------
@@ -35,7 +34,7 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
     override fun clickAction(pointerPosition: Cell, act: Activity): Boolean {
         var handled: Boolean
 
-        var shot = Shot(pointerPosition, null)
+        var shot = Shot(pointerPosition)
 
         currentShip = findShipAtPosition(pointerPosition)
 
@@ -48,11 +47,22 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
         }
         handled = true
 
-        if (handled) {
+        if (!endGameCheck() && handled) {
             randomShot()
         }
 
         return handled
+    }
+
+    override fun endGameCheck(): Boolean {
+        val gameEnded = super.endGameCheck()
+        if (gameEnded && activeGame.data.state != GameState.ENDED) {
+            println("============END CHECK POSITIVE ME")
+            activeGame.data.result = 1      // game won
+            activeGame.data.state = GameState.ENDED
+            return true
+        }
+        return false
     }
 
     fun findShipAtPosition(position: Cell): ShipViewModel? {
@@ -77,8 +87,7 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
         if (activeGame.data.state != GameState.ENDED) {
             var success = activeGame.opponentBoard.shoot(
                 Shot(
-                    Cell(0, 0).getRandomCell(),
-                    null
+                    Cell(0, 0).getRandomCell()
                 )
             )
             if (!success) {

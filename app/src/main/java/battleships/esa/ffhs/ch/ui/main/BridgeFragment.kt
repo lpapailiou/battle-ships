@@ -8,12 +8,11 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils.provideGameViewModelFactory
 import battleships.esa.ffhs.ch.model.GameState
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import kotlinx.android.synthetic.main.bridge_fragment.*
 
 class BridgeFragment : Fragment() {
@@ -29,13 +28,14 @@ class BridgeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //setList() // TODO: replace
         initializeGameList()
     }
 
+    // ----------------------------- list view for currently active games -----------------------------
+
     private fun initializeGameList() {
         val factory = provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             val ongoingGames = games.filter { game -> game.data.state != GameState.ENDED }
             itemsAdapter =
@@ -49,32 +49,19 @@ class BridgeFragment : Fragment() {
 
         bridge_game_list.setOnItemClickListener { parent, view, position, id ->
             val factory = provideGameViewModelFactory()
-            val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+            val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
             val gameList = viewModel.getGames().value?.filter{ game -> game.data.state != GameState.ENDED}
             val clickedGame = gameList?.get(position)
             if (clickedGame != null) {
                 val activeGame = viewModel.getActiveGame()
-                if (activeGame != null) {
-                    activeGame.setActive(false)
+                if (activeGame.value != null) {
+                    activeGame.value!!.setActive(false)
                 }
                 clickedGame.setActive(true)
                 findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
             }
 
         }
-    }
-
-    // ----------------------------- list view for currently active games -----------------------------
-
-    // temporary handler for static gui testing
-    fun setList() {
-        val itemsAdapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(
-                (activity as MainActivity),
-                android.R.layout.simple_list_item_1,
-                resources.getStringArray(R.array.staticgamedata)
-            )
-        bridge_game_list.adapter = itemsAdapter
     }
 
 }

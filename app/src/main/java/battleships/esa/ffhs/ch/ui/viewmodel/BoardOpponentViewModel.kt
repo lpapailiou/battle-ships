@@ -2,6 +2,7 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.entity.GameInstance
 import battleships.esa.ffhs.ch.entity.InjectorUtils
@@ -11,14 +12,8 @@ import battleships.esa.ffhs.ch.entity.Shot
 class BoardOpponentViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) {
 
     init {
-        //if (activeGame!= null) {
-            if (activeGame.preparedShips.isEmpty()) {
-                ships = initShips()
-                setShipsRandomly()
-            } else {
-                ships = activeGame.preparedShips
-            }
-        //}
+        ships = initShips()
+        setShipsRandomly()
     }
 
     // ----------------------------- handle click action from UI -----------------------------
@@ -89,9 +84,20 @@ class BoardOpponentViewModel(activeGame: GameInstance) : BoardViewModel(activeGa
                 refresh = true
             }
         }
-        if (refresh && activeGame.opponentBoardDrawable != null) {
-            activeGame.opponentBoardDrawable!!.invalidate()
-            //activeGame.opponentBoardDrawable!!.endGameCheck() TODO: move up
+        if (refresh) {
+            //TODO: make change listener to invalidate in fragment
+            endGameCheck()
+            return true
+        }
+        return false
+    }
+
+    override fun endGameCheck(): Boolean {
+        val gameEnded = super.endGameCheck()
+        if (gameEnded && activeGame.data.state != GameState.ENDED) {
+            activeGame.data.result = 0      // game lost
+            println("============END CHECK POSITIVE OPPONENT")
+            activeGame.data.state = GameState.ENDED
             return true
         }
         return false

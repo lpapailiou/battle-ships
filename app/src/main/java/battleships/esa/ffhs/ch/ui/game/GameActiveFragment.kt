@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.ui.drawable.CustomDialog
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 
@@ -47,21 +48,21 @@ class GameActiveFragment : Fragment() {
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return
         }
-        if (currentGame!!.isActivePlayerMe) {
+        if (currentGame.isActivePlayerMe) {
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardOpponentFragment(), "other")
                 .commit()
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_inactive, GameBoardMineFragment(), "mine")
                 .commit()
-            currentGame!!.isActivePlayerMe = false
+            currentGame.isActivePlayerMe = false
         } else {
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_active, GameBoardMineFragment(), "mine").commit()
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_game_inactive, GameBoardOpponentFragment(), "other")
                 .commit()
-            currentGame!!.isActivePlayerMe = true
+            currentGame.isActivePlayerMe = true
         }
     }
 

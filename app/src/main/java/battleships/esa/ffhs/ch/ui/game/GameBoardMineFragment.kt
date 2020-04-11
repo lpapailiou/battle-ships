@@ -37,7 +37,7 @@ class GameBoardMineFragment : Fragment() {
         boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_mine)
         (boardPainter as BoardPainter).setBoardViewModel(boardModel)
 
-        v.setOnTouchListener(object : View.OnTouchListener {    // TODO: bugfix - extra click on 0,0 when board switch happens
+        v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (!currentGame.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                     (parentFragment as GameActiveFragment).switchFragments()
@@ -58,7 +58,7 @@ class GameBoardMineFragment : Fragment() {
                     val pointerPosition: Cell =
                         Cell(
                             (xTouch / (v as BoardPainter).gridWidth).toInt(),
-                            (yTouch / (v as BoardPainter).gridWidth).toInt()
+                            (yTouch / v.gridWidth).toInt()
                         )
 
                     if (boardModel.repeatClickCheck(pointerPosition)) {

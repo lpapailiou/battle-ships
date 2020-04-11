@@ -3,7 +3,7 @@ package battleships.esa.ffhs.ch.entity
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.entity.Player
 
-data class Shot(val cell: Cell, val player: Player?) {
+data class Shot(val cell: Cell) {
 
     var isHit = false
     var drawable: Boolean = true

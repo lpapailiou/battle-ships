@@ -5,7 +5,7 @@ import battleships.esa.ffhs.ch.model.Ship
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.entity.DirectionHandler
 import battleships.esa.ffhs.ch.entity.Shot
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.strictOverlapRule
+import battleships.esa.ffhs.ch.model.STRICT_OVERLAP_RULE
 
 class ShipViewModel(val ship: Ship) {
 
@@ -126,7 +126,7 @@ class ShipViewModel(val ship: Ship) {
      * there must not be another ship.
      */
     fun getOccupiedCells(): HashSet<Cell> {
-        if (strictOverlapRule) {        // ships must not touch each other
+        if (STRICT_OVERLAP_RULE) {        // ships must not touch each other
             val occupiedCells: HashSet<Cell> = linkedSetOf()
             occupiedCells.addAll(shipCells)
             shipCells.forEach { shipCell ->

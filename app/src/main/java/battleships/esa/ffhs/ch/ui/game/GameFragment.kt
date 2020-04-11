@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.GameInstance
 import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.Game
 import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.ui.drawable.CustomDialog
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardOpponentViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 
 
 class GameFragment : Fragment() {
@@ -32,14 +34,32 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val factory = InjectorUtils.provideGameViewModelFactory()
-        val viewModel = ViewModelProviders.of(this as GameFragment, factory).get(GameViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
         // TODO: move to function
-        if (viewModel.getActiveGame() == null) {
+        if (viewModel.getActiveGame().value == null) {
             currentGame = GameInstance(Game())
             viewModel.addGame(currentGame)
         } else {
-            currentGame = viewModel.getActiveGame()!!
+            currentGame = viewModel.getActiveGame().value!!
         }
+        viewModel.getActiveGame().observe(viewLifecycleOwner, Observer { game ->
+            // is not working because game state is not live data and nested, so no notification on changes
+            if (game.data.state == GameState.ENDED) {
+                println("game ENDS ================================================")
+                (activity as MainActivity).vibrate()
+                CustomDialog().showEndGameDialog(context!!, currentGame.data.result)
+            }
+        })
+        /* TODO: make work
+        val observedGame: MutableLiveData<GameInstance> = currentGame as MutableLiveData<GameInstance>
+        observedGame.observe(viewLifecycleOwner, Observer { game ->
+            if (currentGame.data.state == GameState.ENDED) {
+                println("game ENDS ================================================")
+                (activity as MainActivity).vibrate()
+                CustomDialog().showEndGameDialog(context!!, currentGame.data.result)
+            }
+        })*/
+
 
         opponentBoard = currentGame.opponentBoard
         myBoard = currentGame.myBoard

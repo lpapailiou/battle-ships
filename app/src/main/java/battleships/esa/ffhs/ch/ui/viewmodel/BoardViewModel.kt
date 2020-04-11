@@ -27,20 +27,19 @@ open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
 
 
 
-    fun endGameCheck(): Boolean {
+    open fun endGameCheck(): Boolean {
         var sunkenShips = ships.filter { s -> s.isSunken() }.count()
         return (sunkenShips == ships.size)
     }
 
     fun getGameResult(): Boolean {
-        return (ships != activeGame.preparedShips)
+        return (ships != activeGame.opponentBoard.ships)
     }
 
     fun validateStart(): Boolean {
         if (ships.filter { s -> !s.isPositionValid() }.count() > 0) {
             return false
         }
-        activeGame.preparedShips = ships
         return true
     }
 

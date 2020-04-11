@@ -7,17 +7,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter.Companion.CLICK_LIMIT
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 
 class GameBoardOpponentFragment : Fragment() {
 
@@ -45,7 +42,7 @@ class GameBoardOpponentFragment : Fragment() {
         if (currentGame.data.state != GameState.PREPARATION) {
             boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_opponent)
             (boardPainter as BoardPainter).setBoardViewModel(boardModel)
-            currentGame.opponentBoardDrawable = (boardPainter as BoardPainter)
+            //currentGame.opponentBoardDrawable = (boardPainter as BoardPainter)
         }
 
         v.setOnTouchListener(object : View.OnTouchListener {
@@ -69,7 +66,7 @@ class GameBoardOpponentFragment : Fragment() {
                     val pointerPosition: Cell =
                         Cell(
                             (xTouch / (v as BoardPainter).gridWidth).toInt(),
-                            (yTouch / (v as BoardPainter).gridWidth).toInt()
+                            (yTouch / v.gridWidth).toInt()
                         )
                     handled = boardModel.identifyShip(pointerPosition)
 
@@ -83,7 +80,7 @@ class GameBoardOpponentFragment : Fragment() {
                             return true
                         }
                         MotionEvent.ACTION_UP -> {              // rotate ship
-                            if (handled && (v as BoardPainter).clickCounter <= CLICK_LIMIT) {
+                            if (handled && v.clickCounter <= CLICK_LIMIT) {
                                 boardModel.clickAction(pointerPosition)
                             } else {
                                 boardModel.releaseShip()

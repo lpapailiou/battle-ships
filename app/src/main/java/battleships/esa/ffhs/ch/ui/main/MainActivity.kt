@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,7 +15,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,8 +23,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var isFirstLogin: Boolean =
             true                        // temporary global variable to check if user is logged in for the first time
-        var strictOverlapRule =
-            true                        // if true: no ships are allowed to touch each other, else: ships can touch, but not overlap
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,16 +60,13 @@ class MainActivity : AppCompatActivity() {
 
     // ----------------------------- navigation -----------------------------
 
-    // TODO: remove 'current game' menu item if there is no current game
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater       // TODO: inflater not used, remove
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         val item: MenuItem? = menu?.getItem(2)
         if (item != null) {
             val factory = InjectorUtils.provideGameViewModelFactory()
-            val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
-            viewModel.getGames().observe(this, Observer { games ->
+            val viewModel = ViewModelProviders.of(this, factory).get(GameListViewModel::class.java)
+            viewModel.getGames().observe(this, Observer { games ->          // remove 'current game' menu item if there is no current game
                 val currentGame = viewModel.getActiveGame()
                 if (currentGame == null) {
                     item.setVisible(false)
@@ -108,9 +101,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-
-private fun Any.observe(function: () -> Unit) {
-
-}
-
 

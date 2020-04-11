@@ -1,21 +1,21 @@
 package battleships.esa.ffhs.ch.entity
 
-class GameRepository private constructor (private val gameDao: GameDao) {       // mediator between viewModels and database
+class GameRepository private constructor (private val gameListDao: GameListDao) {       // mediator between viewModels and database
 
     companion object {
         @Volatile private var instance: GameRepository? = null
 
-        fun getInstance(gameDao: GameDao) = instance ?: synchronized(this) {
-            instance?: GameRepository(gameDao).also { instance = it }
+        fun getInstance(gameListDao: GameListDao) = instance ?: synchronized(this) {
+            instance?: GameRepository(gameListDao).also { instance = it }
         }
     }
 
     fun addGame(game: GameInstance) {
-        gameDao.addGame(game)
+        gameListDao.addGame(game)
     }
 
-    fun getGames() = gameDao.getGames()
+    fun getGames() = gameListDao.getGames()
 
-    fun getActiveGame() = gameDao.getActiveGame()
+    fun getActiveGame() = gameListDao.getActiveGame()
 
 }

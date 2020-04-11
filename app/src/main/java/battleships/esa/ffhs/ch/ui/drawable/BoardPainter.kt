@@ -4,20 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.BOARD_SIZE
-import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 
 open class BoardPainter(
     context: Context, attributes: AttributeSet

@@ -27,7 +27,6 @@ class ShipPainter(
     init {
         paint = initPaint(R.color.colorAccent)
         errPaint = initPaint(R.color.colorComplementary)
-        //hiddenPaint = initPaint(R.color.colorPrimaryDark)       // TODO: switch to black later. shlightly visible now for easier testing
         hiddenPaint = initPaint(R.color.colorBackground)
     }
 

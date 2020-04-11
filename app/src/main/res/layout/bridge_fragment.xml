@@ -41,11 +41,11 @@
 
     <ListView
         android:id="@+id/bridge_game_list"
-        android:layout_width="298dp"
+        android:layout_width="330dp"
         android:layout_height="250dp"
-        android:layout_marginStart="58dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="58dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
