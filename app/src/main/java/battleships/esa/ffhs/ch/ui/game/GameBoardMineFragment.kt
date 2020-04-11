@@ -41,7 +41,7 @@ class GameBoardMineFragment : Fragment() {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if (!currentGame.isActivePlayerMe && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                     (parentFragment as GameActiveFragment).switchFragments()
-                    return true
+                    return false
                 } else {
                     if (event == null || currentGame.data.state == GameState.ENDED) {
                         return false
@@ -67,15 +67,14 @@ class GameBoardMineFragment : Fragment() {
 
                     handled = boardModel.clickAction(
                         pointerPosition,
-                        (boardPainter as BoardPainter)
+                        activity as MainActivity
                     )
                     if (handled) {
                         v.invalidate()
                     }
                     //endGameCheck()    TODO: implement
-                    return v.onTouchEvent(event) ?: handled
+                    return true //v.onTouchEvent(event) ?: handled  // TODO: comment in if one shot per click should be made
                 }
-                return false
             }
         })
     }

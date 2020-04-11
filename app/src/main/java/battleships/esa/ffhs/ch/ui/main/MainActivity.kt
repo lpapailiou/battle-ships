@@ -1,15 +1,23 @@
 package battleships.esa.ffhs.ch.ui.main
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.GameInstance
+import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +46,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun vibrate() {
+        val vibrator = applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        200,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            } else {
+                vibrator.vibrate(200)
+            }
+        }
+    }
+
     // ----------------------------- navigation -----------------------------
 
     // TODO: remove 'current game' menu item if there is no current game
@@ -45,6 +69,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater       // TODO: inflater not used, remove
         menuInflater.inflate(R.menu.menu_toolbar, menu)
+        val item: MenuItem? = menu?.getItem(2)
+        if (item != null) {
+            val factory = InjectorUtils.provideGameViewModelFactory()
+            val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+            viewModel.getGames().observe(this, Observer { games ->
+                val currentGame = viewModel.getActiveGame()
+                if (currentGame == null) {
+                    item.setVisible(false)
+                } else {
+                    item.setVisible(true)
+                }
+                invalidateOptionsMenu()
+            })
+        }
         return true
     }
 
@@ -70,3 +108,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+
+private fun Any.observe(function: () -> Unit) {
+
+}
+
+

@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import android.app.Activity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
@@ -8,6 +9,9 @@ import battleships.esa.ffhs.ch.entity.GameInstance
 import battleships.esa.ffhs.ch.entity.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.ui.game.GameActiveFragment
+import battleships.esa.ffhs.ch.ui.game.GameBoardMineFragment
+import battleships.esa.ffhs.ch.ui.main.MainActivity
 
 class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) {
 
@@ -28,7 +32,7 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
         return false
     }
 
-    override fun clickAction(pointerPosition: Cell, board: BoardPainter): Boolean {
+    override fun clickAction(pointerPosition: Cell, act: Activity): Boolean {
         var handled: Boolean
 
         var shot = Shot(pointerPosition, null)
@@ -37,7 +41,7 @@ class BoardMineViewModel(activeGame: GameInstance) : BoardViewModel(activeGame) 
 
         if (currentShip != null) {
             hit(currentShip!!, shot)
-            board.vibrate()
+            (act as MainActivity).vibrate()
             currentShip = null
         } else {
             hit(shot)

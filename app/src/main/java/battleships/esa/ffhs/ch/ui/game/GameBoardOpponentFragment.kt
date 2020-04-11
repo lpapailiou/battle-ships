@@ -92,9 +92,8 @@ class GameBoardOpponentFragment : Fragment() {
                             v.clickCounter = 0
                         }
                     }
-                    return handled //v?.onTouchEvent(event) ?: handled
+                    return handled
                 }
-                return false
             }
         })
     }

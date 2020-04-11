@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.InjectorUtils.provideGameViewModelFactory
 import battleships.esa.ffhs.ch.model.GameState
@@ -16,6 +18,7 @@ import kotlinx.android.synthetic.main.bridge_fragment.*
 
 class BridgeFragment : Fragment() {
 
+    lateinit var itemsAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +38,7 @@ class BridgeFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
         viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             val ongoingGames = games.filter { game -> game.data.state != GameState.ENDED }
-            val itemsAdapter: ArrayAdapter<String> =
+            itemsAdapter =
                 ArrayAdapter<String>(
                     (activity as MainActivity),
                     android.R.layout.simple_list_item_1,
@@ -43,6 +46,22 @@ class BridgeFragment : Fragment() {
                 )
             bridge_game_list.adapter = itemsAdapter
         })
+
+        bridge_game_list.setOnItemClickListener { parent, view, position, id ->
+            val factory = provideGameViewModelFactory()
+            val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+            val gameList = viewModel.getGames().value?.filter{ game -> game.data.state != GameState.ENDED}
+            val clickedGame = gameList?.get(position)
+            if (clickedGame != null) {
+                val activeGame = viewModel.getActiveGame()
+                if (activeGame != null) {
+                    activeGame.setActive(false)
+                }
+                clickedGame.setActive(true)
+                findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
+            }
+
+        }
     }
 
     // ----------------------------- list view for currently active games -----------------------------

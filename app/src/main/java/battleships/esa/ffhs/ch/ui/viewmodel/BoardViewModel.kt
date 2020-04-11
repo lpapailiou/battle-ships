@@ -1,5 +1,6 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import battleships.esa.ffhs.ch.model.Coordinate
@@ -9,6 +10,7 @@ import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.entity.Cell
 import battleships.esa.ffhs.ch.entity.GameInstance
 import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.ui.game.GameActiveFragment
 
 open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
 
@@ -22,6 +24,8 @@ open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
     var offset = Cell(0, 0)
 
     // ----------------------------- game handling -----------------------------
+
+
 
     fun endGameCheck(): Boolean {
         var sunkenShips = ships.filter { s -> s.isSunken() }.count()
@@ -58,7 +62,7 @@ open class BoardViewModel(val activeGame: GameInstance) : ViewModel() {
         return false
     }
 
-    open fun clickAction(pointerPosition: Cell, board: BoardPainter): Boolean {
+    open fun clickAction(pointerPosition: Cell, act: Activity): Boolean {
         return false
     }
 

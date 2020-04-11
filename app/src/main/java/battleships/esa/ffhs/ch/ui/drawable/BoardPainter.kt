@@ -75,24 +75,6 @@ open class BoardPainter(
         drawGrid(canvas)
     }
 
-    // ----------------------------- enable vibrations -----------------------------
-
-    open fun vibrate() {
-        val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrator.hasVibrator()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(
-                    VibrationEffect.createOneShot(
-                        200,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
-                )
-            } else {
-                vibrator.vibrate(200)
-            }
-        }
-    }
-
     // ----------------------------- end game check -----------------------------
 /* TODO: move up
     open fun endGameCheck(): Boolean {

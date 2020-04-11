@@ -20,7 +20,7 @@ class GameInstance (gameData: Game) {
     companion object {
         var isAnyGameActive: Boolean = false
     }
-
+    // TODO: move this class to GameViewModel
     val data = gameData
 
     var opponentBoard: BoardOpponentViewModel
@@ -43,6 +43,7 @@ class GameInstance (gameData: Game) {
         opponentBoard = BoardOpponentViewModel(this)
         myBoard = BoardMineViewModel(this)
         data.state = GameState.PREPARATION
+        active = true
     }
 
     fun isActive(): Boolean {

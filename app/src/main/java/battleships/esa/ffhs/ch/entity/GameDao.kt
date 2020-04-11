@@ -13,7 +13,7 @@ class GameDao {
     }
 
     fun addGame(game: GameInstance) {
-        gameList.add(game)
+        gameList.add(0, game)
         games.value = gameList                                  // triggers observers
     }
 

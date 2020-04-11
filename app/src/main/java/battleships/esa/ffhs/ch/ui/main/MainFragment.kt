@@ -2,13 +2,17 @@ package battleships.esa.ffhs.ch.ui.main
 
 import MainViewModel
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isFirstLogin
+import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
+import kotlinx.android.synthetic.main.bridge_fragment.*
 
 
 class MainFragment : Fragment() {
@@ -33,6 +37,16 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         ViewModelProvider(this).get(MainViewModel::class.java)
+    }
+
+    private fun adaptMenuItems() {
+        val factory = InjectorUtils.provideGameViewModelFactory()
+        val viewModel = ViewModelProviders.of(this, factory).get(GameViewModel::class.java)
+        viewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
+            if (games.filter { game -> game.isActive()}.count() == 0) {
+
+            }
+        })
     }
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
