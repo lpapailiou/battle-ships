@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.wrapper.Cell
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter.Companion.CLICK_LIMIT
@@ -54,7 +54,7 @@ class GameBoardOpponentFragment : Fragment() {
 
         v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (currentGame.isMyTurn() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.notEqualsState(GameState.PREPARATION)) {
+                if (currentGame.isMyBoardVisible() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.notEqualsState(GameState.PREPARATION)) {
                     // if this fragment is displayed as small fragment (portrait mode), this click will trigger a board switch
                     (parentFragment as GameActiveFragment).switchFragments()
                     return false
@@ -62,7 +62,7 @@ class GameBoardOpponentFragment : Fragment() {
                     if (event == null || currentGame.notEqualsState(GameState.PREPARATION)) {
                         return false
                     }
-                    if (currentGame.isMyTurn() && currentGame.notEqualsState(GameState.PREPARATION)) {
+                    if (currentGame.isMyBoardVisible() && currentGame.notEqualsState(GameState.PREPARATION)) {
                         return false
                     }
 

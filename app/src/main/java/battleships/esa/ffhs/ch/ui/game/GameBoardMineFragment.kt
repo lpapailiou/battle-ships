@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.Cell
+import battleships.esa.ffhs.ch.wrapper.Cell
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
@@ -43,7 +43,7 @@ class GameBoardMineFragment : Fragment() {
 
         v.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (!currentGame.isMyTurn() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                if (!currentGame.isMyBoardVisible() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                     // if this fragment is displayed as small fragment (portrait mode), this click will trigger a board switch
                     (parentFragment as GameActiveFragment).switchFragments()
                     return false
@@ -51,7 +51,7 @@ class GameBoardMineFragment : Fragment() {
                     if (event == null || currentGame.equalsState(GameState.ENDED)) {
                         return false
                     }
-                    if (!currentGame.isMyTurn() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    if (!currentGame.isMyBoardVisible() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                         return false
                     }
 

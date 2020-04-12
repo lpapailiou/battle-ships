@@ -1,11 +1,27 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.entity.GameDao
-import battleships.esa.ffhs.ch.entity.GameRepository
+import battleships.esa.ffhs.ch.entity.GameEntity
+import battleships.esa.ffhs.ch.data.GameRepository
+import battleships.esa.ffhs.ch.data.GameRoomDatabase
+import battleships.esa.ffhs.ch.data.GameMockDao
+import battleships.esa.ffhs.ch.data.GameMockRepository
 
-class GameListViewModel (private val gameRepository: GameRepository): ViewModel() {
+class GameListViewModel (private val gameRepository: GameMockRepository, application: Application): AndroidViewModel(application) {
+// class GameListViewModel (application: Application): AndroidViewModel(application) {    // new class signature
+
+    private val repo: GameRepository
+    val gameList: LiveData<List<GameEntity>>
+
+    init {
+        val gameDao = GameRoomDatabase.getDatabase(application).gameDao()
+        repo = GameRepository(gameDao)
+        gameList = repo.gameList
+    }
+
 
     fun getGames() = gameRepository.getGames()
 
@@ -13,13 +29,13 @@ class GameListViewModel (private val gameRepository: GameRepository): ViewModel(
 
     fun hasActiveGame() = gameRepository.hasActiveGame()
 
-    fun addGame(game: GameDao) = gameRepository.addGame(game)
+    fun addGame(game: GameMockDao) = gameRepository.addGame(game)
 
     fun getGameViewModel(): GameViewModel {
         val game = getActiveGame()
-        var gameToReturn = MutableLiveData<GameDao>()
+        var gameToReturn = MutableLiveData<GameMockDao>()
         if (game.value == null) {
-            val newGame = GameDao()
+            val newGame = GameMockDao()
             addGame(newGame)
             gameToReturn.value = newGame
         } else {
@@ -28,7 +44,7 @@ class GameListViewModel (private val gameRepository: GameRepository): ViewModel(
         return GameViewModel(gameToReturn)
     }
 
-    fun setGameActive(game: GameDao?) {
+    fun setGameActive(game: GameMockDao?) {
         val currentGame = getActiveGame().value
         if (currentGame != null) {
             currentGame.setActive(false)

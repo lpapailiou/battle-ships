@@ -2,19 +2,19 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import battleships.esa.ffhs.ch.model.Coordinate
-import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.DirectionHandler
-import battleships.esa.ffhs.ch.entity.ShipDao
-import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.entity.CoordinateEntity
+import battleships.esa.ffhs.ch.wrapper.Cell
+import battleships.esa.ffhs.ch.wrapper.DirectionHandler
+import battleships.esa.ffhs.ch.data.ShipMockDao
+import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.model.STRICT_OVERLAP_RULE
 
-class ShipViewModel(shipData: ShipDao) {
+class ShipViewModel(shipData: ShipMockDao) {
 
     private var shipCells: MutableList<Cell> = mutableListOf<Cell>()
     private var isSunken = false
-    private var ship = MutableLiveData<ShipDao>()
+    private var ship = MutableLiveData<ShipMockDao>()
 
     init {
         ship.value = shipData
@@ -22,15 +22,15 @@ class ShipViewModel(shipData: ShipDao) {
         isSunken = ship.value!!.getHitCount() == shipCells.size
     }
 
-    private fun getShip(): ShipDao {
+    private fun getShip(): ShipMockDao {
         return ship.value!!
     }
 
-    fun getBowCoordinate(): Coordinate {
+    fun getBowCoordinate(): CoordinateEntity {
         return ship.value!!.getBowCoordinate()
     }
 
-    fun setBowCoordinate(coordinate: Coordinate) {
+    fun setBowCoordinate(coordinate: CoordinateEntity) {
         ship.value!!.setCoordinate(coordinate)
     }
 
@@ -42,7 +42,7 @@ class ShipViewModel(shipData: ShipDao) {
         ship.value!!.setDirection(direction)
     }
 
-    fun getObservableShip(): LiveData<ShipDao> {
+    fun getObservableShip(): LiveData<ShipMockDao> {
         return ship
     }
 
@@ -50,11 +50,11 @@ class ShipViewModel(shipData: ShipDao) {
         return ship.value!!.getShipSize()
     }
 
-    fun addHit(hit: Shot) {
+    fun addHit(hit: ShotWrapper) {
         ship.value!!.addHit(hit)
     }
 
-    fun getHits(): Set<Shot> {
+    fun getHits(): Set<ShotWrapper> {
         return ship.value!!.getHits()
     }
 
@@ -66,7 +66,7 @@ class ShipViewModel(shipData: ShipDao) {
         return ship.value!!.getObservableDirection()
     }
 
-    fun getObservableCoordinate(): LiveData<Coordinate> {
+    fun getObservableCoordinate(): LiveData<CoordinateEntity> {
         return ship.value!!.getObservableCoordinate()
     }
 
@@ -113,8 +113,11 @@ class ShipViewModel(shipData: ShipDao) {
     // TODO: probably better to refactor
     fun setRandomly() {
         do {
-            setBowCoordinate(Cell(0,0).getRandomCoordinate())
-            setDirection(DirectionHandler(getDirection()).getRandomDirection())
+            setBowCoordinate(Cell(0, 0).getRandomCoordinate())
+            setDirection(
+                DirectionHandler(
+                    getDirection()
+                ).getRandomDirection())
             updateCells()
         } while (!isShipCompletelyOnBoard())
     }
@@ -135,17 +138,22 @@ class ShipViewModel(shipData: ShipDao) {
 
     fun rotate(cell: Cell) {
         val index = getIndex(cell)
-        setDirection(DirectionHandler(getDirection()).getNextClockwiseNondiagonalDirection())
-        setBowCoordinate(Coordinate(
-            cell.coordinate.x - (getDirection().x * index),
-            cell.coordinate.y - (getDirection().y * index)
-        ))
+        setDirection(
+            DirectionHandler(
+                getDirection()
+            ).getNextClockwiseNondiagonalDirection())
+        setBowCoordinate(
+            CoordinateEntity(
+                cell.coordinate.x - (getDirection().x * index),
+                cell.coordinate.y - (getDirection().y * index)
+            )
+        )
         updateCells()
     }
 
     // ----------------------------- hit handling -----------------------------
 
-    fun hit(shot: Shot) {
+    fun hit(shot: ShotWrapper) {
         addHit(shot)
         sinkCheck()
     }
@@ -196,7 +204,11 @@ class ShipViewModel(shipData: ShipDao) {
 
     // TODO: check if can be replaced with getOffset method
     fun getIndex(cell: Cell): Int {
-        var pos: Cell = Cell(getBowCoordinate().x, getBowCoordinate().y)
+        var pos: Cell =
+            Cell(
+                getBowCoordinate().x,
+                getBowCoordinate().y
+            )
 
         for ((index, i) in (0 until getShipSize()).withIndex()) {
             if (pos.equals(cell)) {

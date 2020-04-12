@@ -1,11 +1,13 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
 import android.app.Activity
-import battleships.esa.ffhs.ch.entity.*
+import battleships.esa.ffhs.ch.data.GameMockDao
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.main.MainActivity
+import battleships.esa.ffhs.ch.wrapper.Cell
+import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
-class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
+class BoardMineViewModel(activeGame: GameMockDao) : BoardViewModel(activeGame) {
 
     init {
         getShips().forEach { it.hide(true) }
@@ -24,7 +26,7 @@ class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     override fun clickAction(pointerPosition: Cell, act: Activity): Boolean {
         var handled: Boolean
 
-        var shot = Shot(pointerPosition)
+        var shot = ShotWrapper(pointerPosition)
 
         currentShip = findShipAtPosition(pointerPosition)
 
@@ -75,7 +77,7 @@ class BoardMineViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
     fun randomShot(): Boolean {
         if (activeGame.getState().value != GameState.ENDED) {
             var success = activeGame.getOpponentBoard().value!!.shoot(
-                Shot(
+                ShotWrapper(
                     Cell(0, 0).getRandomCell()
                 )
             )

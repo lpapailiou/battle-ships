@@ -3,12 +3,12 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.entity.GameDao
+import battleships.esa.ffhs.ch.data.GameMockDao
 import battleships.esa.ffhs.ch.model.GameState
 
-class GameViewModel(gameDao: MutableLiveData<GameDao>): ViewModel() {
+class GameViewModel(gameDao: MutableLiveData<GameMockDao>): ViewModel() {
 
-    private var data: MutableLiveData<GameDao>
+    private var data: MutableLiveData<GameMockDao>
 
     init {
         data = gameDao
@@ -33,12 +33,12 @@ class GameViewModel(gameDao: MutableLiveData<GameDao>): ViewModel() {
         data.value!!.setState(state)
     }
 
-    fun isMyTurn(): Boolean {
-        return data.value!!.isMyTurn().value!!
+    fun isMyBoardVisible(): Boolean {
+        return data.value!!.isMyBoardVisible().value!!
     }
 
-    fun setMyTurn(isMyTurnNow: Boolean) {
-        data.value!!.setMyTurn(isMyTurnNow)
+    fun setMyBoardVisible(isMyBoard: Boolean) {
+        data.value!!.setMyBoardVisible(isMyBoard)
     }
 
     fun setActive(active: Boolean) {

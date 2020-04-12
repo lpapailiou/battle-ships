@@ -1,14 +1,14 @@
-package battleships.esa.ffhs.ch.entity
+package battleships.esa.ffhs.ch.wrapper
 
 import battleships.esa.ffhs.ch.model.BOARD_SIZE
-import battleships.esa.ffhs.ch.model.Coordinate
+import battleships.esa.ffhs.ch.entity.CoordinateEntity
 import battleships.esa.ffhs.ch.model.Direction
 import java.util.*
 
 
 class Cell(x: Int, y: Int) {
 
-    val coordinate = Coordinate(x, y)
+    val coordinate = CoordinateEntity(x, y)
 
     fun isValid(): Boolean {
         if (coordinate.x < 0 || coordinate.x >= BOARD_SIZE || coordinate.y < 0 || coordinate.y >= BOARD_SIZE) {
@@ -24,8 +24,8 @@ class Cell(x: Int, y: Int) {
         )
     }
 
-    fun getRandomCoordinate(): Coordinate {
-        return Coordinate(
+    fun getRandomCoordinate(): CoordinateEntity {
+        return CoordinateEntity(
             (0 until BOARD_SIZE).random(),
             (0 until BOARD_SIZE).random()
         )

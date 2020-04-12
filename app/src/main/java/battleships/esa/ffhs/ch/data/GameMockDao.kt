@@ -1,9 +1,7 @@
-package battleships.esa.ffhs.ch.entity
+package battleships.esa.ffhs.ch.data
 
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.observe
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
@@ -12,7 +10,7 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GameDao { // Dao = Data Access Object
+class GameMockDao { // Dao = Data Access Object
 
     private val id = MutableLiveData<Timestamp>()
     private var lastChange = MutableLiveData<String>()
@@ -22,8 +20,9 @@ class GameDao { // Dao = Data Access Object
     private var myBoard = MutableLiveData<BoardMineViewModel>()
 
     private var isCurrentGame = MutableLiveData<Boolean>()
+    private var isMyBoardVisible = MutableLiveData<Boolean>()
     private var isMyTurn = MutableLiveData<Boolean>()
-    private var connectedGame = MutableLiveData<GameDao>()
+    private var connectedGame = MutableLiveData<GameMockDao>()
     private var opponentName = MutableLiveData<String>()
 
     init {
@@ -34,7 +33,7 @@ class GameDao { // Dao = Data Access Object
         opponentBoard.value = BoardOpponentViewModel(this)
         myBoard.value = BoardMineViewModel(this)
         isCurrentGame.value = true
-        isMyTurn.value = true
+        isMyBoardVisible.value = true
         opponentName.value = "Bot"
 
         updateModificationDate()
@@ -47,7 +46,7 @@ class GameDao { // Dao = Data Access Object
     fun getOpponentBoard() = opponentBoard as LiveData<BoardOpponentViewModel>
     fun getMyBoard() = myBoard as LiveData<BoardMineViewModel>
     fun isActive() = isCurrentGame as LiveData<Boolean>
-    fun isMyTurn() = isMyTurn as LiveData<Boolean>
+    fun isMyBoardVisible() = isMyBoardVisible as LiveData<Boolean>
     fun getOpponentName() = opponentName.value
 
     fun setState(newState: GameState) {
@@ -65,8 +64,8 @@ class GameDao { // Dao = Data Access Object
         updateModificationDate()
     }
 
-    fun setMyTurn(isMyTurnNow: Boolean) {
-        isMyTurn.value = isMyTurnNow
+    fun setMyBoardVisible(isMyBoard: Boolean) {
+        isMyBoardVisible.value = isMyBoard
         updateModificationDate()
     }
 

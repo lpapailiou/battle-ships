@@ -6,16 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.GameDao
-import battleships.esa.ffhs.ch.entity.InjectorUtils.provideGameViewModelFactory
+import battleships.esa.ffhs.ch.utils.InjectorUtils.provideGameViewModelFactory
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 import kotlinx.android.synthetic.main.bridge_fragment.*
 
 class BridgeFragment : Fragment() {

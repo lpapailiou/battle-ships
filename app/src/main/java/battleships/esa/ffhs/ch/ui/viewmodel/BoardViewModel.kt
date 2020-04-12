@@ -4,20 +4,20 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.model.Coordinate
+import battleships.esa.ffhs.ch.entity.CoordinateEntity
 import battleships.esa.ffhs.ch.model.Direction
-import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.GameDao
-import battleships.esa.ffhs.ch.entity.ShipDao
-import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.wrapper.Cell
+import battleships.esa.ffhs.ch.data.GameMockDao
+import battleships.esa.ffhs.ch.data.ShipMockDao
+import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
-open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
+open class BoardViewModel(val activeGame: GameMockDao) : ViewModel() {
 
     val username = MutableLiveData<String>()
 
     val shipSizes: IntArray = intArrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
     private var ships: MutableLiveData<MutableList<ShipViewModel>> = MutableLiveData<MutableList<ShipViewModel>>()
-    private var shots: MutableLiveData<MutableList<Shot>> = MutableLiveData<MutableList<Shot>>()
+    private var shots: MutableLiveData<MutableList<ShotWrapper>> = MutableLiveData<MutableList<ShotWrapper>>()
 
     var currentShip: ShipViewModel? = null
     var offset = Cell(0, 0)
@@ -34,15 +34,15 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
         return ships as LiveData<List<ShipViewModel>>
     }
 
-    fun getObservableShots(): LiveData<List<Shot>> {
-        return shots as LiveData<List<Shot>>
+    fun getObservableShots(): LiveData<List<ShotWrapper>> {
+        return shots as LiveData<List<ShotWrapper>>
     }
 
     fun getShips(): List<ShipViewModel> {
         return ships.value!!
     }
 
-    fun getShots(): List<Shot> {
+    fun getShots(): List<ShotWrapper> {
         return shots.value!!
     }
 
@@ -52,7 +52,7 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
         ships.value = newShipList
     }
 
-    fun addShot(shot: Shot) {
+    fun addShot(shot: ShotWrapper) {
         var shotList = shots.value!!
         shotList.add(shot)
         shots.value = shotList      // extra complicated so 'mr. observer' gets triggered - you are welcome.
@@ -98,11 +98,11 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
 
     // ----------------------------- shot handling -----------------------------
 
-    protected fun hit(shot: Shot) {
+    protected fun hit(shot: ShotWrapper) {
         hit(null, shot)
     }
 
-    protected fun hit(ship: ShipViewModel?, shot: Shot) {
+    protected fun hit(ship: ShipViewModel?, shot: ShotWrapper) {
         if (ship != null) {
             shot.isHit(true)
             ship.hit(shot)
@@ -132,12 +132,12 @@ open class BoardViewModel(val activeGame: GameDao) : ViewModel() {
 
     protected fun initShips(): List<ShipViewModel> {
         val newShips =  shipSizes.mapIndexed { index, size ->
-            ShipDao(
-                    index,
-                    Coordinate(0, index),
-                    size,
-                    Direction.RIGHT
-                )
+            ShipMockDao(
+                index,
+                CoordinateEntity(0, index),
+                size,
+                Direction.RIGHT
+            )
         }.toList()
 
         return newShips.map { ship  ->

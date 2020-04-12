@@ -7,13 +7,10 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
-import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 import battleships.esa.ffhs.ch.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.ShipViewModel
 
 open class BoardPainter(
@@ -26,7 +23,7 @@ open class BoardPainter(
     }
 
     private var ships: MutableList<ShipViewModel> = mutableListOf()
-    private var shots: MutableList<Shot> = mutableListOf()
+    private var shots: MutableList<ShotWrapper> = mutableListOf()
 
     var boardModel: BoardViewModel? = null
 
@@ -50,9 +47,9 @@ open class BoardPainter(
         invalidate()
     }
 
-    fun setShots(updatedShots: List<Shot>) {
+    fun setShots(updatedShots: List<ShotWrapper>) {
         println("shots set")
-        shots = updatedShots as MutableList<Shot>
+        shots = updatedShots as MutableList<ShotWrapper>
         invalidate()
     }
 

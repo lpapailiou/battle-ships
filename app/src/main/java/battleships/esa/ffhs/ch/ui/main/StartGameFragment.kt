@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.utils.InjectorUtils
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.ViewModelFactory
 import kotlinx.android.synthetic.main.start_game_fragment.*

@@ -1,9 +1,11 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
-import battleships.esa.ffhs.ch.entity.*
+import battleships.esa.ffhs.ch.data.GameMockDao
 import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.wrapper.Cell
+import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
-class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
+class BoardOpponentViewModel(activeGame: GameMockDao) : BoardViewModel(activeGame) {
 
     // ----------------------------- handle click action from UI -----------------------------
 
@@ -49,7 +51,7 @@ class BoardOpponentViewModel(activeGame: GameDao) : BoardViewModel(activeGame) {
 
     // ----------------------------- take a shot on opponents board -----------------------------
 
-    fun shoot(shot: Shot): Boolean {
+    fun shoot(shot: ShotWrapper): Boolean {
         if (activeGame.getState().value == GameState.ENDED) {
             return true
         }

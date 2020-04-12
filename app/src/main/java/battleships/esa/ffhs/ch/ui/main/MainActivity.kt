@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.utils.InjectorUtils
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import kotlinx.android.synthetic.main.main_activity.*
 

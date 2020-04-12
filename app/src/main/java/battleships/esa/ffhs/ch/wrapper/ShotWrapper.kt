@@ -1,9 +1,8 @@
-package battleships.esa.ffhs.ch.entity
+package battleships.esa.ffhs.ch.wrapper
 
-import battleships.esa.ffhs.ch.entity.Cell
-import battleships.esa.ffhs.ch.entity.Player
+import battleships.esa.ffhs.ch.wrapper.Cell
 
-data class Shot(val cell: Cell) {
+class ShotWrapper(val cell: Cell) {
 
     var isHit = false
     var drawable: Boolean = true

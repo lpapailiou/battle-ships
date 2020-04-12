@@ -1,4 +1,4 @@
-package battleships.esa.ffhs.ch.entity
+package battleships.esa.ffhs.ch.wrapper
 
 import battleships.esa.ffhs.ch.model.Direction
 

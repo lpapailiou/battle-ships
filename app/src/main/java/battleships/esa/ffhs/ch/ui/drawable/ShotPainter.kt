@@ -9,7 +9,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.model.BOARD_SIZE
-import battleships.esa.ffhs.ch.entity.Shot
+import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
 class ShotPainter(
     context: Context, attributes: AttributeSet
@@ -29,7 +29,7 @@ class ShotPainter(
         shotOuterPaint = initLinePaint(R.color.colorComplementary)
     }
 
-    fun draw(shot: Shot, canvas: Canvas) {
+    fun draw(shot: ShotWrapper, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
         var startX = gridWidth * shot.cell.coordinate.x

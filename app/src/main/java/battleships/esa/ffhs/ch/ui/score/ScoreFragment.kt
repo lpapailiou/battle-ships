@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.InjectorUtils
+import battleships.esa.ffhs.ch.utils.InjectorUtils
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
