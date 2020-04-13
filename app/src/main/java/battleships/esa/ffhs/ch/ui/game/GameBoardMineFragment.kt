@@ -85,15 +85,6 @@ class GameBoardMineFragment : Fragment() {
     }
 
     private fun setObservers() {
-        /*boardModel.getShips().forEach{ ship ->        // TODO: remove not used observers
-            ship.getObservableShip().observe(viewLifecycleOwner, Observer {
-                (boardPainter as BoardPainter).setShips(boardModel.getShips())
-            })
-        }
-
-        boardModel.getObservableShots().observe(viewLifecycleOwner, Observer { shots ->
-            (boardPainter as BoardPainter).setShots(shots)
-        })*/
 
         mainViewModel.getMyShips().observe(viewLifecycleOwner, Observer {
             println("------------- observing opponent ship change")

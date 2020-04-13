@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var isFirstLogin: Boolean =
-            true                        // temporary global variable to check if user is logged in for the first time
+            false                        // temporary global variable to check if user is logged in for the first time
         lateinit var mainViewModel: MainViewModel
     }
 

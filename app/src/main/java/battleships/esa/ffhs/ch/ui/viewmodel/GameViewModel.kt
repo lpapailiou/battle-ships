@@ -10,24 +10,24 @@ import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 
-class GameViewModel(gameEntity: LiveData<GameEntity>): ViewModel() {
+class GameViewModel(gameEntity: LiveData<GameEntity>): ViewModel() {    // TODO: not completely thought through yet
 
     var data: MutableLiveData<GameEntity> = MutableLiveData<GameEntity>()
     private var opponentBoard: BoardOpponentViewModel
     private var myBoard: BoardMineViewModel
 
-
-
     init {
         data.value = gameEntity.value
         opponentBoard = BoardOpponentViewModel(this)
         myBoard = BoardMineViewModel(this)
-
     }
+
+    // ----------------------------- getters and setters -----------------------------
 
     fun getOpponentBoard(): BoardOpponentViewModel {
         return opponentBoard
     }
+
     fun getMyBoard(): BoardMineViewModel {
         return myBoard
     }

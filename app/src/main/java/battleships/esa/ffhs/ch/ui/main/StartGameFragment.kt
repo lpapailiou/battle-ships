@@ -26,12 +26,12 @@ class StartGameFragment : Fragment() {
         // ----------------------------- button change listeners -----------------------------
 
         offline_button.setOnClickListener {
-            mainViewModel.setGameActive(null)
+            mainViewModel.setGameActive(null)       // TODO: we want to start a new game, so the current game is set to null. idea: this will let the reporistory know to create a new game. malfunctioning because async for the moment
             findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
         }
 
         online_button.setOnClickListener {
-            mainViewModel.setGameActive(null)
+            mainViewModel.setGameActive(null)       // TODO: same as above
             findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
         }
 

@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.wrapper.Cell
 import battleships.esa.ffhs.ch.model.GameState
@@ -16,7 +18,9 @@ import battleships.esa.ffhs.ch.ui.drawable.BoardPainter.Companion.CLICK_LIMIT
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.BoardOpponentViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
+import battleships.esa.ffhs.ch.ui.viewmodel.MainViewModel
 
 class GameBoardOpponentFragment : Fragment() {
 
@@ -107,14 +111,15 @@ class GameBoardOpponentFragment : Fragment() {
     private fun setObserver() {     // TODO: this is doing way too much work
 
         mainViewModel.getOpponentShips().observe(viewLifecycleOwner, Observer {
-            println("------------- observing opponent ship change")
-            println("number of ships:1 " + it.size)
-            (boardPainter as BoardPainter).setShips(boardModel.getShips())
+            if (it.size == 10) {
+                val boardViewModel = currentGame.getOpponentBoard()
+                boardViewModel.updateShips()
+                (boardPainter as BoardPainter).setShips(boardViewModel.getShips())
+            }
         })
 
         mainViewModel.getOpponentShots().observe(viewLifecycleOwner, Observer { shots ->
             (boardPainter as BoardPainter).setShots(shots)
-            println("------------- opponent shot change observed")
         })
 
         observerSet = true

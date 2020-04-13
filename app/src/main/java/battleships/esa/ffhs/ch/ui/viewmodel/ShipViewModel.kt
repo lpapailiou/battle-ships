@@ -66,7 +66,7 @@ class ShipViewModel(shipData: ShipEntity) {
     }
 
     fun addHit(shot: ShotWrapper) {
-        val tempShip = ship/*
+        /*
         tempShip.value!!.shotCount++
         ship = tempShip
         val newShot = ShotEntity(
@@ -78,7 +78,7 @@ class ShipViewModel(shipData: ShipEntity) {
         )
         var tempShots: List<ShotEntity> = mutableListOf()*/
         //tempShots = shots.value!!
-        //tempShots.add(newShot) // TODO: add shot
+        //tempShots.add(newShot) // TODO: shot handling - shots are not saved to database yet
         //shots = tempShots
     }
 
@@ -147,6 +147,7 @@ class ShipViewModel(shipData: ShipEntity) {
     fun set(cell: Cell) {
         setBowCoordinate(cell.coordinate)
         updateCells()
+        mainViewModel.save(ship)
     }
 
     fun set(cell: Cell, offset: Cell) {
@@ -170,6 +171,7 @@ class ShipViewModel(shipData: ShipEntity) {
                 cell.coordinate.y - (getDirection().y * index)
             )
         )
+        mainViewModel.save(ship)
         updateCells()
     }
 

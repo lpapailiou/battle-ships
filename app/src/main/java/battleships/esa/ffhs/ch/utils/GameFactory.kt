@@ -21,7 +21,6 @@ class GameFactory() {
             true,
             true,
             "Bot")
-        mainViewModel.addGame(newGame)
     }
 
     fun getGame(): GameEntity {

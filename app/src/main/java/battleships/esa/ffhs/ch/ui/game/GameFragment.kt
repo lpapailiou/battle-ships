@@ -24,22 +24,14 @@ class GameFragment : Fragment() {
         lateinit var currentGame: GameViewModel
     }
 
-    private var updateDatabase: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    var gameToUpdate: GameEntity? = null
-    lateinit var myBoard: BoardMineViewModel
-    lateinit var opponentBoard: BoardOpponentViewModel
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         currentGame = mainViewModel.getCurrentGameAsViewModel()
-        gameToUpdate = currentGame.data.value
-        var updateNow = MutableLiveData<Boolean>()
-        updateNow.value = true
-        updateDatabase = updateNow
+        mainViewModel.getCurrentGame().observe(viewLifecycleOwner, Observer {
+            currentGame = mainViewModel.getCurrentGameAsViewModel()
+        })
         currentGame.getObservableState().observe(viewLifecycleOwner, Observer { state ->
             if (currentGame.equalsState(GameState.ENDED)) {
                 currentGame.setActive(false)
@@ -48,8 +40,6 @@ class GameFragment : Fragment() {
             }
         })
 
-        opponentBoard = currentGame.getOpponentBoard()
-        myBoard = currentGame.getMyBoard()
         return inflater.inflate(R.layout.game_fragment, container, false)
     }
 
@@ -58,12 +48,6 @@ class GameFragment : Fragment() {
         mainViewModel.save(currentGame)
     }
 
-    suspend fun updateRepo(game: GameEntity?) {
-        if (game != null) {
-            mainViewModel.repository.insert(game)
-            updateDatabase.value = false
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

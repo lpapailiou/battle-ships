@@ -52,7 +52,7 @@ open class BoardViewModel(val isThisBoardMine: Boolean) : ViewModel() {
             shotList.addAll(shots.value as Collection<ShotWrapper>)
         }
         shotList.add(shot)
-        shots.value = shotList      // extra complicated so 'mr. observer' gets triggered - you are welcome.
+        shots.value = shotList      // TODO: not working yet
     }
 
     open fun endGameCheck(): Boolean {

@@ -10,13 +10,14 @@ import battleships.esa.ffhs.ch.entity.ShipEntity
 import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
+import battleships.esa.ffhs.ch.ui.main.MainActivity
 import battleships.esa.ffhs.ch.utils.GameFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
-
+// this class is currently used as memory to keep track of the game list (active and finished) and to start new games
+class MainViewModel(application: Application): AndroidViewModel(application) {  // TODO: quite disfunctional yet (async tasks)
 
     val repository: GameRepository
     val gameList: LiveData<List<GameEntity>>
@@ -30,10 +31,14 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     fun getCurrentGameAsViewModel(): GameViewModel {
         var game: LiveData<GameEntity> = repository.getCurrentGame()
         if (game.value == null) {
-            var newGame = MutableLiveData<GameEntity>()
-            newGame.value = GameFactory().getGame()
+            var newGameLiveData = MutableLiveData<GameEntity>()
+            var newGame =  GameFactory().getGame()
+            newGameLiveData.value = newGame
+            synchronized(this) {
+                addGame(newGame)
+            }
             println("----------------------------------------------------------- create game")
-            return GameViewModel(newGame)
+            return GameViewModel(newGameLiveData)
 
         }
         println("----------------------------------------------------------- get existing game")

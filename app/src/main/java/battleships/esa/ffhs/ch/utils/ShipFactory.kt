@@ -17,7 +17,7 @@ class ShipFactory(val boardId: Int) {
                 CoordinateEntity(0, index),
                 size,
                 Direction.RIGHT,
-                true,
+                false,
                 false
             )
         }.toList()

@@ -3,7 +3,7 @@ package battleships.esa.ffhs.ch.wrapper
 import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.wrapper.Cell
 
-class ShotWrapper() {
+class ShotWrapper() {       // TODO: not bound to ShotEntity yet
 
     lateinit var cell: Cell
     var isHit = false

@@ -14,23 +14,23 @@ import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 class BoardOpponentViewModel(activeGame: GameViewModel) : BoardViewModel(false) {
 
     init {
-        initializeShips(activeGame.data.value!!)
-        initializeShots(activeGame.data.value!!)
+        updateShips()
+        initializeShots()
     }
 
-    private fun initializeShips(game: GameEntity) {
+    fun updateShips() {         // TODO: very much malfunctioning at the moment because of async stuff
         var shipList = mainViewModel.getOpponentShips().value
         if (shipList != null) {
             ships.value = shipList.map { ship ->
                 ShipViewModel(ship)
             }.toMutableList()
-        } else {
-            setShips(initShips())
-            setShipsRandomly()
+            if (ships.value!!.filter { !it.isPositionValid() }.count() > 0) {
+                setShipsRandomly()
+            }
         }
     }
 
-    private fun initializeShots(game: GameEntity) {
+    private fun initializeShots() {
         var shotList = mainViewModel.getOpponentShots().value
         if (shotList != null) {
             shots.value = shotList.map { shot -> ShotWrapper(shot) }.toMutableList()

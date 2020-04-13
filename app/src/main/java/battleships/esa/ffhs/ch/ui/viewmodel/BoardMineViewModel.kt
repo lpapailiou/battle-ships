@@ -21,7 +21,7 @@ class BoardMineViewModel(activeGame: GameViewModel) : BoardViewModel(true) {
         getShips().forEach { it.hide(true) }
     }
 
-    private fun initializeShips(game: GameEntity) {
+    private fun initializeShips(game: GameEntity) {     // TODO: threading stuff is malfunctioning the hard way
         var shipList = mainViewModel.getMyShips().value
         if (shipList != null) {
             ships.value = shipList.map { ship ->
