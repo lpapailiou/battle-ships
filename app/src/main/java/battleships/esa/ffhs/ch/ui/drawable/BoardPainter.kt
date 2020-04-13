@@ -42,13 +42,11 @@ open class BoardPainter(
     }
 
     fun setShips(updatedShips: List<ShipViewModel>) {
-        println("ships set")
         ships = updatedShips as MutableList<ShipViewModel>
         invalidate()
     }
 
     fun setShots(updatedShots: List<ShotWrapper>) {
-        println("shots set")
         shots = updatedShots as MutableList<ShotWrapper>
         invalidate()
     }

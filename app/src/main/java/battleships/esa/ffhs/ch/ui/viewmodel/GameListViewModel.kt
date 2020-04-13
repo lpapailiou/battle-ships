@@ -1,56 +1,106 @@
 package battleships.esa.ffhs.ch.ui.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import battleships.esa.ffhs.ch.entity.GameEntity
-import battleships.esa.ffhs.ch.data.GameRepository
-import battleships.esa.ffhs.ch.data.GameRoomDatabase
-import battleships.esa.ffhs.ch.data.GameMockDao
-import battleships.esa.ffhs.ch.data.GameMockRepository
+import battleships.esa.ffhs.ch.database.GameRepository
+import battleships.esa.ffhs.ch.database.GameRoomDatabase
+import battleships.esa.ffhs.ch.entity.BoardEntity
+import battleships.esa.ffhs.ch.entity.ShipEntity
+import battleships.esa.ffhs.ch.entity.ShotEntity
+import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
+import battleships.esa.ffhs.ch.utils.GameFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class GameListViewModel (private val gameRepository: GameMockRepository, application: Application): AndroidViewModel(application) {
-// class GameListViewModel (application: Application): AndroidViewModel(application) {    // new class signature
+class GameListViewModel (application: Application): AndroidViewModel(application) {
 
-    private val repo: GameRepository
+
+    val repository: GameRepository
     val gameList: LiveData<List<GameEntity>>
 
     init {
         val gameDao = GameRoomDatabase.getDatabase(application).gameDao()
-        repo = GameRepository(gameDao)
-        gameList = repo.gameList
+        repository = GameRepository(gameDao)
+        gameList = repository.gameList
     }
 
 
-    fun getGames() = gameRepository.getGames()
 
-    private fun getActiveGame() = gameRepository.getActiveGame()
+    fun getGames() = repository.getGames()
 
-    fun hasActiveGame() = gameRepository.hasActiveGame()
+    fun getCurrentGame() = repository.getCurrentGame()
 
-    fun addGame(game: GameMockDao) = gameRepository.addGame(game)
-
-    fun getGameViewModel(): GameViewModel {
-        val game = getActiveGame()
-        var gameToReturn = MutableLiveData<GameMockDao>()
+    fun getCurrentGameAsViewModel(): GameViewModel {
+        var game: LiveData<GameEntity> = repository.getCurrentGame()
         if (game.value == null) {
-            val newGame = GameMockDao()
-            addGame(newGame)
-            gameToReturn.value = newGame
-        } else {
-            gameToReturn.value = game.value!!
+            var newGame = MutableLiveData<GameEntity>()
+            newGame.value = GameFactory().getGame()
+            return GameViewModel(newGame, repository)
         }
-        return GameViewModel(gameToReturn)
+        return GameViewModel(game, repository)
     }
 
-    fun setGameActive(game: GameMockDao?) {
-        val currentGame = getActiveGame().value
-        if (currentGame != null) {
-            currentGame.setActive(false)
-        }
-        if (game != null) {
-            game.setActive(true)
+    fun getMyShips() = repository.getMyShips()
+    fun getOpponentShips() = repository.getOpponentShips()
+
+
+
+    fun hasActiveGame() = (repository.getCurrentGame().value != null)
+
+    fun save(game: GameEntity) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(game)
+    }
+
+    fun save(ship: ShipEntity) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(ship)
+    }
+
+    fun save(shot: ShotEntity) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(shot)
+    }
+
+    fun addGame(game: GameEntity) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(game)
+    }
+
+    fun addShip(ship: ShipEntity) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(ship)
+    }
+
+    fun addShot(shot: ShotEntity) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insert(shot)
+    }
+
+    fun setGameActive(game: GameEntity?) {
+        if (game == null) {
+            var tempGame = getCurrentGame()
+            if (tempGame.value != null) {
+                tempGame.value!!.isCurrentGame = false
+            }
+        } else {
+            game.isCurrentGame = true
         }
     }
+
+    fun printActive(game: GameEntity): String {
+        var gameState: String = ""
+        if (game.state == GameState.PREPARATION) {
+            gameState = ", preparing"
+        }
+        if (game.isCurrentGame) {
+            gameState = gameState + " (CURRENT)"
+        }
+        return (print(game) + "" + gameState)
+    }
+
+    fun printScore(game: GameEntity): String {
+        return (print(game) + ": " + (game.result * WON_GAME_VALUE))
+    }
+
+    fun print(game: GameEntity): String {
+        return ("" + game.game_id + ": vs. " + game.opponentName)
+    }
+
 }

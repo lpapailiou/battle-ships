@@ -4,30 +4,24 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.entity.CoordinateEntity
 import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.wrapper.Cell
-import battleships.esa.ffhs.ch.data.GameMockDao
-import battleships.esa.ffhs.ch.data.ShipMockDao
+import battleships.esa.ffhs.ch.entity.*
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
 import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
-open class BoardViewModel(val activeGame: GameMockDao) : ViewModel() {
+open class BoardViewModel(var activeGame: GameViewModel, var boardEntity: BoardEntity) : ViewModel() {
 
     val username = MutableLiveData<String>()
 
     val shipSizes: IntArray = intArrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
-    private var ships: MutableLiveData<MutableList<ShipViewModel>> = MutableLiveData<MutableList<ShipViewModel>>()
-    private var shots: MutableLiveData<MutableList<ShotWrapper>> = MutableLiveData<MutableList<ShotWrapper>>()
+    var ships: MutableLiveData<MutableList<ShipViewModel>> = MutableLiveData<MutableList<ShipViewModel>>()
+    var shots: MutableLiveData<MutableList<ShotWrapper>> = MutableLiveData<MutableList<ShotWrapper>>()
 
     var currentShip: ShipViewModel? = null
     var offset = Cell(0, 0)
 
-    init {
-        ships.value = mutableListOf()
-        shots.value = mutableListOf()
-        setShips(initShips())
-        setShipsRandomly()
-    }
+
 
     // ----------------------------- game handling -----------------------------
     fun getObservableShips(): LiveData<List<ShipViewModel>> {
@@ -43,7 +37,10 @@ open class BoardViewModel(val activeGame: GameMockDao) : ViewModel() {
     }
 
     fun getShots(): List<ShotWrapper> {
-        return shots.value!!
+        if (shots.value != null) {
+            return shots.value as List<ShotWrapper>
+        }
+        return listOf()
     }
 
     fun setShips(newShips: List<ShipViewModel>) {
@@ -53,7 +50,10 @@ open class BoardViewModel(val activeGame: GameMockDao) : ViewModel() {
     }
 
     fun addShot(shot: ShotWrapper) {
-        var shotList = shots.value!!
+        var shotList = mutableListOf<ShotWrapper>()
+        if (shots.value != null) {
+            shotList.addAll(shots.value as Collection<ShotWrapper>)
+        }
         shotList.add(shot)
         shots.value = shotList      // extra complicated so 'mr. observer' gets triggered - you are welcome.
     }
@@ -132,16 +132,26 @@ open class BoardViewModel(val activeGame: GameMockDao) : ViewModel() {
 
     protected fun initShips(): List<ShipViewModel> {
         val newShips =  shipSizes.mapIndexed { index, size ->
-            ShipMockDao(
+            ShipEntity(
                 index,
+                boardEntity,
                 CoordinateEntity(0, index),
                 size,
-                Direction.RIGHT
+                Direction.RIGHT,
+                0,
+                true,
+                false
             )
         }.toList()
 
+        newShips.forEach { ship ->
+            gameListViewModel.addShip(ship)
+        }
+
         return newShips.map { ship  ->
-            ShipViewModel(ship)
+            var liveShip = MutableLiveData<ShipEntity>()
+            liveShip.value = ship
+            ShipViewModel(liveShip, MutableLiveData<List<ShotEntity>>())
         }.toList()
     }
 

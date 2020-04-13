@@ -1,11 +1,24 @@
 package battleships.esa.ffhs.ch.wrapper
 
+import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.wrapper.Cell
 
-class ShotWrapper(val cell: Cell) {
+class ShotWrapper() {
 
+    lateinit var cell: Cell
     var isHit = false
     var drawable: Boolean = true
+
+    constructor (cell: Cell) : this() {
+        this.cell = cell
+    }
+
+    constructor (shot: ShotEntity): this() {
+        this.cell = Cell(shot.coordinate.x,shot.coordinate.y)
+        isHit = shot.isHit
+        drawable = shot.drawable
+    }
+
 
     // indicator if hit or water should be drawn
     fun isHit(hit: Boolean) {

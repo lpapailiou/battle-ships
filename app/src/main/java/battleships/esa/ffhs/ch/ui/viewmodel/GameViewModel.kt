@@ -3,26 +3,33 @@ package battleships.esa.ffhs.ch.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import battleships.esa.ffhs.ch.data.GameMockDao
+import battleships.esa.ffhs.ch.database.GameRepository
+import battleships.esa.ffhs.ch.entity.GameEntity
 import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
 
-class GameViewModel(gameDao: MutableLiveData<GameMockDao>): ViewModel() {
+class GameViewModel(gameEntity: LiveData<GameEntity>, repository: GameRepository): ViewModel() {
 
-    private var data: MutableLiveData<GameMockDao>
+    var data: MutableLiveData<GameEntity> = MutableLiveData<GameEntity>()
+    private var opponentBoard: BoardOpponentViewModel
+    private var myBoard: BoardMineViewModel
+
 
     init {
-        data = gameDao
+        data.value = gameEntity.value
+        opponentBoard = BoardOpponentViewModel(this, gameEntity.value!!.opponentBoard, repository)
+        myBoard = BoardMineViewModel(this, gameEntity.value!!.myBoard, repository)
     }
 
     fun getOpponentBoard(): BoardOpponentViewModel {
-        return data.value!!.getOpponentBoard().value!!
+        return opponentBoard
     }
     fun getMyBoard(): BoardMineViewModel {
-        return data.value!!.getMyBoard().value!!
+        return myBoard
     }
 
     fun equalsState(state: GameState): Boolean {
-        return data.value!!.getState().value!! == state
+        return data.value!!.state == state
     }
 
     fun notEqualsState(state: GameState): Boolean {
@@ -30,31 +37,38 @@ class GameViewModel(gameDao: MutableLiveData<GameMockDao>): ViewModel() {
     }
 
     fun setState(state: GameState) {
-        data.value!!.setState(state)
+        var updatedGame = data
+        updatedGame.value!!.state = state
+        data = updatedGame
     }
 
     fun isMyBoardVisible(): Boolean {
-        return data.value!!.isMyBoardVisible().value!!
+        return data.value!!.isMyBoardVisible
     }
 
     fun setMyBoardVisible(isMyBoard: Boolean) {
-        data.value!!.setMyBoardVisible(isMyBoard)
+        var updatedGame = data
+        updatedGame.value!!.isMyBoardVisible = isMyBoard
+        data = updatedGame
     }
 
     fun setActive(active: Boolean) {
-        data.value!!.setActive(active)
-    }
-
-    fun isActive(): Boolean {
-        return data.value!!.isActive().value!!
+        var updatedGame = data
+        updatedGame.value!!.isCurrentGame = active
+        data = updatedGame
     }
 
     fun getObservableState(): LiveData<GameState> {
-        return data.value!!.getState()
+        val liveState = MutableLiveData<GameState>()
+        liveState.value = data.value!!.state
+        return liveState
     }
 
     fun getResult(): Int {
-        return data.value!!.getResult().value!!
+        return data.value!!.result
     }
+
+
+
 
 }

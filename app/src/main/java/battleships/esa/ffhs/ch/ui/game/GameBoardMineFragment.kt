@@ -85,11 +85,7 @@ class GameBoardMineFragment : Fragment() {
 
     private fun setObservers() {
         boardModel.getShips().forEach{ ship ->
-            ship.getObservableShip().value!!.getObservableCoordinate().observe(viewLifecycleOwner, Observer {
-                (boardPainter as BoardPainter).setShips(boardModel.getShips())
-            })
-
-            ship.getObservableShip().value!!.getObservableDirection().observe(viewLifecycleOwner, Observer {
+            ship.getObservableShip().observe(viewLifecycleOwner, Observer {
                 (boardPainter as BoardPainter).setShips(boardModel.getShips())
             })
         }

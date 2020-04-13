@@ -1,14 +1,17 @@
-package battleships.esa.ffhs.ch.data
+package battleships.esa.ffhs.ch.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import battleships.esa.ffhs.ch.entity.BoardEntity
 import battleships.esa.ffhs.ch.entity.GameEntity
+import battleships.esa.ffhs.ch.entity.ShipEntity
+import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.utils.Converters
 
-@Database(entities = arrayOf(GameEntity::class), version = 1, exportSchema = false)       // version needs to be increased if table is altered
+@Database(entities = [GameEntity::class, BoardEntity::class, ShipEntity::class, ShotEntity::class], version = 1, exportSchema = false)       // version needs to be increased if table is altered
 @TypeConverters(Converters::class)
 public abstract class GameRoomDatabase: RoomDatabase() {
 

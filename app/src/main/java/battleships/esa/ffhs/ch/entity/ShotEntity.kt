@@ -1,14 +1,13 @@
 package battleships.esa.ffhs.ch.entity
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import androidx.room.*
 import battleships.esa.ffhs.ch.utils.Converters
 
 @Entity(tableName = "shot_table")
 data class ShotEntity(
     @Embedded(prefix = "shot_coord_") val coordinate: CoordinateEntity,
+    @Embedded(prefix = "shot_owner_") val owner_board: BoardEntity,
+    val owner_ship_id: Int,
     var isHit: Boolean,
     var drawable: Boolean
 ) {

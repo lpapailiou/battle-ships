@@ -6,6 +6,7 @@ import battleships.esa.ffhs.ch.model.GameState
 import java.sql.Date
 
 class Converters {
+
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
         return value?.let { Date(it) }

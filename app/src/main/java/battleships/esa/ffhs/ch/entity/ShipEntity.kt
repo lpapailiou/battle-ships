@@ -7,11 +7,12 @@ import battleships.esa.ffhs.ch.model.Direction
 
 @Entity(tableName = "ship_table")
 data class ShipEntity(
-    val id: Int,
+    val shipid: Int,
+    @Embedded(prefix = "ship_owner_") val owner: BoardEntity,
     @Embedded(prefix = "ship_coord_") var bowCoordinate: CoordinateEntity,
     val size: Int,
     var direction: Direction,
-    @Embedded(prefix = "hit_") val hits: ShotListEntity,
+    var shotCount: Int,
     var isPositionValid: Boolean,
     var isHidden: Boolean
 ) {

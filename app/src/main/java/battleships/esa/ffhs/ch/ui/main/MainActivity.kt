@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.utils.InjectorUtils
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import kotlinx.android.synthetic.main.main_activity.*
 
@@ -23,11 +22,13 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var isFirstLogin: Boolean =
             true                        // temporary global variable to check if user is logged in for the first time
+        lateinit var gameListViewModel: GameListViewModel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
+            gameListViewModel = ViewModelProvider(this).get(GameListViewModel::class.java)
             setContentView(R.layout.main_activity)
 
             val navController = Navigation.findNavController(
@@ -48,10 +49,8 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         val item: MenuItem? = menu?.getItem(2)
         if (item != null) {
-            val factory = InjectorUtils.provideGameViewModelFactory()
-            val viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
-            viewModel.getGames().observe(this, Observer {           // remove 'current game' menu item if there is no current game
-                item.setVisible(viewModel.hasActiveGame().value == true)
+            gameListViewModel.getCurrentGame().observe(this, Observer {           // remove 'current game' menu item if there is no current game
+                item.setVisible(gameListViewModel.getCurrentGame().value != null)
                 invalidateOptionsMenu()     // TODO: not clean yet, menu item is still visible when game was ended
             })
         }

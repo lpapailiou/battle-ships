@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.utils.InjectorUtils
+import battleships.esa.ffhs.ch.entity.GameEntity
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.drawable.CustomDialog
 import battleships.esa.ffhs.ch.ui.main.MainActivity
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardOpponentViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
@@ -24,6 +26,8 @@ class GameFragment : Fragment() {
         lateinit var currentGame: GameViewModel
     }
 
+    private var updateDatabase: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    var gameToUpdate: GameEntity? = null
     lateinit var myBoard: BoardMineViewModel
     lateinit var opponentBoard: BoardOpponentViewModel
 
@@ -32,9 +36,12 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val factory = InjectorUtils.provideGameViewModelFactory()
-        val viewModel = ViewModelProvider(this, factory).get(GameListViewModel::class.java)
-        currentGame = viewModel.getGameViewModel()
+
+        currentGame = gameListViewModel.getCurrentGameAsViewModel()
+        gameToUpdate = currentGame.data.value
+        var updateNow = MutableLiveData<Boolean>()
+        updateNow.value = true
+        updateDatabase = updateNow
         currentGame.getObservableState().observe(viewLifecycleOwner, Observer { state ->
             if (currentGame.equalsState(GameState.ENDED)) {
                 currentGame.setActive(false)
@@ -46,6 +53,13 @@ class GameFragment : Fragment() {
         opponentBoard = currentGame.getOpponentBoard()
         myBoard = currentGame.getMyBoard()
         return inflater.inflate(R.layout.game_fragment, container, false)
+    }
+
+    suspend fun updateRepo(game: GameEntity?) {
+        if (game != null) {
+            gameListViewModel.repository.insert(game)
+            updateDatabase.value = false
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

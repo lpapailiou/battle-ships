@@ -5,69 +5,86 @@ import androidx.lifecycle.MutableLiveData
 import battleships.esa.ffhs.ch.entity.CoordinateEntity
 import battleships.esa.ffhs.ch.wrapper.Cell
 import battleships.esa.ffhs.ch.wrapper.DirectionHandler
-import battleships.esa.ffhs.ch.data.ShipMockDao
+import battleships.esa.ffhs.ch.entity.ShipEntity
+import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.model.STRICT_OVERLAP_RULE
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
 
-class ShipViewModel(shipData: ShipMockDao) {
+class ShipViewModel(shipData: LiveData<ShipEntity>, shotList: LiveData<List<ShotEntity>>) {
 
     private var shipCells: MutableList<Cell> = mutableListOf<Cell>()
     private var isSunken = false
-    private var ship = MutableLiveData<ShipMockDao>()
+    private var ship = MutableLiveData<ShipEntity>()
+    private var shots: MutableLiveData<List<ShotEntity>>
 
     init {
-        ship.value = shipData
+        ship = shipData as MutableLiveData<ShipEntity>
+        shots = shotList as MutableLiveData<List<ShotEntity>>
         updateCells()
-        isSunken = ship.value!!.getHitCount() == shipCells.size
+        isSunken = ship.value!!.shotCount == shipCells.size
     }
 
-    private fun getShip(): ShipMockDao {
-        return ship.value!!
+    fun save() {
+        gameListViewModel.save(ship.value!!)
     }
 
     fun getBowCoordinate(): CoordinateEntity {
-        return ship.value!!.getBowCoordinate()
+        return ship.value!!.bowCoordinate
     }
 
     fun setBowCoordinate(coordinate: CoordinateEntity) {
-        ship.value!!.setCoordinate(coordinate)
+        val tempShip = ship
+        tempShip.value!!.bowCoordinate = coordinate
+        ship = tempShip
+        save()
     }
 
     fun getDirection(): Direction {
-        return ship.value!!.getDirection()
+        return ship.value!!.direction
     }
 
     fun setDirection(direction: Direction) {
-        ship.value!!.setDirection(direction)
+        val tempShip = ship
+        tempShip.value!!.direction = direction
+        ship = tempShip
+        save()
     }
 
-    fun getObservableShip(): LiveData<ShipMockDao> {
+    fun getObservableShip(): LiveData<ShipEntity> {
         return ship
     }
 
     fun getShipSize(): Int {
-        return ship.value!!.getShipSize()
+        return ship.value!!.size
     }
 
-    fun addHit(hit: ShotWrapper) {
-        ship.value!!.addHit(hit)
+    fun addHit(shot: ShotWrapper) {
+        val tempShip = ship
+        tempShip.value!!.shotCount++
+        ship = tempShip
+        val newShot = ShotEntity(
+            shot.cell.coordinate,
+            ship.value!!.owner,
+            ship.value!!.ship_id,
+            shot.isHit,
+            shot.drawable
+        )
+        var tempShots: List<ShotEntity> = mutableListOf()
+        //tempShots = shots.value!!
+        //tempShots.add(newShot) // TODO: add shot
+        //shots = tempShots
     }
 
-    fun getHits(): Set<ShotWrapper> {
-        return ship.value!!.getHits()
+    fun getHits(): Int {
+        return ship.value!!.shotCount
     }
 
     fun hide(hide: Boolean) {
-        ship.value!!.hide(hide)
-    }
-
-    fun getObservableDirection(): LiveData<Direction> {
-        return ship.value!!.getObservableDirection()
-    }
-
-    fun getObservableCoordinate(): LiveData<CoordinateEntity> {
-        return ship.value!!.getObservableCoordinate()
+        val tempShip = ship
+        tempShip.value!!.isHidden = hide
+        ship = tempShip
     }
 
     // ----------------------------- ship body location handling -----------------------------
@@ -159,9 +176,13 @@ class ShipViewModel(shipData: ShipMockDao) {
     }
 
     private fun sinkCheck() {
-        isSunken = getHits().size == shipCells.size
+        isSunken = ship.value!!.shotCount == shipCells.size
         if (isSunken) {
-            getHits().forEach { h -> h.undraw() }   // shots of ships get invisible (as they overlap ship)
+            if (shots.value != null) {
+                shots.value!!.forEach { h ->
+                    h.drawable = false
+                }
+            }   // shots of ships get invisible (as they overlap ship)
             hide(false)                                // ships gets visible again; drawn in red to vizualize it is completely sunk
         }
     }
@@ -233,15 +254,17 @@ class ShipViewModel(shipData: ShipMockDao) {
     // ----------------------------- generic getters and setters -----------------------------
 
     fun isHidden(): Boolean {
-        return ship.value!!.isHidden()
+        return ship.value!!.isHidden
     }
 
     fun isPositionValid(): Boolean {
-        return ship.value!!.isPositionValid()
+        return ship.value!!.isPositionValid
     }
 
     fun isPositionValid(valid: Boolean) {
-        ship.value!!.setPositionValid(valid)
+        val tempShip = ship
+        tempShip.value!!.isPositionValid = valid
+        ship = tempShip
     }
 
 }
