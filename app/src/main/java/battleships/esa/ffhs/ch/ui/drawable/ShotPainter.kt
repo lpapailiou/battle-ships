@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
@@ -29,11 +30,11 @@ class ShotPainter(
         shotOuterPaint = initLinePaint(R.color.colorComplementary)
     }
 
-    fun draw(shot: ShotWrapper, canvas: Canvas) {
+    fun draw(shot: ShotEntity, canvas: Canvas) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shot.cell.coordinate.x
-        var startY = gridWidth * shot.cell.coordinate.y
+        var startX = gridWidth * shot.coordinate.x
+        var startY = gridWidth * shot.coordinate.y
 
         var endX = startX + gridWidth
         var endY = startY + gridWidth
@@ -47,8 +48,8 @@ class ShotPainter(
         innerShotOval.inset(innerInsetWith, innerInsetWith)
         outerShotOval.inset(outerInsetWidth, outerInsetWidth)
 
-        if (shot.isHit) {
-            if (shot.isDrawable()) {
+        if (shot.shot_ship_owner_id != 0) {
+            if (shot.drawable) {
                 canvas.drawOval(innerShotOval, shotInnerPaint)
                 canvas.drawOval(outerShotOval, shotOuterPaint)
             }

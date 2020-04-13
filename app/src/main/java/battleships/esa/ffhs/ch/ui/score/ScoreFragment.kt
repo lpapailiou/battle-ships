@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import kotlinx.android.synthetic.main.score_fragment.*
 
 class ScoreFragment : Fragment() {
@@ -32,13 +30,13 @@ class ScoreFragment : Fragment() {
     // TODO: add score counter to view (bot games and real games), maybe ranking as soon as we made the connection
 
     private fun initializeObserver() {
-        gameListViewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
+        mainViewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
             val finishedGames = games.filter { game -> game.state == GameState.ENDED }
             val itemsAdapter: ArrayAdapter<String> =
                 ArrayAdapter<String>(
                     (activity as MainActivity),
                     android.R.layout.simple_list_item_1,
-                    finishedGames.map{ game -> gameListViewModel.printScore(game)}
+                    finishedGames.map{ game -> mainViewModel.printScore(game)}
                 )
             score_game_list.adapter = itemsAdapter
 

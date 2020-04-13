@@ -10,58 +10,63 @@ import battleships.esa.ffhs.ch.entity.ShotEntity
 import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.model.STRICT_OVERLAP_RULE
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 
-class ShipViewModel(shipData: LiveData<ShipEntity>, shotList: LiveData<List<ShotEntity>>) {
+class ShipViewModel(shipData: ShipEntity) {
 
     private var shipCells: MutableList<Cell> = mutableListOf<Cell>()
     private var isSunken = false
-    private var ship = MutableLiveData<ShipEntity>()
-    private var shots: MutableLiveData<List<ShotEntity>>
+    private var ship: ShipEntity
+    private var shots: MutableList<ShotEntity> = mutableListOf()
 
     init {
-        ship = shipData as MutableLiveData<ShipEntity>
-        shots = shotList as MutableLiveData<List<ShotEntity>>
+        ship = shipData
+        var shotList = mainViewModel.getOpponentShots().value?.filter { shot ->
+            shot.shot_ship_owner_id == shipData.ship_id
+        }?.toList()
+        shotList?.forEach { shot -> shots.add(shot) }
         updateCells()
-        isSunken = ship.value!!.shotCount == shipCells.size
+        isSunken = shotList?.size == shipCells.size
     }
 
     fun save() {
-        gameListViewModel.save(ship.value!!)
+        mainViewModel.save(ship)
     }
 
     fun getBowCoordinate(): CoordinateEntity {
-        return ship.value!!.bowCoordinate
+        return ship.bowCoordinate
     }
 
     fun setBowCoordinate(coordinate: CoordinateEntity) {
         val tempShip = ship
-        tempShip.value!!.bowCoordinate = coordinate
+        tempShip.bowCoordinate = coordinate
         ship = tempShip
         save()
     }
 
     fun getDirection(): Direction {
-        return ship.value!!.direction
+        return ship.direction
     }
 
     fun setDirection(direction: Direction) {
         val tempShip = ship
-        tempShip.value!!.direction = direction
+        tempShip.direction = direction
         ship = tempShip
         save()
     }
 
     fun getObservableShip(): LiveData<ShipEntity> {
-        return ship
+        var tempShip = MutableLiveData<ShipEntity>()
+        tempShip.value = ship
+        return tempShip
     }
 
     fun getShipSize(): Int {
-        return ship.value!!.size
+        return ship.size
     }
 
     fun addHit(shot: ShotWrapper) {
-        val tempShip = ship
+        val tempShip = ship/*
         tempShip.value!!.shotCount++
         ship = tempShip
         val newShot = ShotEntity(
@@ -71,19 +76,19 @@ class ShipViewModel(shipData: LiveData<ShipEntity>, shotList: LiveData<List<Shot
             shot.isHit,
             shot.drawable
         )
-        var tempShots: List<ShotEntity> = mutableListOf()
+        var tempShots: List<ShotEntity> = mutableListOf()*/
         //tempShots = shots.value!!
         //tempShots.add(newShot) // TODO: add shot
         //shots = tempShots
     }
 
     fun getHits(): Int {
-        return ship.value!!.shotCount
+        return shots?.size
     }
 
     fun hide(hide: Boolean) {
         val tempShip = ship
-        tempShip.value!!.isHidden = hide
+        tempShip.isHidden = hide
         ship = tempShip
     }
 
@@ -176,10 +181,10 @@ class ShipViewModel(shipData: LiveData<ShipEntity>, shotList: LiveData<List<Shot
     }
 
     private fun sinkCheck() {
-        isSunken = ship.value!!.shotCount == shipCells.size
+        isSunken = shots.size == shipCells.size
         if (isSunken) {
-            if (shots.value != null) {
-                shots.value!!.forEach { h ->
+            if (shots != null) {
+                shots.forEach { h ->
                     h.drawable = false
                 }
             }   // shots of ships get invisible (as they overlap ship)
@@ -254,16 +259,16 @@ class ShipViewModel(shipData: LiveData<ShipEntity>, shotList: LiveData<List<Shot
     // ----------------------------- generic getters and setters -----------------------------
 
     fun isHidden(): Boolean {
-        return ship.value!!.isHidden
+        return ship.isHidden
     }
 
     fun isPositionValid(): Boolean {
-        return ship.value!!.isPositionValid
+        return ship.isPositionValid
     }
 
     fun isPositionValid(valid: Boolean) {
         val tempShip = ship
-        tempShip.value!!.isPositionValid = valid
+        tempShip.isPositionValid = valid
         ship = tempShip
     }
 

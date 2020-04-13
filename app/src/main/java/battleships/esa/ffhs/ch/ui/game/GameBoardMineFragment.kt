@@ -14,6 +14,7 @@ import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 
 class GameBoardMineFragment : Fragment() {
@@ -84,7 +85,7 @@ class GameBoardMineFragment : Fragment() {
     }
 
     private fun setObservers() {
-        boardModel.getShips().forEach{ ship ->
+        /*boardModel.getShips().forEach{ ship ->        // TODO: remove not used observers
             ship.getObservableShip().observe(viewLifecycleOwner, Observer {
                 (boardPainter as BoardPainter).setShips(boardModel.getShips())
             })
@@ -92,6 +93,17 @@ class GameBoardMineFragment : Fragment() {
 
         boardModel.getObservableShots().observe(viewLifecycleOwner, Observer { shots ->
             (boardPainter as BoardPainter).setShots(shots)
+        })*/
+
+        mainViewModel.getMyShips().observe(viewLifecycleOwner, Observer {
+            println("------------- observing opponent ship change")
+            println("number of ships:1 " + it.size)
+            (boardPainter as BoardPainter).setShips(boardModel.getShips())
+        })
+
+        mainViewModel.getMyShots().observe(viewLifecycleOwner, Observer { shots ->
+            (boardPainter as BoardPainter).setShots(shots)
+            println("------------- opponent shot change observed")
         })
     }
 

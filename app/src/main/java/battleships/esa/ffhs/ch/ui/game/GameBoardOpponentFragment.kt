@@ -15,7 +15,7 @@ import battleships.esa.ffhs.ch.ui.drawable.BoardPainter
 import battleships.esa.ffhs.ch.ui.drawable.BoardPainter.Companion.CLICK_LIMIT
 import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardViewModel
 
 class GameBoardOpponentFragment : Fragment() {
@@ -35,7 +35,6 @@ class GameBoardOpponentFragment : Fragment() {
         v = inflater.inflate(R.layout.game_board_opponent_fragment, container, false)
         boardPainter = v
         if (currentGame.equalsState(GameState.PREPARATION)) {
-            println("-------------preparation happened")
             setObserver()
         }
         return v
@@ -46,7 +45,6 @@ class GameBoardOpponentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (currentGame.notEqualsState(GameState.PREPARATION)) {
-            println("-------------normal mode")
             if (boardPainter == null) {
                 boardPainter = (activity as MainActivity).findViewById<View>(R.id.game_board_opponent)
             }
@@ -107,32 +105,18 @@ class GameBoardOpponentFragment : Fragment() {
     }
 
     private fun setObserver() {     // TODO: this is doing way too much work
-        boardModel.getShips().forEach{ ship ->
-            ship.getObservableShip().observe(viewLifecycleOwner, Observer {
-                (boardPainter as BoardPainter).setShips(boardModel.getShips())
-                println("------------- ship change observed")
-            })
-        }
 
-        gameListViewModel.getOpponentShips().observe(viewLifecycleOwner, Observer {
-            println("------------- ship change observed from database")
+        mainViewModel.getOpponentShips().observe(viewLifecycleOwner, Observer {
+            println("------------- observing opponent ship change")
             println("number of ships:1 " + it.size)
             (boardPainter as BoardPainter).setShips(boardModel.getShips())
         })
 
-        gameListViewModel.getMyShips().observe(viewLifecycleOwner, Observer {
-            println("------------- ship change observed from database")
-            println("number of ships:2 " + it.size)
-            (boardPainter as BoardPainter).setShips(boardModel.getShips())
+        mainViewModel.getOpponentShots().observe(viewLifecycleOwner, Observer { shots ->
+            (boardPainter as BoardPainter).setShots(shots)
+            println("------------- opponent shot change observed")
         })
 
-        boardModel.getObservableShots().observe(viewLifecycleOwner, Observer { shots ->
-            (boardPainter as BoardPainter).setShots(shots)
-            println("------------- shot change observed")
-        })
-        boardModel.getObservableShips().observe(viewLifecycleOwner, Observer {
-            println("------------- ship 3 change observed")
-        })
         observerSet = true
     }
 

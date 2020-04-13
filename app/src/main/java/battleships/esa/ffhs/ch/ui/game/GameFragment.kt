@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.entity.GameEntity
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.ui.drawable.CustomDialog
 import battleships.esa.ffhs.ch.ui.main.MainActivity
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardMineViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.BoardOpponentViewModel
-import battleships.esa.ffhs.ch.ui.viewmodel.GameListViewModel
 import battleships.esa.ffhs.ch.ui.viewmodel.GameViewModel
 
 
@@ -37,7 +35,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        currentGame = gameListViewModel.getCurrentGameAsViewModel()
+        currentGame = mainViewModel.getCurrentGameAsViewModel()
         gameToUpdate = currentGame.data.value
         var updateNow = MutableLiveData<Boolean>()
         updateNow.value = true
@@ -55,9 +53,14 @@ class GameFragment : Fragment() {
         return inflater.inflate(R.layout.game_fragment, container, false)
     }
 
+    override fun onPause() {
+        super.onPause()
+        mainViewModel.save(currentGame)
+    }
+
     suspend fun updateRepo(game: GameEntity?) {
         if (game != null) {
-            gameListViewModel.repository.insert(game)
+            mainViewModel.repository.insert(game)
             updateDatabase.value = false
         }
     }

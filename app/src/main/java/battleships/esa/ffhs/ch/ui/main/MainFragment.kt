@@ -1,12 +1,12 @@
 package battleships.esa.ffhs.ch.ui.main
 
-import MainViewModel
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.isFirstLogin
+import battleships.esa.ffhs.ch.ui.viewmodel.MainViewModel
 
 
 class MainFragment : Fragment() {

@@ -1,9 +1,13 @@
 package battleships.esa.ffhs.ch.database
 
 import androidx.lifecycle.LiveData
+import battleships.esa.ffhs.ch.entity.BoardEntity
 import battleships.esa.ffhs.ch.entity.GameEntity
 import battleships.esa.ffhs.ch.entity.ShipEntity
 import battleships.esa.ffhs.ch.entity.ShotEntity
+import battleships.esa.ffhs.ch.utils.ShipFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class GameRepository(private val gameDao: GameDao) {
@@ -36,18 +40,42 @@ class GameRepository(private val gameDao: GameDao) {
     }
 
     suspend fun update(game: GameEntity) {
+        game.lastChange = SimpleDateFormat("yyyy-MMd-dd HH:mm:ss").format(Date())
         gameDao.update(game)
     }
 
     suspend fun insert(game: GameEntity) {
-        println("===================================================game is inserted")
-        gameDao.insert(game)
+        // create game
+        val rowId= gameDao.insert(game)
+        val dbGame = gameDao.getGameByRowId(rowId)
+        if (dbGame != null) {
+            // create boards for game
+            val rowIdOpponentBoard = gameDao.insert(BoardEntity(dbGame.game_id, false))
+            val rowIdMyBoard = gameDao.insert(BoardEntity(dbGame.game_id, true))
+
+            // create ships for boards
+            val dbBoadOpponent = gameDao.getBoardByRowId(rowIdOpponentBoard)
+            if (dbBoadOpponent != null) {
+                var newOpponentShips = ShipFactory(dbBoadOpponent.board_id).getShips()
+                for (ship in newOpponentShips) {
+                    gameDao.insert(ship)
+                }
+            }
+
+            val dbBoadMine = gameDao.getBoardByRowId(rowIdMyBoard)
+            if (dbBoadMine != null) {
+                var newMineShips = ShipFactory(dbBoadMine.board_id).getShips()
+                for (ship in newMineShips) {
+                    gameDao.insert(ship)
+                }
+            }
+        }
     }
 
     // ----------------------------- ship queries -----------------------------
 
-    val myShipList = gameDao.getMyShips()
-    val opponentShipList = gameDao.getOpponentShips()
+    val myShipList = gameDao.getShipsMineCurrent()
+    val opponentShipList = gameDao.getShipsOpponentCurrent()
 
     fun getMyShips(): LiveData<List<ShipEntity>> {
         return myShipList
@@ -58,36 +86,24 @@ class GameRepository(private val gameDao: GameDao) {
     }
 
     suspend fun update(ship: ShipEntity) {
-        println("===================================================ship is updated")
         gameDao.update(ship)
     }
 
     suspend fun insert(ship: ShipEntity) {
-        println("===================================================ship is inserted")
         gameDao.insert(ship)
     }
 
     // ----------------------------- shot queries -----------------------------
 
     val myShotList = gameDao.getMyShots()
-    val myShipShotList = gameDao.getMyShipShots()
     val opponentShotList = gameDao.getOpponentShots()
-    val opponentShipShotList = gameDao.getOpponentShipShots()
 
     fun getMyShots(): LiveData<List<ShotEntity>> {
         return myShotList
     }
 
-    fun getMyShipShots(): LiveData<List<ShotEntity>> {
-        return myShipShotList
-    }
-
     fun getOpponentShots(): LiveData<List<ShotEntity>> {
         return opponentShotList
-    }
-
-    fun getOpponentShipShots(): LiveData<List<ShotEntity>> {
-        return opponentShipShotList
     }
 
     suspend fun update(shot: ShotEntity) {

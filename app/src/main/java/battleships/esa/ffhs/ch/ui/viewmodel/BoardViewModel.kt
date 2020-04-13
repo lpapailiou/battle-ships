@@ -7,21 +7,18 @@ import androidx.lifecycle.ViewModel
 import battleships.esa.ffhs.ch.model.Direction
 import battleships.esa.ffhs.ch.wrapper.Cell
 import battleships.esa.ffhs.ch.entity.*
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
-open class BoardViewModel(var activeGame: GameViewModel, var boardEntity: BoardEntity) : ViewModel() {
+open class BoardViewModel(val isThisBoardMine: Boolean) : ViewModel() {
 
     val username = MutableLiveData<String>()
 
-    val shipSizes: IntArray = intArrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1)
     var ships: MutableLiveData<MutableList<ShipViewModel>> = MutableLiveData<MutableList<ShipViewModel>>()
     var shots: MutableLiveData<MutableList<ShotWrapper>> = MutableLiveData<MutableList<ShotWrapper>>()
 
     var currentShip: ShipViewModel? = null
     var offset = Cell(0, 0)
-
-
 
     // ----------------------------- game handling -----------------------------
     fun getObservableShips(): LiveData<List<ShipViewModel>> {
@@ -131,28 +128,13 @@ open class BoardViewModel(var activeGame: GameViewModel, var boardEntity: BoardE
     // ----------------------------- initialization of ships -----------------------------
 
     protected fun initShips(): List<ShipViewModel> {
-        val newShips =  shipSizes.mapIndexed { index, size ->
-            ShipEntity(
-                index,
-                boardEntity,
-                CoordinateEntity(0, index),
-                size,
-                Direction.RIGHT,
-                0,
-                true,
-                false
-            )
-        }.toList()
-
-        newShips.forEach { ship ->
-            gameListViewModel.addShip(ship)
+        val newShips =  mainViewModel.getShips(isThisBoardMine)
+        if (newShips.value != null) {
+            return newShips.value!!.map { ship ->
+                ShipViewModel(ship)
+            }.toList()
         }
-
-        return newShips.map { ship  ->
-            var liveShip = MutableLiveData<ShipEntity>()
-            liveShip.value = ship
-            ShipViewModel(liveShip, MutableLiveData<List<ShotEntity>>())
-        }.toList()
+        return listOf()
     }
 
     // TODO: unstable, should be refactored

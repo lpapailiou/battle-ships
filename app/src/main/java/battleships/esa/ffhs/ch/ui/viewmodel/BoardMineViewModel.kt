@@ -7,25 +7,25 @@ import battleships.esa.ffhs.ch.entity.BoardEntity
 import battleships.esa.ffhs.ch.entity.GameEntity
 import battleships.esa.ffhs.ch.entity.ShipEntity
 import battleships.esa.ffhs.ch.model.GameState
+import battleships.esa.ffhs.ch.ui.game.GameFragment.Companion.currentGame
 import battleships.esa.ffhs.ch.ui.main.MainActivity
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import battleships.esa.ffhs.ch.wrapper.Cell
 import battleships.esa.ffhs.ch.wrapper.ShotWrapper
 
-class BoardMineViewModel(activeGame: GameViewModel, boardEntity: BoardEntity, repository: GameRepository) : BoardViewModel(activeGame, boardEntity) {
+class BoardMineViewModel(activeGame: GameViewModel) : BoardViewModel(true) {
 
     init {
-        initializeShips(activeGame.data.value!!, repository)
-        initializeShots(activeGame.data.value!!, repository)
+        initializeShips(activeGame.data.value!!)
+        initializeShots(activeGame.data.value!!)
         getShips().forEach { it.hide(true) }
     }
 
-    private fun initializeShips(game: GameEntity, repository: GameRepository) {
-        var shipList = repository.getMyShips().value
+    private fun initializeShips(game: GameEntity) {
+        var shipList = mainViewModel.getMyShips().value
         if (shipList != null) {
             ships.value = shipList.map { ship ->
-                var liveShip = MutableLiveData<ShipEntity>()
-                liveShip.value = ship
-                ShipViewModel(liveShip, repository.getMyShipShots())
+                ShipViewModel(ship)
             }.toMutableList()
 
         } else {
@@ -34,8 +34,8 @@ class BoardMineViewModel(activeGame: GameViewModel, boardEntity: BoardEntity, re
         }
     }
 
-    private fun initializeShots(game: GameEntity, repository: GameRepository) {
-        var shotList = repository.getMyShots().value
+    private fun initializeShots(game: GameEntity) {
+        var shotList = mainViewModel.getMyShots().value
         if (shotList != null) {
             shots.value = shotList.map { shot -> ShotWrapper(shot) }.toMutableList()
         }
@@ -76,11 +76,11 @@ class BoardMineViewModel(activeGame: GameViewModel, boardEntity: BoardEntity, re
 
     override fun endGameCheck(): Boolean {
         val gameEnded = super.endGameCheck()
-        if (gameEnded && activeGame.data.value!!.state != GameState.ENDED) {
-            val tempGame = activeGame.data.value!!
-            tempGame.result = 1
-            tempGame.state = GameState.ENDED
-            activeGame.data.value =  tempGame
+        if (gameEnded && currentGame.notEqualsState(GameState.ENDED)) {
+            val tempGame = currentGame
+            tempGame.data.value!!.result = 1
+            tempGame.data.value!!.state = GameState.ENDED
+            currentGame = tempGame
             return true
         }
         return false
@@ -105,8 +105,8 @@ class BoardMineViewModel(activeGame: GameViewModel, boardEntity: BoardEntity, re
     // ----------------------------- trigger shot on opponents board -----------------------------
 
     fun randomShot(): Boolean {
-        if (activeGame.data.value!!.state != GameState.ENDED) {
-            var success = activeGame.getOpponentBoard().shoot(
+        if (currentGame.data.value!!.state != GameState.ENDED) {
+            var success = currentGame.getOpponentBoard().shoot(
                 ShotWrapper(
                     Cell(0, 0).getRandomCell()
                 )

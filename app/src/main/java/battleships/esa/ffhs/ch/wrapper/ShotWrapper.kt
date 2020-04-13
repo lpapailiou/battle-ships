@@ -15,10 +15,9 @@ class ShotWrapper() {
 
     constructor (shot: ShotEntity): this() {
         this.cell = Cell(shot.coordinate.x,shot.coordinate.y)
-        isHit = shot.isHit
+        isHit = shot.shot_ship_owner_id != 0
         drawable = shot.drawable
     }
-
 
     // indicator if hit or water should be drawn
     fun isHit(hit: Boolean) {

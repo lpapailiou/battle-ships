@@ -4,21 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import battleships.esa.ffhs.ch.database.GameRepository
+import battleships.esa.ffhs.ch.entity.BoardEntity
 import battleships.esa.ffhs.ch.entity.GameEntity
 import battleships.esa.ffhs.ch.model.GameState
 import battleships.esa.ffhs.ch.model.WON_GAME_VALUE
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 
-class GameViewModel(gameEntity: LiveData<GameEntity>, repository: GameRepository): ViewModel() {
+class GameViewModel(gameEntity: LiveData<GameEntity>): ViewModel() {
 
     var data: MutableLiveData<GameEntity> = MutableLiveData<GameEntity>()
     private var opponentBoard: BoardOpponentViewModel
     private var myBoard: BoardMineViewModel
 
 
+
     init {
         data.value = gameEntity.value
-        opponentBoard = BoardOpponentViewModel(this, gameEntity.value!!.opponentBoard, repository)
-        myBoard = BoardMineViewModel(this, gameEntity.value!!.myBoard, repository)
+        opponentBoard = BoardOpponentViewModel(this)
+        myBoard = BoardMineViewModel(this)
+
     }
 
     fun getOpponentBoard(): BoardOpponentViewModel {

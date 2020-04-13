@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.entity.GameEntity
-import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.gameListViewModel
+import battleships.esa.ffhs.ch.ui.main.MainActivity.Companion.mainViewModel
 import kotlinx.android.synthetic.main.start_game_fragment.*
 
 
@@ -28,12 +26,12 @@ class StartGameFragment : Fragment() {
         // ----------------------------- button change listeners -----------------------------
 
         offline_button.setOnClickListener {
-            gameListViewModel.setGameActive(null)
+            mainViewModel.setGameActive(null)
             findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
         }
 
         online_button.setOnClickListener {
-            gameListViewModel.setGameActive(null)
+            mainViewModel.setGameActive(null)
             findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
         }
 
