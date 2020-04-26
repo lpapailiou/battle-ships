@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".ui.main.StartGameFragment">
+    tools:context=".old.ui.main.StartGameFragment">
 
     <Button
-        android:id="@+id/offline_button"
+        android:id="@+id/play_vs_bot_button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
 
@@ -17,12 +17,12 @@
         android:text="@string/practice"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/online_button"
+        app:layout_constraintEnd_toStartOf="@+id/play_vs_friend_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/online_button"
+        android:id="@+id/play_vs_friend_button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

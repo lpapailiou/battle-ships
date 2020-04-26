@@ -5,7 +5,7 @@
     android:id="@+id/game_active"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.game.GameActiveFragment">
+    tools:context=".old.ui.game.GameActiveFragment">
 
     <FrameLayout
         android:id="@+id/fragment_container_game_active"
