@@ -26,9 +26,8 @@ class ShipLogic @Inject constructor(
             shipCells.forEach { shipCell ->
                 occupiedCells.addAll(shipCell.getSurroundingCells())
             }
-            return occupiedCells
         }
-        return linkedSetOf()
+        return occupiedCells
     }
 
 

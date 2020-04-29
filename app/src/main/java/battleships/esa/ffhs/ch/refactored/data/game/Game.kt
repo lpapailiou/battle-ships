@@ -26,7 +26,7 @@ import battleships.esa.ffhs.ch.refactored.data.player.Player
         childColumns = ["winnerId"]
     )]
 )
-class Game(
+data class Game(
     var lastChangedAt: String,
     var state: GameState,
     @ColumnInfo(index = true)
