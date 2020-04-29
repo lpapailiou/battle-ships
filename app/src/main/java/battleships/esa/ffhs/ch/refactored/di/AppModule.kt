@@ -5,6 +5,8 @@ import androidx.room.Room
 import battleships.esa.ffhs.ch.refactored.data.impl.local.BattleShipsDatabase
 import battleships.esa.ffhs.ch.refactored.data.impl.local.player.LocalPlayerDataSource
 import battleships.esa.ffhs.ch.refactored.data.player.PlayerDataSource
+import battleships.esa.ffhs.ch.refactored.ship.DirectionLogic
+import battleships.esa.ffhs.ch.refactored.ship.ShipLogic
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,4 +54,16 @@ object AppModule {
     @Provides
     fun provideIoDispatcher() = Dispatchers.IO
 
+
+    @Singleton
+    @Provides
+    fun provideShipLogic(directionLogic: DirectionLogic): ShipLogic {
+        return ShipLogic(directionLogic)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDirectionLogic(): DirectionLogic {
+        return DirectionLogic()
+    }
 }

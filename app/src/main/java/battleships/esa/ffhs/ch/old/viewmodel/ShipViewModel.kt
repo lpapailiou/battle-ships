@@ -4,7 +4,7 @@
 //import androidx.lifecycle.MutableLiveData
 //import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.mainViewModel
 //import battleships.esa.ffhs.ch.old.wrapper.Cell
-//import battleships.esa.ffhs.ch.old.wrapper.DirectionHandler
+//import battleships.esa.ffhs.ch.refactored.ship.DirectionHandler
 //import battleships.esa.ffhs.ch.old.wrapper.ShotWrapper
 //import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 //import battleships.esa.ffhs.ch.refactored.data.ship.Ship
@@ -132,23 +132,6 @@
 //                cell.coordinate.y - offset.coordinate.y
 //            )
 //        )
-//    }
-//
-//    fun rotate(cell: Cell) {
-//        val index = getIndex(cell)
-//        setDirection(
-//            DirectionHandler(
-//                getDirection()
-//            ).getNextClockwiseNondiagonalDirection()
-//        )
-////        setBowCoordinate(
-////            Coordinate(
-////                cell.coordinate.x - (getDirection().x * index),
-////                cell.coordinate.y - (getDirection().y * index)
-////            )
-////        )
-////        mainViewModel.save(ship)
-//        updateCells()
 //    }
 //
 //    // ----------------------------- hit handling -----------------------------

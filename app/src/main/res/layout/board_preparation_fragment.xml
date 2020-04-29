@@ -10,7 +10,7 @@
         tools:context=".refactored.boardpreparation.BoardPreparationFragment">
 
 
-        <battleships.esa.ffhs.ch.old.ui.drawable.BoardPainter
+        <battleships.esa.ffhs.ch.old.ui.drawable.BoardView
 
             android:id="@+id/preparation_board"
             android:layout_width="350dp"

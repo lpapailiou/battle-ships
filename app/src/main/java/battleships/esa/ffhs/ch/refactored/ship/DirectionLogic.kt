@@ -1,21 +1,21 @@
-package battleships.esa.ffhs.ch.old.wrapper
+package battleships.esa.ffhs.ch.refactored.ship
 
 import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 
-class DirectionHandler(var direction: Direction) {
+class DirectionLogic {
 
-    fun getNextClockwiseNondiagonalDirection(): Direction {
-        return when {
-            direction == Direction.UP -> {
+    fun getNextClockwiseNonDiagonalDirection(direction: Direction): Direction {
+        return when (direction) {
+            Direction.UP -> {
                 Direction.RIGHT
             }
-            direction == Direction.RIGHT -> {
+            Direction.RIGHT -> {
                 Direction.DOWN
             }
-            direction == Direction.DOWN -> {
+            Direction.DOWN -> {
                 Direction.LEFT
             }
-            direction == Direction.LEFT -> {
+            Direction.LEFT -> {
                 Direction.UP
             }
             else -> direction
@@ -23,13 +23,12 @@ class DirectionHandler(var direction: Direction) {
     }
 
     fun getRandomDirection(): Direction {
-        direction = listOf(
+        return listOf(
             Direction.UP,
             Direction.DOWN,
             Direction.LEFT,
             Direction.RIGHT
         ).random()
-        return direction
     }
 
 }

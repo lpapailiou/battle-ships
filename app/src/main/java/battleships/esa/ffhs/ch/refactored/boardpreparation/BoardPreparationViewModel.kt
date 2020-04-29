@@ -5,19 +5,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
-import battleships.esa.ffhs.ch.old.model.STRICT_OVERLAP_RULE
+import battleships.esa.ffhs.ch.refactored.board.Cell
 import battleships.esa.ffhs.ch.refactored.data.DataResult
 import battleships.esa.ffhs.ch.refactored.data.board.Board
 import battleships.esa.ffhs.ch.refactored.data.player.Player
 import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepository
 import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 import battleships.esa.ffhs.ch.refactored.data.ship.Ship
+import battleships.esa.ffhs.ch.refactored.ship.DirectionLogic
+import battleships.esa.ffhs.ch.refactored.ship.ShipLogic
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
 class BoardPreparationViewModel @Inject constructor(
-    private val playerRepository: PlayerRepository
+    private val playerRepository: PlayerRepository,
+    private val shipLogic: ShipLogic,
+    private val directionLogic: DirectionLogic
 ) : ViewModel() {
 
     private val _player = MutableLiveData<Player>()
@@ -64,6 +68,7 @@ class BoardPreparationViewModel @Inject constructor(
         _ships.value!!.forEach { ship ->
             ship.x = Random.nextInt(BOARD_SIZE)
             ship.y = Random.nextInt(BOARD_SIZE)
+            ship.direction = directionLogic.getRandomDirection()
         }
 
         var overlapList = getOverlappingShips()
@@ -74,7 +79,6 @@ class BoardPreparationViewModel @Inject constructor(
         }
     }
 
-
     private fun getOverlappingShips(): HashSet<Ship> {
         val overlappingShips = hashSetOf<Ship>()
         for (ship in _ships.value!!) {
@@ -83,7 +87,7 @@ class BoardPreparationViewModel @Inject constructor(
             for (otherShip in _ships.value!!) {
                 if (ship == otherShip) continue
 
-                if (areShipsWithinOccupiedRangeOfEachOthers(ship, otherShip)) {
+                if (shipLogic.areShipsWithinOccupiedRangeOfEachOther(ship, otherShip)) {
                     overlappingShips.add(ship)
                     overlappingShips.add(otherShip)
                 }
@@ -92,28 +96,18 @@ class BoardPreparationViewModel @Inject constructor(
         return overlappingShips
     }
 
-    private fun areShipsWithinOccupiedRangeOfEachOthers(ship: Ship, otherShip: Ship): Boolean {
-        val occupiedArea = determineOccupiedCells(ship)
-        return occupiedArea.intersect(determineOccupiedCells(otherShip)).isNotEmpty()
+    fun determineShipAt(cell: Cell): Ship? {
+        return _ships.value!!.find { ship ->
+            shipLogic.determineShipCells(ship).contains(cell)
+        }
     }
 
-    private fun determineOccupiedCells(ship: Ship): HashSet<Pair<Int, Int>> {
-        val occupiedCells: HashSet<Pair<Int, Int>> = linkedSetOf()
-        occupiedCells.addAll(determineShipCells(ship))
-        if (STRICT_OVERLAP_RULE) {
-//            shipCells.forEach { shipCell ->
-//                occupiedCells.addAll(shipCell.getSurroundingCells())
-//            }
-            return occupiedCells
-        }
-        return linkedSetOf()
+    fun rotateAround(ship: Ship, cell: Cell) {
+        shipLogic.rotateAround(ship, cell)
     }
 
-    private fun determineShipCells(ship: Ship): HashSet<Pair<Int, Int>> {
-        val cells = HashSet<Pair<Int, Int>>()
-        for (i in 0 until ship.size) {
-            cells.add(Pair(ship.x + ship.direction.x * i, ship.y + ship.direction.y * i))
-        }
-        return cells
+    fun moveShip(ship: Ship, cell: Cell) {
+        ship.x = cell.x
+        ship.y = cell.y
     }
 }

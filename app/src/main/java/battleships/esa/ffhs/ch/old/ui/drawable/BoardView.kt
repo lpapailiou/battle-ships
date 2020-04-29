@@ -10,10 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
+import battleships.esa.ffhs.ch.refactored.board.Cell
 import battleships.esa.ffhs.ch.refactored.data.ship.Ship
 import battleships.esa.ffhs.ch.refactored.data.shot.Shot
 
-open class BoardPainter(
+open class BoardView(
     context: Context, attributes: AttributeSet
 ) : View(context, attributes) {
 
@@ -33,6 +34,8 @@ open class BoardPainter(
 
     var paint: Paint
     var paintBackground: Paint
+
+    private var currentlyTouchingShip: Ship? = null
 
     init {
         paint = initPaint(R.color.colorAccent)
@@ -117,5 +120,12 @@ open class BoardPainter(
             isAntiAlias = true
             isDither = true
         }
+    }
+
+    fun getCellAt(x: Float, y: Float): Cell {
+        return Cell(
+            (x / gridWidth).toInt(),
+            (y / gridWidth).toInt()
+        )
     }
 }

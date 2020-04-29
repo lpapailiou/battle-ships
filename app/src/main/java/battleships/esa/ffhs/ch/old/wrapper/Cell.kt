@@ -31,28 +31,4 @@
 //        )
 //    }
 //
-//    fun getSurroundingCells(): HashSet<Cell> {
-//        val directions: Array<Direction> = Direction.values()
-//        return directions.map { direction ->
-//            Cell(
-//                coordinate.x + direction.x,
-//                coordinate.y + direction.y
-//            )
-//        }.toHashSet()
-//    }
-//
-//    // ----------------------------- overriding equals, hashCode and toString -----------------------------
-//
-//    override fun equals(other: Any?): Boolean {
-//        val otherC: Cell = (other as Cell)
-//        return this.coordinate.x == otherC.coordinate.x && this.coordinate.y == otherC.coordinate.y
-//    }
-//
-//    override fun hashCode(): Int {
-//        return Objects.hash(coordinate.x, coordinate.y)
-//    }
-//
-//    override fun toString(): String {
-//        return "($coordinate.x, $coordinate.y)"
-//    }
 //}
