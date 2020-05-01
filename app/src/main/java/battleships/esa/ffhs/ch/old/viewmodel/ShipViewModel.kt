@@ -108,32 +108,6 @@
 //        return null
 //    }
 //
-//    fun isCellOnShip(cellToFind: Cell): Boolean {
-//        for (shipCell in shipCells) {
-//            if (cellToFind.equals(shipCell)) {
-//                return true
-//            }
-//        }
-//        return false
-//    }
-//
-//    // ----------------------------- ship location actions -----------------------------
-//
-//    fun set(cell: Cell) {
-////        setBowCoordinate(cell.coordinate)
-////        updateCells()
-////        mainViewModel.save(ship)
-//    }
-//
-//    fun set(cell: Cell, offset: Cell) {
-//        set(
-//            Cell(
-//                cell.coordinate.x - offset.coordinate.x,
-//                cell.coordinate.y - offset.coordinate.y
-//            )
-//        )
-//    }
-//
 //    // ----------------------------- hit handling -----------------------------
 //
 //    fun hit(shot: ShotWrapper) {
@@ -157,45 +131,6 @@
 //        return isSunken
 //    }
 //
-//    // ----------------------------- positioning and check helper methods -----------------------------
-//
-//    fun isShipCompletelyOnBoard(): Boolean {
-//        for (cell in shipCells) {
-//            if (!cell.isValid()) {
-//                return false
-//            }
-//        }
-//        return true
-//    }
-//
-//
-//    // TODO: check if can be replaced with getOffset method
-//    fun getIndex(cell: Cell): Int {
-////        var pos: Cell =
-////            Cell(
-////                getBowCoordinate().x,
-////                getBowCoordinate().y
-////            )
-////
-////        for ((index, i) in (0 until getShipSize()).withIndex()) {
-////            if (pos.equals(cell)) {
-////                return index
-////            }
-////            pos = Cell(
-////                pos.coordinate.x + getDirection().x,
-////                pos.coordinate.y + getDirection().y
-////            )
-////        }
-//        return -1
-//    }
-//
-//    // used for more intuitive moving
-////    fun getOffset(cell: Cell): Cell {
-////        return Cell(
-////            cell.coordinate.x - getBowCoordinate().x,
-////            cell.coordinate.y - getBowCoordinate().y
-////        )
-////    }
 //
 //    // ----------------------------- generic getters and setters -----------------------------
 //

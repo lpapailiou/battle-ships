@@ -7,15 +7,16 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.refactored.board.Cell
-import battleships.esa.ffhs.ch.refactored.data.ship.Ship
 import battleships.esa.ffhs.ch.refactored.data.shot.Shot
+import battleships.esa.ffhs.ch.refactored.ship.ShipModel
 
+// TODO: maybe split into each use cases: preparation, attacking and defending boards?
 open class BoardView(
-    context: Context, attributes: AttributeSet
+    context: Context,
+    attributes: AttributeSet
 ) : View(context, attributes) {
 
     companion object {
@@ -23,30 +24,30 @@ open class BoardView(
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
     }
 
-    private lateinit var ships: LiveData<List<Ship>>
+    private lateinit var ships: List<ShipModel>
     private var shots: MutableList<Shot> = mutableListOf()
 
     var gridWidth: Float = 0f
-    var clickCounter: Int = 0
 
-    val shipPainter: ShipPainter = ShipPainter(context, attributes)
-    val shotPainter: ShotPainter = ShotPainter(context, attributes)
+    private val shotPainter: ShotPainter = ShotPainter(context, attributes)
+    private val shipPainter: ShipPainter = ShipPainter(context, attributes)
 
-    var paint: Paint
-    var paintBackground: Paint
-
-    private var currentlyTouchingShip: Ship? = null
+    private var paint: Paint
+    private var paintBackground: Paint
 
     init {
         paint = initPaint(R.color.colorAccent)
         paintBackground = initBackgroundPaint()
     }
 
-    fun setShips(updatedShips: LiveData<List<Ship>>) {
-        ships = updatedShips
+    // TODO: write adapter?
+    fun setShips(ships: List<ShipModel>) {
+        this.ships = ships
         invalidate()
     }
 
+
+    // TODO: write adapter?
     fun setShots(updatedShots: List<Shot>) {
         shots = updatedShots as MutableList<Shot>
         invalidate()
@@ -60,21 +61,21 @@ open class BoardView(
     }
 
     override fun onDraw(canvas: Canvas) {
-        // clear canvas
-        canvas.drawColor(Color.BLACK)
+        clearCanvas(canvas)
 
-        // drawing ships first
-        ships.value!!.forEach { shipViewModel ->
-            shipPainter.draw(shipViewModel, canvas)
+        ships.forEach { ship ->
+            shipPainter.draw(canvas, ship)
         }
 
-        // drawing shots over ships
         shots.forEach { shot ->
-            shotPainter.draw(shot, canvas)
+            shotPainter.draw(canvas, shot)
         }
 
-        // drawing grid over ships
         drawGrid(canvas)
+    }
+
+    private fun clearCanvas(canvas: Canvas) {
+        canvas.drawColor(Color.BLACK)
     }
 
     // ----------------------------- create grid -----------------------------
@@ -98,8 +99,6 @@ open class BoardView(
             canvas.drawLine(0f, y, width.toFloat(), y, customPaint)
         }
     }
-
-    // ----------------------------- create paints -----------------------------
 
     protected fun initPaint(id: Int): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {

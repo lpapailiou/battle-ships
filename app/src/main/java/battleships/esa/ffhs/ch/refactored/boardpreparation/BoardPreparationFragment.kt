@@ -10,13 +10,16 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.ui.drawable.BoardView
 import battleships.esa.ffhs.ch.old.ui.drawable.BoardView.Companion.CLICK_LIMIT
 import battleships.esa.ffhs.ch.refactored.BattleShipsApplication
-import battleships.esa.ffhs.ch.refactored.data.ship.Ship
+import battleships.esa.ffhs.ch.refactored.board.Cell
+import battleships.esa.ffhs.ch.refactored.ship.ShipModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.board_preparation_fragment.*
 import javax.inject.Inject
@@ -32,9 +35,12 @@ class BoardPreparationFragment : Fragment() {
 
     lateinit var boardView: BoardView
 
+    private var touchedShip: ShipModel? = null
+
     private var touchCounter = 0
 
-    private var touchedShip: Ship? = null
+    private var touchedOffsetY: Int = 0
+    private var touchedOffsetX: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,27 +57,39 @@ class BoardPreparationFragment : Fragment() {
         val view = inflater.inflate(R.layout.board_preparation_fragment, container, false)
 
         boardPreparationViewModel.start(args.googlePlayerId)
+        boardPreparationViewModel.ships.observe(viewLifecycleOwner, Observer { ships ->
+            boardView.setShips(ships)
+        })
 
         boardView = view.findViewById(R.id.preparation_board)
-        boardView.setShips(boardPreparationViewModel.ships)
+
+        // TODO: refactor into custom KeyEvent in BoardView?
         boardView.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
 
             boardView as BoardView
             val touchedCell = boardView.getCellAt(motionEvent.x, motionEvent.y)
 
             if (touchCounter == 0) {
-                touchedShip = boardPreparationViewModel.determineShipAt(touchedCell)
+                touchedShip = boardPreparationViewModel.getShipAt(touchedCell)
                 if (touchedShip == null) {
                     return@OnTouchListener true
                 }
+                touchedOffsetX = touchedCell.x - touchedShip!!.x
+                touchedOffsetY = touchedCell.y - touchedShip!!.y
             }
 
+            if (touchedShip == null) {
+                return@OnTouchListener true
+            }
             touchCounter++
 
             when (motionEvent.actionMasked) {
                 MotionEvent.ACTION_MOVE -> {
                     if (touchCounter > CLICK_LIMIT) {
-                        boardPreparationViewModel.moveShip(touchedShip!!, touchedCell)
+                        boardPreparationViewModel.moveShipTo(
+                            touchedShip!!,
+                            Cell(touchedCell.x - touchedOffsetX, touchedCell.y - touchedOffsetY)
+                        )
                     }
                 }
                 MotionEvent.ACTION_UP -> {
@@ -82,46 +100,7 @@ class BoardPreparationFragment : Fragment() {
                 }
             }
 
-
             return@OnTouchListener true
-//                if (currentGame.isMyBoardVisible() && resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && currentGame.notEqualsState(
-//                        GameState.PREPARATION
-//                    )
-//                ) {
-//                    // if this fragment is displayed as small fragment (portrait mode), this click will trigger a board switch
-//                    (parentFragment as GameActiveFragment).switchFragments()
-//                    return false
-//                } else {
-//                    if (event == null || currentGame.notEqualsState(GameState.PREPARATION)) {
-//                        return false
-//                    }
-//                    if (currentGame.isMyBoardVisible() && currentGame.notEqualsState(GameState.PREPARATION)) {
-//                        return false
-//                    }
-//
-//                    val handled: Boolean
-//
-//                    handled = boardModel.identifyShip(pointerPosition)
-//
-//                    when (event.actionMasked) {
-//                        MotionEvent.ACTION_MOVE -> {            // move ship around
-//                            v.clickCounter++
-//                            if (handled && v.clickCounter > CLICK_LIMIT) {
-//                                boardModel.moveAction(pointerPosition)
-//                            }
-//                            return true
-//                        }
-//                        MotionEvent.ACTION_UP -> {              // rotate ship
-//                            if (handled && v.clickCounter <= CLICK_LIMIT) {
-//                                boardModel.clickAction(pointerPosition)
-//                            } else {
-//                                boardModel.releaseShip()
-//                            }
-//                            v.clickCounter = 0
-//                        }
-//                    }
-//                    return handled
-//        }
         })
 
 
@@ -131,19 +110,23 @@ class BoardPreparationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         startgame_button.setOnClickListener {
-//            if (currentGame.getOpponentBoard().validateStart()) {
-//                currentGame.setState(GameState.ACTIVE)
-//                (parentFragment as GameFragment).switchToGameFragment()
-//            } else {
-//                showSnackBar(it)
-//            }
+            if (boardPreparationViewModel.isBoardInValidState()) {
+
+                val action =
+                    BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
+                        args.googlePlayerId
+                    )
+                findNavController().navigate(action)
+            } else {
+                showSnackBar(it)
+            }
         }
     }
 
 
     private fun showSnackBar(view: View) {
         val snackBar =
-            Snackbar.make(view, "Some of your ships are still too close to each other!", 1000)
+            Snackbar.make(view, "Some of your ships are still too close to each other!", 2000)
         snackBar.setBackgroundTint(ContextCompat.getColor(view.context, R.color.colorComplementary))
         snackBar.show()
     }

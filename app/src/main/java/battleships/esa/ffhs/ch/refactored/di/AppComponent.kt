@@ -3,9 +3,9 @@ package battleships.esa.ffhs.ch.refactored.di
 import android.content.Context
 import battleships.esa.ffhs.ch.refactored.boardpreparation.di.BoardPreparationComponent
 import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepository
+import battleships.esa.ffhs.ch.refactored.game.di.GameComponent
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
 import javax.inject.Singleton
 
 
@@ -28,13 +28,8 @@ interface AppComponent {
 
     fun boardPreparationComponent(): BoardPreparationComponent.Factory
 
+    fun gameComponent(): GameComponent.Factory
+
     val playerRepository: PlayerRepository
 }
 
-
-@Module(
-    subcomponents = [
-        BoardPreparationComponent::class
-    ]
-)
-object SubcomponentsModule

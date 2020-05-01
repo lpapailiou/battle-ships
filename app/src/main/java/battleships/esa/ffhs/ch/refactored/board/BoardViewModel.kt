@@ -10,8 +10,9 @@ import battleships.esa.ffhs.ch.refactored.data.board.BoardRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class BoardViewModel @Inject constructor(private val boardRepository: BoardRepository) :
-    ViewModel() {
+class BoardViewModel @Inject constructor(
+    private val boardRepository: BoardRepository
+) : ViewModel() {
 
     private val _board = MutableLiveData<Board>()
     val board: LiveData<Board> = _board
@@ -21,7 +22,6 @@ class BoardViewModel @Inject constructor(private val boardRepository: BoardRepos
         loadBoard(boardId)
     }
 
-
     private fun loadBoard(boardId: Int) {
         viewModelScope.launch {
             val result = boardRepository.findById(boardId)
@@ -30,4 +30,5 @@ class BoardViewModel @Inject constructor(private val boardRepository: BoardRepos
             }
         }
     }
+
 }

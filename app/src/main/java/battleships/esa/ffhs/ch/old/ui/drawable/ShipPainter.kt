@@ -10,19 +10,21 @@ import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.refactored.data.ship.Direction
-import battleships.esa.ffhs.ch.refactored.data.ship.Ship
+import battleships.esa.ffhs.ch.refactored.ship.ShipModel
+import javax.inject.Inject
 
-class ShipPainter(
-    context: Context, attributes: AttributeSet
+class ShipPainter @Inject constructor(
+    context: Context,
+    attributes: AttributeSet
 ) : View(context, attributes) {
 
     companion object {
         const val STROKE_WIDTH = 10f
     }
 
-    val paint: Paint
-    val errPaint: Paint
-    val hiddenPaint: Paint
+    private val paint: Paint
+    private val errPaint: Paint
+    private val hiddenPaint: Paint
 
     init {
         paint = initPaint(R.color.colorAccent)
@@ -30,14 +32,14 @@ class ShipPainter(
         hiddenPaint = initPaint(R.color.colorBackground)
     }
 
-    fun draw(ship: Ship, canvas: Canvas) {
+    fun draw(canvas: Canvas, ship: ShipModel) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
         var startX = gridWidth * ship.x
         var startY = gridWidth * ship.y
 
-        var endX: Float
-        var endY: Float
+        val endX: Float
+        val endY: Float
 
         when (ship.direction) {
             Direction.UP -> {
@@ -63,7 +65,7 @@ class ShipPainter(
             }
         }
 
-        var oval: RectF = RectF(startX, startY, endX, endY)
+        val oval = RectF(startX, startY, endX, endY)
         val insetWith: Float = STROKE_WIDTH * (3 / 2)
         oval.inset(insetWith, insetWith)                 // resize ships to create padding effect
 
@@ -71,12 +73,15 @@ class ShipPainter(
 //            canvas.drawOval(oval, hiddenPaint)
 //        } else if (shipViewModel.isPositionValid() && !shipViewModel.isSunken()) {
 //            canvas.drawOval(oval, paint)
-//        } else {
-        canvas.drawOval(oval, errPaint)
 //        }
-    }
 
-    // ----------------------------- create paints -----------------------------
+        if (ship.isPositionValid) {
+            canvas.drawOval(oval, paint)
+            return
+        }
+
+        canvas.drawOval(oval, errPaint)
+    }
 
     private fun initPaint(id: Int): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {

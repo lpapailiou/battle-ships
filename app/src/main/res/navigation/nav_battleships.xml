@@ -35,6 +35,20 @@
         <argument
             android:name="googlePlayerId"
             app:argType="string" />
+
+        <action
+            android:id="@+id/action_boardPreparationFragment_to_gameFragment"
+            app:destination="@id/game_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/game_fragment"
+        android:name="battleships.esa.ffhs.ch.refactored.game.GameFragment"
+        android:label="Game"
+        tools:layout="@layout/game_fragment">
+        <argument
+            android:name="googlePlayerId"
+            app:argType="string" />
     </fragment>
 
     <fragment

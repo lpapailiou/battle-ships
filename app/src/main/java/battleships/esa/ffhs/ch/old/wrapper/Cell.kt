@@ -10,12 +10,6 @@
 //    val coordinate =
 //        Coordinate(x, y)
 //
-//    fun isValid(): Boolean {
-//        if (coordinate.x < 0 || coordinate.x >= BOARD_SIZE || coordinate.y < 0 || coordinate.y >= BOARD_SIZE) {
-//            return false
-//        }
-//        return true
-//    }
 //
 //    fun getRandomCell(): Cell {
 //        return Cell(

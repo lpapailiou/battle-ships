@@ -13,14 +13,13 @@ import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepository
 import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 import battleships.esa.ffhs.ch.refactored.data.ship.Ship
 import battleships.esa.ffhs.ch.refactored.ship.DirectionLogic
-import battleships.esa.ffhs.ch.refactored.ship.ShipLogic
+import battleships.esa.ffhs.ch.refactored.ship.ShipModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
 class BoardPreparationViewModel @Inject constructor(
     private val playerRepository: PlayerRepository,
-    private val shipLogic: ShipLogic,
     private val directionLogic: DirectionLogic
 ) : ViewModel() {
 
@@ -30,8 +29,8 @@ class BoardPreparationViewModel @Inject constructor(
     private val _board = MutableLiveData<Board>()
     val board: LiveData<Board> = _board
 
-    private val _ships = MutableLiveData<List<Ship>>()
-    val ships: LiveData<List<Ship>> = _ships
+    private val _ships = MutableLiveData<List<ShipModel>>()
+    val ships: LiveData<List<ShipModel>> = _ships
 
 
     fun start(playerId: String) {
@@ -54,12 +53,15 @@ class BoardPreparationViewModel @Inject constructor(
     private fun initializeShips() {
         val shipsSizes = arrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1) // TODO: Refactor?
         _ships.value = shipsSizes.map { size ->
-            Ship(
-                0,
-                0,
-                size,
-                Direction.UP,
-                0
+            ShipModel(
+                Ship(
+                    0,
+                    0,
+                    size,
+                    Direction.UP,
+                    0
+                ),
+                directionLogic
             )
         }
     }
@@ -71,23 +73,36 @@ class BoardPreparationViewModel @Inject constructor(
             ship.direction = directionLogic.getRandomDirection()
         }
 
-        var overlapList = getOverlappingShips()
-        while (!overlapList.isEmpty()) {
-            overlapList.first().x = Random.nextInt(BOARD_SIZE)
-            overlapList.first().y = Random.nextInt(BOARD_SIZE)
-            overlapList = getOverlappingShips()
+        var invalidlyPositionedShips = getInvalidlyPositionedShips()
+        while (invalidlyPositionedShips.isNotEmpty()) {
+            invalidlyPositionedShips.first().x = Random.nextInt(BOARD_SIZE)
+            invalidlyPositionedShips.first().y = Random.nextInt(BOARD_SIZE)
+            invalidlyPositionedShips = getInvalidlyPositionedShips()
         }
+
+        updateShipPositionValidity()
+        _ships.value = ships.value
+
     }
 
-    private fun getOverlappingShips(): HashSet<Ship> {
-        val overlappingShips = hashSetOf<Ship>()
+    private fun getInvalidlyPositionedShips(): HashSet<ShipModel> {
+        val overlappingShips = getOverlappingShips()
+        val shipsOutsideOfBoard = getShipsOutsideOfBoard()
+
+        overlappingShips.addAll(shipsOutsideOfBoard)
+
+        return overlappingShips
+    }
+
+    private fun getOverlappingShips(): HashSet<ShipModel> {
+        val overlappingShips = hashSetOf<ShipModel>()
         for (ship in _ships.value!!) {
             if (overlappingShips.contains(ship)) continue
 
             for (otherShip in _ships.value!!) {
                 if (ship == otherShip) continue
 
-                if (shipLogic.areShipsWithinOccupiedRangeOfEachOther(ship, otherShip)) {
+                if (ship.isShipWithinOccupiedRangeOfOtherShip(otherShip)) {
                     overlappingShips.add(ship)
                     overlappingShips.add(otherShip)
                 }
@@ -96,18 +111,48 @@ class BoardPreparationViewModel @Inject constructor(
         return overlappingShips
     }
 
-    fun determineShipAt(cell: Cell): Ship? {
+    private fun getShipsOutsideOfBoard(): HashSet<ShipModel> {
+        return _ships.value!!.filter { ship ->
+            !ship.isShipCompletelyOnBoard()
+        }.toHashSet()
+    }
+
+    fun getShipAt(cell: Cell): ShipModel? {
         return _ships.value!!.find { ship ->
-            shipLogic.determineShipCells(ship).contains(cell)
+            ship.getShipCells().contains(cell)
         }
     }
 
-    fun rotateAround(ship: Ship, cell: Cell) {
-        shipLogic.rotateAround(ship, cell)
+    fun rotateAround(ship: ShipModel, cell: Cell) {
+        ship.rotateAround(cell)
+        updateShipPositionValidity()
+        _ships.value = ships.value
     }
 
-    fun moveShip(ship: Ship, cell: Cell) {
+    fun moveShipTo(ship: ShipModel, cell: Cell) {
+        val oldX = ship.x
+        val oldY = ship.y
+
         ship.x = cell.x
         ship.y = cell.y
+
+        if (ship.isShipCompletelyOnBoard()) {
+            updateShipPositionValidity()
+            _ships.value = ships.value
+            return
+        }
+        ship.x = oldX
+        ship.y = oldY
+    }
+
+    private fun updateShipPositionValidity() {
+        val invalidlyPositionedShips = getInvalidlyPositionedShips()
+        _ships.value!!.forEach { ship ->
+            ship.isPositionValid = !invalidlyPositionedShips.contains(ship)
+        }
+    }
+
+    fun isBoardInValidState(): Boolean {
+        return getInvalidlyPositionedShips().isEmpty()
     }
 }

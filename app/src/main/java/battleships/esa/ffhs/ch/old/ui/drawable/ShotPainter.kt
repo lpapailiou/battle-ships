@@ -29,7 +29,7 @@ class ShotPainter(
         shotOuterPaint = initLinePaint(R.color.colorComplementary)
     }
 
-    fun draw(shot: Shot, canvas: Canvas) {
+    fun draw(canvas: Canvas, shot: Shot) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
         var startX = gridWidth * shot.x
@@ -40,8 +40,8 @@ class ShotPainter(
 
         var with = endX - startX
 
-        var innerShotOval: RectF = RectF(startX, startY, endX, endY)
-        var outerShotOval: RectF = RectF(startX, startY, endX, endY)
+        var innerShotOval = RectF(startX, startY, endX, endY)
+        var outerShotOval = RectF(startX, startY, endX, endY)
         val innerInsetWith: Float = with * 0.3f
         val outerInsetWidth: Float = with * 0.15f
         innerShotOval.inset(innerInsetWith, innerInsetWith)
