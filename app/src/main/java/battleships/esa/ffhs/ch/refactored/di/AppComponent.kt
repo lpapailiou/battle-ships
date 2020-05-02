@@ -7,6 +7,7 @@ import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepository
 import battleships.esa.ffhs.ch.refactored.data.ship.ShipRepository
 import battleships.esa.ffhs.ch.refactored.data.shot.ShotRepository
 import battleships.esa.ffhs.ch.refactored.di.boardpreparation.BoardPreparationComponent
+import battleships.esa.ffhs.ch.refactored.di.game.BridgeComponent
 import battleships.esa.ffhs.ch.refactored.di.game.GameComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -33,6 +34,8 @@ interface AppComponent {
     fun boardPreparationComponent(): BoardPreparationComponent.Factory
 
     fun gameComponent(): GameComponent.Factory
+
+    fun bridgeComponent(): BridgeComponent.Factory
 
     val playerRepository: PlayerRepository
 

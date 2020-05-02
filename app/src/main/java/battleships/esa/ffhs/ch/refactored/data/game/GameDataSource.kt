@@ -7,4 +7,5 @@ interface GameDataSource {
 
     suspend fun insert(game: Game): DataResult<Long>
     suspend fun update(game: Game): DataResult<Int>
+    suspend fun findActiveGames(): DataResult<List<Game>>
 }

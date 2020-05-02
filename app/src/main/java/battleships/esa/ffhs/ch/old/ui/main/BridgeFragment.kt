@@ -1,17 +1,35 @@
 package battleships.esa.ffhs.ch.old.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
+import battleships.esa.ffhs.ch.refactored.BattleShipsApplication
+import battleships.esa.ffhs.ch.refactored.business.bridge.BridgeViewModel
 import kotlinx.android.synthetic.main.bridge_fragment.*
+import javax.inject.Inject
 
 class BridgeFragment : Fragment() {
 
-    lateinit var itemsAdapter: ArrayAdapter<String>
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val bridgeViewModel by viewModels<BridgeViewModel> { viewModelFactory }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as BattleShipsApplication).appComponent.bridgeComponent()
+            .create().inject(this)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,7 +40,18 @@ class BridgeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeGameList()
+
+        bridgeViewModel.start()
+
+        bridgeViewModel.activeGames.observe(viewLifecycleOwner, Observer {
+
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                it.map { game -> game.lastChangedAt.toString() }
+            )
+            bridge_game_list.adapter = adapter
+        })
     }
 
     // ----------------------------- list view for currently active games -----------------------------

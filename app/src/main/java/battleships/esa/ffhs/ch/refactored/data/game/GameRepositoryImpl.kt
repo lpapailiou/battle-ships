@@ -29,4 +29,10 @@ class GameRepositoryImpl @Inject constructor(
             return@withContext localGameDataSource.update(game)
         }
     }
+
+    override suspend fun findActiveGames(): DataResult<List<Game>> {
+        return withContext(ioDispatcher) {
+            return@withContext localGameDataSource.findActiveGames()
+        }
+    }
 }

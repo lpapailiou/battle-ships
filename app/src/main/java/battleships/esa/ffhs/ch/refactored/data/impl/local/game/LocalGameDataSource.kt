@@ -53,4 +53,14 @@ class LocalGameDataSource internal constructor(
                 return@withContext DataResult.Error(e)
             }
         }
+
+    override suspend fun findActiveGames(): DataResult<List<Game>> =
+        withContext(ioDispatcher) {
+            try {
+                val games = gameDao.getActiveGames()
+                return@withContext DataResult.Success(games)
+            } catch (e: Exception) {
+                return@withContext DataResult.Error(e)
+            }
+        }
 }

@@ -22,7 +22,7 @@ interface GameDao {
     fun getGameCount(): Int
 
     @Query("SELECT * from game WHERE state != 3")
-    fun getActiveGames(): LiveData<List<Game>>
+    fun getActiveGames(): List<Game>
 
     @Query("SELECT * from game WHERE state = 3")
     fun getFinishedGames(): LiveData<List<Game>>
