@@ -5,12 +5,12 @@
     android:id="@+id/intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.IntroFragment">
+    tools:context=".old.ui.main.IntroFragment">
 
 
     <fragment
         android:id="@+id/gif_intro_container"
-        android:name="battleships.esa.ffhs.ch.ui.main.GifFragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.main.GifFragment"
         android:layout_width="206dp"
         android:layout_height="244dp"
         android:layout_marginStart="100dp"
@@ -31,13 +31,13 @@
 
         android:layout_marginTop="150dp"
 
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="20dp"
         android:hint="@string/username"
         android:textColorHint="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
         app:hintEnabled="true"
         app:hintTextColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/offline_button"
+        app:layout_constraintBottom_toTopOf="@+id/start_game_fragment"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
@@ -56,35 +56,18 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/offline_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
-        android:layout_marginStart="128dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="50dp"
-        android:text="@string/practice"
+    <fragment
+        android:id="@+id/start_game_fragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.main.StartGameFragment"
+        android:layout_width="270dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/online_button"
-        app:layout_constraintStart_toEndOf="@+id/gif_intro_container"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/online_button"
-        android:layout_width="101dp"
-        android:layout_height="wrap_content"
-
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="50dp"
-        android:text="@string/online"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/offline_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

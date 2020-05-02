@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/main_fragment">
+
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.main.MainFragment"
+        android:label="Welcome to Battle Ships"
+        tools:layout="@layout/main_fragment">
+
+        <!-- actions used to navigate manually (via buttons) -->
+        <action
+            android:id="@+id/action_mainFragment_to_boardPreparationFragment"
+            app:destination="@id/board_preparation_fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_scoreFragment"
+            app:destination="@id/score_fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_settings_fragment"
+            app:destination="@id/settings_fragment" />
+    </fragment>
+
+    <!-- fragments used for navigation with nav host -->
+    <fragment
+        android:id="@+id/board_preparation_fragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.boardpreparation.BoardPreparationFragment"
+        android:label="Game Preparation"
+        tools:layout="@layout/board_preparation_fragment">
+        <argument
+            android:name="googlePlayerId"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_boardPreparationFragment_to_gameFragment"
+            app:destination="@id/game_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/game_fragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.game.GameFragment"
+        android:label="Game"
+        tools:layout="@layout/game_fragment">
+        <argument
+            android:name="gameId"
+            app:argType="long" />
+        <argument
+            android:name="currentPlayerId"
+            app:argType="long" />
+        <argument
+            android:name="enemyPlayerId"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/score_fragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.main.ScoreFragment"
+        android:label="Game score"
+        tools:layout="@layout/score_fragment" />
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/rules_fragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.rules.RulesFragment"
+        android:label="Rules"
+        tools:layout="@layout/rules_fragment" />
+</navigation>

@@ -6,59 +6,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.main.BridgeFragment">
+    tools:context=".old.ui.main.BridgeFragment">
 
     <!-- start game button missing here -->
 
     <fragment
         android:id="@+id/gif_bridge_container"
-        android:name="battleships.esa.ffhs.ch.ui.main.GifFragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.main.GifFragment"
         android:layout_width="195dp"
         android:layout_height="172dp"
         android:layout_marginStart="85dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="103dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/start_game_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.008"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/offline_button"
-        android:layout_width="88dp"
-        android:layout_height="48dp"
 
-        android:layout_marginStart="88dp"
+    <fragment
+        android:id="@+id/start_game_fragment"
+        android:name="battleships.esa.ffhs.ch.old.ui.main.StartGameFragment"
+        android:layout_width="271dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="50dp"
-        android:text="@string/practice"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/online_button"
+        app:layout_constraintEnd_toStartOf="@+id/bridge_game_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
 
-    <Button
-        android:id="@+id/online_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="50dp"
-        android:text="@string/online"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/listId"
-        app:layout_constraintStart_toEndOf="@+id/offline_button"
-        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
-
     <ListView
-        android:id="@+id/listId"
+        android:id="@+id/bridge_game_list"
         android:layout_width="299dp"
-        android:layout_height="303dp"
+        android:layout_height="250dp"
         android:layout_marginStart="58dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="58dp"
         android:layout_marginBottom="53dp"
         app:layout_constraintBottom_toBottomOf="parent"
