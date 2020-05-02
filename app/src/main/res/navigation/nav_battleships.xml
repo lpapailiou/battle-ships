@@ -16,9 +16,6 @@
             android:id="@+id/action_mainFragment_to_boardPreparationFragment"
             app:destination="@id/board_preparation_fragment" />
         <action
-            android:id="@+id/action_mainFragment_to_boardFragment"
-            app:destination="@id/board_fragment" />
-        <action
             android:id="@+id/action_mainFragment_to_scoreFragment"
             app:destination="@id/score_fragment" />
         <action
@@ -29,7 +26,7 @@
     <!-- fragments used for navigation with nav host -->
     <fragment
         android:id="@+id/board_preparation_fragment"
-        android:name="battleships.esa.ffhs.ch.refactored.boardpreparation.BoardPreparationFragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.boardpreparation.BoardPreparationFragment"
         android:label="Game Preparation"
         tools:layout="@layout/board_preparation_fragment">
         <argument
@@ -43,12 +40,18 @@
 
     <fragment
         android:id="@+id/game_fragment"
-        android:name="battleships.esa.ffhs.ch.refactored.game.GameFragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.game.GameFragment"
         android:label="Game"
         tools:layout="@layout/game_fragment">
         <argument
-            android:name="googlePlayerId"
-            app:argType="string" />
+            android:name="gameId"
+            app:argType="long" />
+        <argument
+            android:name="currentPlayerId"
+            app:argType="long" />
+        <argument
+            android:name="enemyPlayerId"
+            app:argType="long" />
     </fragment>
 
     <fragment

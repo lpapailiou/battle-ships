@@ -4,25 +4,24 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import battleships.esa.ffhs.ch.refactored.data.player.Player
-import battleships.esa.ffhs.ch.refactored.ship.Ship
+import battleships.esa.ffhs.ch.refactored.data.board.Board
 
 @Entity(
     foreignKeys = [ForeignKey(
-        entity = Player::class,
+        entity = Board::class,
         parentColumns = ["id"],
         childColumns = ["boardId"],
         onDelete = ForeignKey.CASCADE
     )]
 )
 data class Ship(
-    override var x: Int,
-    override var y: Int,
-    override val size: Int,
-    override var direction: Direction,
-    @ColumnInfo(index = true) override val boardId: Int
-) : Ship {
+    var x: Int,
+    var y: Int,
+    val size: Int,
+    var direction: Direction,
+    @ColumnInfo(index = true) var boardId: Long
+) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true)
-    override var id: Int = 0
+    var id: Long = 0
 }

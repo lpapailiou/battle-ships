@@ -1,7 +1,7 @@
 package battleships.esa.ffhs.ch.refactored.di
 
-import battleships.esa.ffhs.ch.refactored.boardpreparation.di.BoardPreparationComponent
-import battleships.esa.ffhs.ch.refactored.game.di.GameComponent
+import battleships.esa.ffhs.ch.refactored.di.boardpreparation.BoardPreparationComponent
+import battleships.esa.ffhs.ch.refactored.di.game.GameComponent
 import dagger.Module
 
 

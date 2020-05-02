@@ -12,6 +12,9 @@ interface GameDao {
 
     // ----------------------------- game queries -----------------------------
 
+    @Query("SELECT * from game where id = :id")
+    fun findById(id: Long): Game?
+
     @Query("SELECT * from game")
     fun getGames(): LiveData<List<Game>>
 

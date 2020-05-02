@@ -7,7 +7,7 @@
 //import battleships.esa.ffhs.ch.old.viewmodel.ShipViewModel
 //import battleships.esa.ffhs.ch.old.wrapper.Cell
 //import battleships.esa.ffhs.ch.old.wrapper.ShotWrapper
-//import battleships.esa.ffhs.ch.refactored.board.Cell
+//import battleships.esa.ffhs.ch.refactored.business.board.Cell
 //import battleships.esa.ffhs.ch.refactored.data.board.Board
 //import battleships.esa.ffhs.ch.refactored.data.impl.local.BattleShipsDatabase
 //import javax.inject.Inject

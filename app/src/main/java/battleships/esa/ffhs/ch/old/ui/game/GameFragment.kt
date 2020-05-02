@@ -9,7 +9,7 @@
 //import battleships.esa.ffhs.ch.old.model.GameState
 //import battleships.esa.ffhs.ch.old.ui.main.MainActivity
 //import battleships.esa.ffhs.ch.old.viewmodel.GameViewModel
-//import battleships.esa.ffhs.ch.refactored.boardpreparation.BoardPreparationFragment
+//import battleships.esa.ffhs.ch.refactored.ui.boardpreparation.BoardPreparationFragment
 //
 //
 //class GameFragment : Fragment() {

@@ -11,6 +11,6 @@ data class Player(
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true)
-    var id: Int = 0
+    var id: Long = 0
 }
 

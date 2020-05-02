@@ -12,10 +12,9 @@ class PlayerRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PlayerRepository {
 
-    override suspend fun findById(playerId: String): DataResult<Player> {
+    override suspend fun findByPlayerId(playerId: String): DataResult<Player> {
         return withContext(ioDispatcher) {
-            return@withContext localPlayerDataSource.findById(playerId)
+            return@withContext localPlayerDataSource.findByPlayerId(playerId)
         }
     }
-
 }

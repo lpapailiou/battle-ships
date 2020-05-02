@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.old.model.GameState
-import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.mainViewModel
 import kotlinx.android.synthetic.main.bridge_fragment.*
 
 class BridgeFragment : Fragment() {
@@ -44,13 +41,13 @@ class BridgeFragment : Fragment() {
 
         bridge_game_list.setOnItemClickListener { parent, view, position, id ->
 
-            val gameList =
-                mainViewModel.getGames().value?.filter { game -> game.state != GameState.ENDED }
-            val clickedGame = gameList?.get(position)
-            if (clickedGame != null) {
-                mainViewModel.setGameActive(clickedGame)
-                findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
-            }
+//            val gameList =
+//                mainViewModel.getGames().value?.filter { game -> game.state != GameState.ENDED }
+//            val clickedGame = gameList?.get(position)
+//            if (clickedGame != null) {
+//                mainViewModel.setGameActive(clickedGame)
+//                findNavController().navigate(R.id.action_mainFragment_to_boardFragment)
+//            }
 
         }
     }

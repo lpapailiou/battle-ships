@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import battleships.esa.ffhs.ch.old.model.GameState
 import battleships.esa.ffhs.ch.refactored.data.player.Player
+import java.util.*
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -27,18 +28,18 @@ import battleships.esa.ffhs.ch.refactored.data.player.Player
     )]
 )
 data class Game(
-    var lastChangedAt: String,
+    var lastChangedAt: Date,
     var state: GameState,
     @ColumnInfo(index = true)
-    var attackerId: Int,
+    var attackerId: Long,
     @ColumnInfo(index = true)
-    var defenderId: Int,
+    var defenderId: Long,
     @ColumnInfo(index = true)
-    var playerAtTurnId: Int,
+    var playerAtTurnId: Long,
     @ColumnInfo(index = true)
-    var winnerId: Int
+    var winnerId: Long?
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true)
-    var id: Int = 0
+    var id: Long = 0
 }

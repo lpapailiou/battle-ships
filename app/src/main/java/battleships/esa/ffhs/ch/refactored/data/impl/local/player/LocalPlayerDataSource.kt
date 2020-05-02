@@ -14,7 +14,7 @@ class LocalPlayerDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PlayerDataSource {
 
-    override suspend fun findById(googlePlayerId: String): DataResult<Player> =
+    override suspend fun findByPlayerId(googlePlayerId: String): DataResult<Player> =
         withContext(ioDispatcher) {
             try {
                 val player = playerDao.findByPlayerId(googlePlayerId)

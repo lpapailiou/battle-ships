@@ -22,13 +22,13 @@ import battleships.esa.ffhs.ch.refactored.data.player.Player
 )
 data class Board(
     @ColumnInfo(index = true)
-    val gameId: Int = 0,
+    val gameId: Long = 0,
 
     @ColumnInfo(index = true)
-    val playerId: String?
+    val playerId: Long?
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true)
-    var id: Int = 0
+    var id: Long = 0
 
 }
