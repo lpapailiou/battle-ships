@@ -8,7 +8,7 @@
     tools:context=".old.ui.game.GameActiveFragment">
 
     <FrameLayout
-        android:id="@+id/fragment_container_game_active"
+        android:id="@+id/board_active"
         android:layout_width="260dp"
         android:layout_height="260dp"
         android:layout_marginStart="35dp"
@@ -17,11 +17,11 @@
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/board_inactive"
-        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+        app:layout_constraintEnd_toStartOf="@id/board_inactive"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
-        android:id="@+id/fragment_container_game_inactive"
+        android:id="@+id/board_inactive"
         android:layout_width="260dp"
         android:layout_height="260dp"
         android:layout_marginStart="35dp"
@@ -29,8 +29,9 @@
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/fragment_container_game_active"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/board_active"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
