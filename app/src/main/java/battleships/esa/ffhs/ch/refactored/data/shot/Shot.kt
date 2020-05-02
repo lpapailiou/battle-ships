@@ -18,9 +18,9 @@ data class Shot(
     val x: Int,
     val y: Int,
     @ColumnInfo(index = true)
-    val boardId: Int
+    val boardId: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true)
-    var id: Int = 0
+    var id: Long = 0
 }

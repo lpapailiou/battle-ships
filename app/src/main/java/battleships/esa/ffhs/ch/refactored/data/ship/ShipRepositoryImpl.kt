@@ -18,4 +18,10 @@ class ShipRepositoryImpl @Inject constructor(
             return@withContext localShipDataSource.insert(ship)
         }
     }
+
+    override suspend fun findByBoard(boardId: Long): DataResult<List<Ship>> {
+        return withContext(ioDispatcher) {
+            return@withContext localShipDataSource.loadByBoard(boardId)
+        }
+    }
 }

@@ -9,7 +9,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
-import battleships.esa.ffhs.ch.refactored.data.shot.Shot
+import battleships.esa.ffhs.ch.refactored.business.shot.ShotModel
 
 class ShotPainter(
     context: Context, attributes: AttributeSet
@@ -29,38 +29,39 @@ class ShotPainter(
         shotOuterPaint = initLinePaint(R.color.colorComplementary)
     }
 
-    fun draw(canvas: Canvas, shot: Shot) {
+    fun draw(canvas: Canvas, shot: ShotModel) {
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
-        var startX = gridWidth * shot.x
-        var startY = gridWidth * shot.y
+        val startX = gridWidth * shot.x
+        val startY = gridWidth * shot.y
 
-        var endX = startX + gridWidth
-        var endY = startY + gridWidth
+        val endX = startX + gridWidth
+        val endY = startY + gridWidth
 
-        var with = endX - startX
-
-        var innerShotOval = RectF(startX, startY, endX, endY)
-        var outerShotOval = RectF(startX, startY, endX, endY)
-        val innerInsetWith: Float = with * 0.3f
-        val outerInsetWidth: Float = with * 0.15f
-        innerShotOval.inset(innerInsetWith, innerInsetWith)
-        outerShotOval.inset(outerInsetWidth, outerInsetWidth)
-
-        if (shot.boardId != 0) {
-//            if (shot.drawable) {
-            canvas.drawOval(innerShotOval, shotInnerPaint)
-            canvas.drawOval(outerShotOval, shotOuterPaint)
-//            }
+        if (shot.isHit) {
+            drawShot(startX, endX, startY, endY, canvas)
         } else {
             drawWater(startX, endX, startY, endY, canvas)
         }
     }
 
-    fun drawWater(startX: Float, endX: Float, startY: Float, endY: Float, canvas: Canvas) {
-        var yList: MutableList<Float> = mutableListOf()
-        var lineCount: Int = 3
-        var yOffset = (endY - startY) / (lineCount + 1)
+    private fun drawShot(startX: Float, endX: Float, startY: Float, endY: Float, canvas: Canvas) {
+        val width = endX - startX
+        val innerShotOval = RectF(startX, startY, endX, endY)
+        val outerShotOval = RectF(startX, startY, endX, endY)
+        val innerInsetWith: Float = width * 0.3f
+        val outerInsetWidth: Float = width * 0.15f
+        innerShotOval.inset(innerInsetWith, innerInsetWith)
+        outerShotOval.inset(outerInsetWidth, outerInsetWidth)
+
+        canvas.drawOval(innerShotOval, shotInnerPaint)
+        canvas.drawOval(outerShotOval, shotOuterPaint)
+    }
+
+    private fun drawWater(startX: Float, endX: Float, startY: Float, endY: Float, canvas: Canvas) {
+        val yList: MutableList<Float> = mutableListOf()
+        val lineCount: Int = 3
+        val yOffset = (endY - startY) / (lineCount + 1)
         var y = startY + ((endY - startY) / lineCount) / 1.3f
         for (i: Int in 0..lineCount - 1) {
             yList.add(y)

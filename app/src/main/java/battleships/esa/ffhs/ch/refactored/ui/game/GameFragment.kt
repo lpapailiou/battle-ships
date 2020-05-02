@@ -1,8 +1,10 @@
 package battleships.esa.ffhs.ch.refactored.ui.game
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -45,16 +47,56 @@ class GameFragment : Fragment() {
         activeBoard = view.findViewById(R.id.board_active)
         inactiveBoard = view.findViewById(R.id.board_inactive)
 
-        gameViewModel.start(args.gameId, args.currentPlayerId, args.enemyPlayerId)
-        gameViewModel.activeBoard.observe(viewLifecycleOwner, Observer { boardModel ->
-//            activeBoard.setShips(boardModel.getShips())
-        })
-        gameViewModel.inactiveBoard.observe(viewLifecycleOwner, Observer { boardModel ->
-//            inactiveBoard.setShips(boardModel.getShips())
-        })
-
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        gameViewModel.start(args.gameId, args.currentPlayerId, args.enemyPlayerId)
+
+        gameViewModel.activeBoard.observe(viewLifecycleOwner, Observer { boardModel ->
+            if (boardModel == null) {
+                return@Observer
+            }
+            activeBoard.setShips(boardModel.ships.value!!)
+            activeBoard.setShots(boardModel.shots.value!!)
+        })
+
+        gameViewModel.inactiveBoard.observe(viewLifecycleOwner, Observer { boardModel ->
+            if (boardModel == null) {
+                return@Observer
+            }
+            inactiveBoard.setShips(boardModel.ships.value!!)
+            inactiveBoard.setShots(boardModel.shots.value!!)
+        })
+
+        activeBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
+
+            boardView as BoardView
+
+            val touchedCell = boardView.getCellAt(motionEvent.x, motionEvent.y)
+
+
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                gameViewModel.shootAt(touchedCell)
+            }
+
+            return@OnTouchListener true
+        })
+
+        gameViewModel.gameOverEvent.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                val dialog: AlertDialog.Builder =
+                    AlertDialog.Builder(context, R.style.AppDialogTheme)
+                dialog.setTitle("THE WAR IS OVER")
+                if (gameViewModel.game.value!!.winnerId == args.currentPlayerId) {
+                    dialog.setMessage("You won! You are the best general!")
+                } else {
+                    dialog.setMessage("You lost! Your wife will be very mad at you.")
+                }
+                dialog.show()
+            }
+        })
+    }
 }

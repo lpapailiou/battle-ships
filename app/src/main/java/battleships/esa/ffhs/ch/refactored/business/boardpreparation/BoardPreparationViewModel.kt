@@ -20,6 +20,7 @@ import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepository
 import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 import battleships.esa.ffhs.ch.refactored.data.ship.Ship
 import battleships.esa.ffhs.ch.refactored.data.ship.ShipRepository
+import battleships.esa.ffhs.ch.refactored.event.Event
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -48,6 +49,9 @@ class BoardPreparationViewModel @Inject constructor(
     private val _ships = MutableLiveData<List<ShipModel>>()
     val ships: LiveData<List<ShipModel>> = _ships
 
+    private val _gameReadyEvent = MutableLiveData<Event<Unit>>()
+    val gameReadyEvent: LiveData<Event<Unit>> = _gameReadyEvent
+
 
     fun start(playerId: String) {
         if (_player.value != null) {
@@ -58,6 +62,7 @@ class BoardPreparationViewModel @Inject constructor(
         loadBot()
         initializeShips()
         randomizeShipPositions()
+        showShips()
     }
 
     private fun loadPlayer(playerId: String) {
@@ -81,7 +86,8 @@ class BoardPreparationViewModel @Inject constructor(
     }
 
     private fun initializeShips() {
-        val shipsSizes = arrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1) // TODO: Refactor?
+//        val shipsSizes = arrayOf(4, 3, 3, 2, 2, 2, 1, 1, 1, 1) // TODO: Refactor?
+        val shipsSizes = arrayOf(4) // TODO: Refactor?
         _ships.value = shipsSizes.map { size ->
             ShipModel(
                 0,
@@ -89,12 +95,13 @@ class BoardPreparationViewModel @Inject constructor(
                 size,
                 Direction.UP,
                 0,
+                false,
                 directionLogic
             )
         }
     }
 
-    // TODO: move to BoardModel
+    // TODO: move to BoardModel & make async
     private fun randomizeShipPositions() {
         _ships.value!!.forEach { ship ->
             ship.x = Random.nextInt(BOARD_SIZE)
@@ -112,6 +119,13 @@ class BoardPreparationViewModel @Inject constructor(
         updateShipPositionValidity()
         _ships.value = ships.value
 
+    }
+
+    private fun showShips() {
+        ships.value!!.forEach {
+            it.isVisible = true
+        }
+        _board.value = _board.value
     }
 
     private fun getInvalidlyPositionedShips(): HashSet<ShipModel> {
@@ -188,10 +202,6 @@ class BoardPreparationViewModel @Inject constructor(
     }
 
     fun startGame() {
-        createGame()
-    }
-
-    fun createGame() {
         val game = Game(
             Date.from(Calendar.getInstance().toInstant()),
             GameState.ACTIVE,
@@ -223,7 +233,7 @@ class BoardPreparationViewModel @Inject constructor(
         viewModelScope.launch {
             val result = boardRepository.saveBoard(board)
             if (result is DataResult.Success) {
-                saveShips(result.data)
+                saveShips(result.data, false)
             }
         }
     }
@@ -235,12 +245,12 @@ class BoardPreparationViewModel @Inject constructor(
             if (result is DataResult.Success) {
                 initializeShips()
                 randomizeShipPositions()
-                saveShips(result.data)
+                saveShips(result.data, true)
             }
         }
     }
 
-    private fun saveShips(boardId: Long) = viewModelScope.launch {
+    private fun saveShips(boardId: Long, fireGameReadyEvent: Boolean) = viewModelScope.launch {
         _ships.value!!.forEach { shipModel ->
             val ship = Ship(
                 shipModel.x,
@@ -251,6 +261,9 @@ class BoardPreparationViewModel @Inject constructor(
             )
             shipRepository.insert(ship)
         }
-    }
 
+        if (fireGameReadyEvent) {
+            _gameReadyEvent.value = Event(Unit)
+        }
+    }
 }

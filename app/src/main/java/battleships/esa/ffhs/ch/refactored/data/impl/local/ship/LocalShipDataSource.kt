@@ -27,4 +27,18 @@ class LocalShipDataSource @Inject constructor(
                 return@withContext DataResult.Error(e)
             }
         }
+
+    override suspend fun loadByBoard(boardId: Long): DataResult<List<Ship>> =
+        withContext(ioDispatcher) {
+            try {
+                val ships = shipDao.loadByBoard(boardId)
+                if (ships.isNotEmpty()) {
+                    return@withContext DataResult.Success(ships)
+                } else {
+                    return@withContext DataResult.Error(Exception("No Ships found for Board"))
+                }
+            } catch (e: Exception) {
+                return@withContext DataResult.Error(e)
+            }
+        }
 }

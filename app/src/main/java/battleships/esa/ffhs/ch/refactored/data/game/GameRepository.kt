@@ -6,4 +6,5 @@ interface GameRepository {
 
     suspend fun findById(gameId: Long): DataResult<Game>
     suspend fun saveGame(game: Game): DataResult<Long>
+    suspend fun update(game: Game): DataResult<Int>
 }

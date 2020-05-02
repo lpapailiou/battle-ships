@@ -9,8 +9,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
-import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 import battleships.esa.ffhs.ch.refactored.business.ship.ShipModel
+import battleships.esa.ffhs.ch.refactored.data.ship.Direction
 import javax.inject.Inject
 
 class ShipPainter @Inject constructor(
@@ -33,6 +33,10 @@ class ShipPainter @Inject constructor(
     }
 
     fun draw(canvas: Canvas, ship: ShipModel) {
+        if (!ship.isVisible) {
+            return
+        }
+
         val gridWidth = canvas.width.toFloat() / BOARD_SIZE.toFloat()
 
         var startX = gridWidth * ship.x

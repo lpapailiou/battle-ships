@@ -12,7 +12,7 @@ import battleships.esa.ffhs.ch.old.model.BOARD_SIZE
 import battleships.esa.ffhs.ch.old.ui.drawable.ShotPainter
 import battleships.esa.ffhs.ch.refactored.business.board.Cell
 import battleships.esa.ffhs.ch.refactored.business.ship.ShipModel
-import battleships.esa.ffhs.ch.refactored.data.shot.Shot
+import battleships.esa.ffhs.ch.refactored.business.shot.ShotModel
 import battleships.esa.ffhs.ch.refactored.ui.ship.ShipPainter
 
 // TODO: maybe split into each use cases: preparation, attacking and defending boards?
@@ -26,8 +26,8 @@ open class BoardView(
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
     }
 
-    private var ships: List<ShipModel> = mutableListOf()
-    private var shots: MutableList<Shot> = mutableListOf()
+    private var ships: List<ShipModel> = mutableListOf<ShipModel>()
+    private var shots: List<ShotModel> = mutableListOf<ShotModel>()
 
     var gridWidth: Float = 0f
 
@@ -55,8 +55,8 @@ open class BoardView(
 
 
     // TODO: write adapter?
-    fun setShots(updatedShots: List<Shot>) {
-        shots = updatedShots as MutableList<Shot>
+    fun setShots(updatedShots: List<ShotModel>) {
+        shots = updatedShots
         invalidate()
     }
 

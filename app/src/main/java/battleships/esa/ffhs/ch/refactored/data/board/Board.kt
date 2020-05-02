@@ -25,7 +25,7 @@ data class Board(
     val gameId: Long = 0,
 
     @ColumnInfo(index = true)
-    val playerId: Long?
+    val playerId: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true)

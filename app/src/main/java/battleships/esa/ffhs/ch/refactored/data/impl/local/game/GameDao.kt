@@ -37,7 +37,7 @@ interface GameDao {
     fun getGameByRowId(id: Long): Game
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(game: Game)
+    suspend fun update(game: Game): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(game: Game): Long

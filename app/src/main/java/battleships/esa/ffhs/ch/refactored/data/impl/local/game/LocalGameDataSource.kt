@@ -39,4 +39,18 @@ class LocalGameDataSource internal constructor(
                 return@withContext DataResult.Error(e)
             }
         }
+
+    override suspend fun update(game: Game): DataResult<Int> =
+        withContext(ioDispatcher) {
+            try {
+                val gameId = gameDao.update(game)
+                if (gameId != 0) {
+                    return@withContext DataResult.Success(gameId)
+                } else {
+                    return@withContext DataResult.Error(Exception("Game could not be saved!"))
+                }
+            } catch (e: Exception) {
+                return@withContext DataResult.Error(e)
+            }
+        }
 }

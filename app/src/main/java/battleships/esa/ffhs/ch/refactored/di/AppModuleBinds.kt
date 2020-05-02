@@ -6,6 +6,8 @@ import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepository
 import battleships.esa.ffhs.ch.refactored.data.player.PlayerRepositoryImpl
 import battleships.esa.ffhs.ch.refactored.data.ship.ShipRepository
 import battleships.esa.ffhs.ch.refactored.data.ship.ShipRepositoryImpl
+import battleships.esa.ffhs.ch.refactored.data.shot.ShotRepository
+import battleships.esa.ffhs.ch.refactored.data.shot.ShotRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -24,4 +26,8 @@ abstract class AppModuleBinds {
     @Singleton
     @Binds
     abstract fun bindShipRepository(repository: ShipRepositoryImpl): ShipRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindShotRepository(repository: ShotRepositoryImpl): ShotRepository
 }

@@ -10,6 +10,7 @@ import battleships.esa.ffhs.ch.refactored.data.impl.local.board.BoardDao
 import battleships.esa.ffhs.ch.refactored.data.impl.local.game.GameDao
 import battleships.esa.ffhs.ch.refactored.data.impl.local.player.PlayerDao
 import battleships.esa.ffhs.ch.refactored.data.impl.local.ship.ShipDao
+import battleships.esa.ffhs.ch.refactored.data.impl.local.shot.ShotDao
 import battleships.esa.ffhs.ch.refactored.data.player.Player
 import battleships.esa.ffhs.ch.refactored.data.ship.Ship
 import battleships.esa.ffhs.ch.refactored.data.shot.Shot
@@ -29,5 +30,7 @@ public abstract class BattleShipsDatabase : RoomDatabase() {
     abstract fun playerDao(): PlayerDao
 
     abstract fun shipDao(): ShipDao
+
+    abstract fun shotDao(): ShotDao
 
 }

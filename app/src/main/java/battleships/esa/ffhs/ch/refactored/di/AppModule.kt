@@ -14,8 +14,10 @@ import battleships.esa.ffhs.ch.refactored.data.impl.local.board.LocalBoardDataSo
 import battleships.esa.ffhs.ch.refactored.data.impl.local.game.LocalGameDataSource
 import battleships.esa.ffhs.ch.refactored.data.impl.local.player.LocalPlayerDataSource
 import battleships.esa.ffhs.ch.refactored.data.impl.local.ship.LocalShipDataSource
+import battleships.esa.ffhs.ch.refactored.data.impl.local.shot.LocalShotDataSource
 import battleships.esa.ffhs.ch.refactored.data.player.PlayerDataSource
 import battleships.esa.ffhs.ch.refactored.data.ship.ShipDataSource
+import battleships.esa.ffhs.ch.refactored.data.shot.ShotDataSource
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -42,6 +44,10 @@ object AppModule {
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalShipDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class LocalShotDataSource
 
 
     @JvmStatic
@@ -96,6 +102,19 @@ object AppModule {
         )
     }
 
+    @JvmStatic
+    @Singleton
+    @LocalShotDataSource
+    @Provides
+    fun provideLocalShotDataSource(
+        database: BattleShipsDatabase,
+        ioDispatcher: CoroutineDispatcher
+    ): ShotDataSource {
+        return LocalShotDataSource(
+            database.shotDao(), ioDispatcher
+        )
+    }
+
 
     @JvmStatic
     @Singleton
@@ -106,7 +125,6 @@ object AppModule {
             BattleShipsDatabase::class.java,
             "BattleShips.db"
         )
-            .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .addCallback(CALLBACK)
             .build()

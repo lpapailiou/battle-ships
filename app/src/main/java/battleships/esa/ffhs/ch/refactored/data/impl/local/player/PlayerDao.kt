@@ -9,4 +9,7 @@ interface PlayerDao {
 
     @Query("select * from Player where playerId = :playerId")
     fun findByPlayerId(playerId: String): Player?
+
+    @Query("select * from Player where id = :id")
+    fun findById(id: Long): Player?
 }

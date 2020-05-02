@@ -53,20 +53,6 @@
 //        ships.value = newShipList
 //    }
 //
-//    fun addShot(shot: ShotWrapper) {
-//        var shotList = mutableListOf<ShotWrapper>()
-//        if (shots.value != null) {
-//            shotList.addAll(shots.value as Collection<ShotWrapper>)
-//        }
-//        shotList.add(shot)
-//        shots.value = shotList      // TODO: not working yet
-//    }
-//
-//    open fun endGameCheck(): Boolean {
-//        var sunkenShips = getShips().filter { s -> s.isSunken() }.count()
-//        return (sunkenShips == getShips().size)
-//    }
-//
 //    fun validateStart(): Boolean {
 //        if (getShips().filter { s -> !s.isPositionValid() }.count() > 0) {
 //            return false

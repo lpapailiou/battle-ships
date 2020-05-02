@@ -2,8 +2,8 @@ package battleships.esa.ffhs.ch.refactored.ui.boardpreparation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -20,6 +20,8 @@ import battleships.esa.ffhs.ch.refactored.BattleShipsApplication
 import battleships.esa.ffhs.ch.refactored.business.board.Cell
 import battleships.esa.ffhs.ch.refactored.business.boardpreparation.BoardPreparationViewModel
 import battleships.esa.ffhs.ch.refactored.business.ship.ShipModel
+import battleships.esa.ffhs.ch.refactored.event.Event
+import battleships.esa.ffhs.ch.refactored.event.EventObserver
 import battleships.esa.ffhs.ch.refactored.ui.board.BoardView
 import battleships.esa.ffhs.ch.refactored.ui.board.BoardView.Companion.CLICK_LIMIT
 import com.google.android.material.snackbar.Snackbar
@@ -59,6 +61,10 @@ class BoardPreparationFragment : Fragment() {
         val view = inflater.inflate(R.layout.board_preparation_fragment, container, false)
         boardView = view.findViewById(R.id.preparation_board)
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         boardPreparationViewModel.start(args.googlePlayerId)
         boardPreparationViewModel.ships.observe(viewLifecycleOwner, Observer { ships ->
             boardView.setShips(ships)
@@ -106,26 +112,25 @@ class BoardPreparationFragment : Fragment() {
         })
 
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        boardPreparationViewModel.gameReadyEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                Log.e(
+                    "Tag",
+                    "NAVIGATED SASADSALKDADSAADDLKDSAJDSALKJLKJDALKJDSADSAKJDSALKDSAKJDKJDSALKJDALKJDSAKJDSAKLKDSLKJSALKDSADSAL"
+                )
+                val action =
+                    BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
+                        boardPreparationViewModel.game.value!!.id,
+                        boardPreparationViewModel.player.value!!.id,
+                        boardPreparationViewModel.bot.value!!.id
+                    )
+                findNavController().navigate(action)
+            })
 
         startgame_button.setOnClickListener {
             if (boardPreparationViewModel.isBoardInValidState()) {
-                boardPreparationViewModel.game.observe(viewLifecycleOwner, Observer { game ->
-                    val action =
-                        BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
-                            game.id,
-                            boardPreparationViewModel.player.value!!.id,
-                            boardPreparationViewModel.bot.value!!.id
-                        )
-                    findNavController().navigate(action)
-                })
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    boardPreparationViewModel.startGame()
-                }
-
+                boardPreparationViewModel.startGame()
             } else {
                 showSnackBar(it)
             }

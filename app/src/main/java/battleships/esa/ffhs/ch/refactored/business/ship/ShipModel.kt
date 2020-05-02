@@ -12,6 +12,7 @@ class ShipModel(
     val size: Int,
     var direction: Direction,
     var boardId: Long,
+    var isVisible: Boolean,
     private val directionLogic: DirectionLogic
 ) {
 

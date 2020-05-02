@@ -23,4 +23,10 @@ class GameRepositoryImpl @Inject constructor(
             return@withContext localGameDataSource.insert(game)
         }
     }
+
+    override suspend fun update(game: Game): DataResult<Int> {
+        return withContext(ioDispatcher) {
+            return@withContext localGameDataSource.update(game)
+        }
+    }
 }
