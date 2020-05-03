@@ -93,4 +93,5 @@
     <string name="points_for_multiplayer_games">points for multiplayer games</string>
     <string name="points_for_bot_games">points for bot games</string>
     <string name="_0">0</string>
+    <string name="sign_in">Sign in</string>
 </resources>

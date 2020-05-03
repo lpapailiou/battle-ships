@@ -13,8 +13,8 @@
 //import battleships.esa.ffhs.ch.old.ui.drawable.BoardPainter
 //import battleships.esa.ffhs.ch.old.ui.drawable.BoardPainter.Companion.CLICK_LIMIT
 //import battleships.esa.ffhs.ch.old.ui.game.GameFragment.Companion.currentGame
-//import battleships.esa.ffhs.ch.old.ui.main.MainActivity
-//import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.mainViewModel
+//import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity
+//import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity.Companion.mainViewModel
 //import battleships.esa.ffhs.ch.old.wrapper.Cell
 //
 //class GameBoardOpponentFragment : Fragment() {

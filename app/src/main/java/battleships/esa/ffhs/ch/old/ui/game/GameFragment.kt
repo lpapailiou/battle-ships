@@ -7,7 +7,7 @@
 //import androidx.fragment.app.Fragment
 //import battleships.esa.ffhs.ch.R
 //import battleships.esa.ffhs.ch.old.model.GameState
-//import battleships.esa.ffhs.ch.old.ui.main.MainActivity
+//import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity
 //import battleships.esa.ffhs.ch.old.viewmodel.GameViewModel
 //import battleships.esa.ffhs.ch.refactored.ui.boardpreparation.BoardPreparationFragment
 //

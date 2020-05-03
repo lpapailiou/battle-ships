@@ -2,7 +2,7 @@
 //
 //import androidx.lifecycle.LiveData
 //import androidx.lifecycle.MutableLiveData
-//import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.mainViewModel
+//import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity.Companion.mainViewModel
 //import battleships.esa.ffhs.ch.old.wrapper.Cell
 //import battleships.esa.ffhs.ch.refactored.business.ship.DirectionHandler
 //import battleships.esa.ffhs.ch.old.wrapper.ShotWrapper
