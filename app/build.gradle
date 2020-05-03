@@ -7,12 +7,12 @@ apply plugin: 'com.google.gms.google-services'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "battleships.esa.ffhs.ch"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion 17
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,10 +47,6 @@ android {
     }
 }
 
-    kapt {
-        generateStubs = true
-    }
-
 dependencies {
 
     def lifecycle_version = '2.2.0'
@@ -63,6 +59,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.android.support:appcompat-v7:28.1.1'
     implementation 'androidx.core:core-ktx:1.2.0'
 
 
@@ -89,11 +86,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:2.27"
 
     // MVP
-    implementation 'com.arello-mobile:moxy:1.4.5'
-    annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
-    implementation 'com.arello-mobile:moxy-app-compat:1.4.5'
-    implementation 'com.arello-mobile:moxy-android:1.4.5'
-    implementation 'com.arello-mobile:moxy-app-compat:1.4.5'
+    api 'com.arello-mobile:moxy:1.5.5'
+    api 'com.arello-mobile:moxy-app-compat:1.5.5'
+    api 'com.arello-mobile:moxy-android:1.5.5'
+    kapt 'com.arello-mobile:moxy-compiler:1.5.5'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"

@@ -1,13 +1,15 @@
 package battleships.esa.ffhs.ch.refactored.ui.auth
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.startActivity
-import androidx.databinding.DataBindingUtil.setContentView
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.refactored.BattleShipsApplication
 import battleships.esa.ffhs.ch.refactored.ui.auth.model.AuthModel
@@ -20,8 +22,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity: MvpAppCompatActivity(), AuthModel {
+@SuppressLint("Registered")
+class LoginActivity : AppCompatActivity(), AuthModel {
+
+    // TODO: It should not be a AppCompatActivity() it should be a MvpAppCompatActivity() -> Error in Library, what can we do?
 
     private val CODE_SIGN_IN = 0
 
@@ -65,7 +71,7 @@ class LoginActivity: MvpAppCompatActivity(), AuthModel {
         startActivityForResult(signInIntent, CODE_SIGN_IN)
     }
 
-    fun onResultRequest(state: AuthState) {
+    override fun onResultRequest(state: AuthState) {
         when (state) {
             AuthState.SUCCESS -> onSuccessAuth()
             AuthState.FAILED -> showMessage(state)

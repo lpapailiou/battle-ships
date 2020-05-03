@@ -1,10 +1,12 @@
 package battleships.esa.ffhs.ch.refactored.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -14,7 +16,10 @@ import battleships.esa.ffhs.ch.refactored.ui.auth.LoginActivity
 import javax.inject.Inject
 
 
-class IntroModel : MvpAppCompatActivity(), FirebaseAuth.AuthStateListener {
+@SuppressLint("Registered")
+class IntroModel : AppCompatActivity(), FirebaseAuth.AuthStateListener {
+
+    // TODO: It should not be a AppCompatActivity() it should be a MvpAppCompatActivity() -> Error in Library, what can we do?
 
     @Inject
     lateinit var mAuth: FirebaseAuth
