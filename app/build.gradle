@@ -91,7 +91,9 @@ dependencies {
     // MVP
     implementation 'com.arello-mobile:moxy:1.4.5'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.4.5'
-    compile 'com.arello-mobile:moxy-app-compat:1.4.5'
+    implementation 'com.arello-mobile:moxy-app-compat:1.4.5'
+    implementation 'com.arello-mobile:moxy-android:1.4.5'
+    implementation 'com.arello-mobile:moxy-app-compat:1.4.5'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -101,6 +103,8 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-core:17.4.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"

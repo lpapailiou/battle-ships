@@ -3,9 +3,14 @@ package battleships.esa.ffhs.ch.refactored
 import android.app.Application
 import battleships.esa.ffhs.ch.refactored.di.AppComponent
 import battleships.esa.ffhs.ch.refactored.di.AppModule
+import battleships.esa.ffhs.ch.refactored.di.DaggerAppComponent
 import battleships.esa.ffhs.ch.refactored.di.FirebaseModule
 
 class BattleShipsApplication : Application() {
+
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create(applicationContext)
+    }
 
     companion object {
 

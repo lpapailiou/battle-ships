@@ -27,8 +27,7 @@ import javax.inject.Singleton
 
 @Module
 object AppModule {
-
-
+    
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalPlayerDataSource
@@ -161,4 +160,5 @@ object AppModule {
     fun provideDirectionLogic(): DirectionLogic {
         return DirectionLogic()
     }
+
 }
