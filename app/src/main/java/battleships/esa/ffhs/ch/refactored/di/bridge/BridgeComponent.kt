@@ -1,6 +1,6 @@
 package battleships.esa.ffhs.ch.refactored.di.game
 
-import battleships.esa.ffhs.ch.old.ui.main.BridgeFragment
+import battleships.esa.ffhs.ch.refactored.ui.bridge.BridgeFragment
 import dagger.Subcomponent
 
 @Subcomponent(modules = [BridgeModule::class])

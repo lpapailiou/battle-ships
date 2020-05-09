@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.isFirstLogin
 import battleships.esa.ffhs.ch.old.viewmodel.MainViewModel
+import battleships.esa.ffhs.ch.refactored.ui.bridge.BridgeFragment
 
 
 class MainFragment : Fragment() {
@@ -39,7 +40,8 @@ class MainFragment : Fragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
             if (!isFirstLogin) {
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_main, BridgeFragment(), "bridge").commit()
+                    .replace(R.id.fragment_container_main,
+                        BridgeFragment(), "bridge").commit()
             } else {
                 childFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_main, IntroFragment(), "intro").commit()
