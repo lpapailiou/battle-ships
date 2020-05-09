@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "523967926840",
+    "firebase_url": "https://esa-battle-ships.firebaseio.com",
+    "project_id": "esa-battle-ships",
+    "storage_bucket": "esa-battle-ships.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523967926840:android:a3c4e9ca75353a8d0bcccd",
+        "android_client_info": {
+          "package_name": "battleships.esa.ffhs.ch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523967926840-95inf8qa841110504fg5fbpb08fl3nl8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "battleships.esa.ffhs.ch",
+            "certificate_hash": "c9b697b3251b34cdd6b7bbe232e34330acfd81d8"
+          }
+        },
+        {
+          "client_id": "523967926840-09gapoe8itno2fu4e6apqud776ejknvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQHMPssz9X9FNpe5uPPRwcAucGUFm1EWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523967926840-09gapoe8itno2fu4e6apqud776ejknvj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

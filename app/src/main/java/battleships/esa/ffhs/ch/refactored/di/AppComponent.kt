@@ -9,6 +9,10 @@ import battleships.esa.ffhs.ch.refactored.data.shot.ShotRepository
 import battleships.esa.ffhs.ch.refactored.di.boardpreparation.BoardPreparationComponent
 import battleships.esa.ffhs.ch.refactored.di.game.BridgeComponent
 import battleships.esa.ffhs.ch.refactored.di.game.GameComponent
+import battleships.esa.ffhs.ch.refactored.ui.auth.LoginActivity
+import battleships.esa.ffhs.ch.refactored.ui.auth.presenter.EmailLogin
+import battleships.esa.ffhs.ch.refactored.ui.auth.presenter.GoogleLogin
+import battleships.esa.ffhs.ch.refactored.ui.main.IntroModel
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -20,7 +24,8 @@ import javax.inject.Singleton
         AppModule::class,
         SubcomponentsModule::class,
         AppModuleBinds::class,
-        ViewModelBuilderModule::class
+        ViewModelBuilderModule::class,
+        FirebaseModule::class
 //        RoomModule::class
     ]
 )
@@ -46,5 +51,10 @@ interface AppComponent {
     val shipRepository: ShipRepository
 
     val shotRepository: ShotRepository
+
+    fun inject(IntroModel: IntroModel)
+    fun inject(loginActivity: LoginActivity)
+    fun inject(authPresenter: EmailLogin)
+    fun inject(authPresenter: GoogleLogin)
 }
 

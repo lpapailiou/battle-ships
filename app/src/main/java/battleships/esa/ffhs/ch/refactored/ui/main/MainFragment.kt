@@ -1,11 +1,12 @@
-package battleships.esa.ffhs.ch.old.ui.main
+package battleships.esa.ffhs.ch.refactored.ui.main
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.isFirstLogin
+import battleships.esa.ffhs.ch.old.ui.main.BridgeFragment
+import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity.Companion.isFirstLogin
 import battleships.esa.ffhs.ch.old.viewmodel.MainViewModel
 import battleships.esa.ffhs.ch.refactored.ui.bridge.BridgeFragment
 
@@ -44,7 +45,8 @@ class MainFragment : Fragment() {
                         BridgeFragment(), "bridge").commit()
             } else {
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_main, IntroFragment(), "intro").commit()
+                    .replace(R.id.fragment_container_main,
+                        IntroModel(), "intro").commit()
             }
         }
     }

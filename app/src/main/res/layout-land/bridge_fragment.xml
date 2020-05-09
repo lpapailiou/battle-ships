@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/gif_bridge_container"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.GifFragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.main.GifFragment"
         android:layout_width="195dp"
         android:layout_height="172dp"
         android:layout_marginStart="85dp"
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/start_game_fragment"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.StartGameFragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.main.StartGameFragment"
         android:layout_width="271dp"
         android:layout_height="42dp"
         android:layout_marginStart="56dp"

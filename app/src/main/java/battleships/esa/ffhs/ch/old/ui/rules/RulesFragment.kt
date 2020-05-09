@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import battleships.esa.ffhs.ch.R
-import battleships.esa.ffhs.ch.old.ui.main.MainActivity
+import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity
 
 
 class RulesFragment : Fragment() {

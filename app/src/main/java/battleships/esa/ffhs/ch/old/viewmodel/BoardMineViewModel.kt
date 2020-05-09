@@ -4,8 +4,8 @@
 //import battleships.esa.ffhs.ch.refactored.data.game.Game
 //import battleships.esa.ffhs.ch.old.model.GameState
 //import battleships.esa.ffhs.ch.old.ui.game.GameFragment.Companion.currentGame
-//import battleships.esa.ffhs.ch.old.ui.main.MainActivity
-//import battleships.esa.ffhs.ch.old.ui.main.MainActivity.Companion.mainViewModel
+//import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity
+//import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity.Companion.mainViewModel
 //import battleships.esa.ffhs.ch.old.wrapper.Cell
 //import battleships.esa.ffhs.ch.old.wrapper.ShotWrapper
 //

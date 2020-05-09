@@ -5,11 +5,25 @@
     android:id="@+id/intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".old.ui.main.IntroFragment">
+    tools:context=".refactored.ui.main.IntroModel">
+
+    <fragment
+        android:id="@+id/gif_intro_container"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.main.GifFragment"
+        android:layout_width="206dp"
+        android:layout_height="244dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <fragment
         android:id="@+id/start_game_fragment"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.StartGameFragment"
+        android:name="battleships.esa.ffhs.ch.refactored.ui.main.StartGameFragment"
         android:layout_width="350dp"
         android:layout_height="62dp"
         android:layout_marginTop="18dp"
@@ -17,55 +31,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/login" />
 
     <fragment
-        android:id="@+id/gif_intro_container"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.GifFragment"
-        android:layout_width="206dp"
-        android:layout_height="244dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/username_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-
-        android:layout_marginBottom="18dp"
-        android:hint="@string/username"
-        android:textColorHint="@color/colorAccent"
-        app:boxStrokeColor="@color/colorAccent"
-
-        app:hintEnabled="true"
-        app:hintTextColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/start_game_fragment"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:singleLine="true"
-            android:textColor="@color/colorAccent"
-            app:boxStrokeColor="@color/colorAccent"
-            app:colorOnSurface="@color/colorAccent" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        android:id="@+id/login"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@id/start_game_fragment"
+        app:layout_constraintTop_toBottomOf="@id/gif_intro_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="128dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

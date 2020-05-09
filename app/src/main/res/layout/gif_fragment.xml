@@ -5,7 +5,7 @@
     android:id="@+id/gif"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".old.ui.main.GifFragment">
+    tools:context=".refactored.ui.main.GifFragment">
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/intro_image"

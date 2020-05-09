@@ -16,6 +16,7 @@
     <string name="prepare_your_ships">PREPARE YOUR SHIPS</string>
     <string name="rules">Rules</string>
 
+
     <string-array name="staticgamedata">
         <item>"2020-03-15 T00:00:00Z me vs bot"</item>
         <item>"2020-03-15 T00:00:00Z me vs trump"</item>
@@ -93,4 +94,18 @@
     <string name="points_for_multiplayer_games">points for multiplayer games</string>
     <string name="points_for_bot_games">points for bot games</string>
     <string name="_0">0</string>
+    <string name="sign_in">Sign in</string>
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_login">Login E-Mail</string>
+
+
 </resources>
