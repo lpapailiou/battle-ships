@@ -11,7 +11,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import javax.inject.Inject
 
 @InjectViewState
-class GoogleLogin : MvpPresenter<AuthModel>()  {
+class GoogleLogin : MvpPresenter<AuthModel>()  { // TODO: ViewModel
 
     @Inject
     lateinit var mAuth: FirebaseAuth

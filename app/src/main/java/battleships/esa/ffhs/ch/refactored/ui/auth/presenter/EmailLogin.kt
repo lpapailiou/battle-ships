@@ -12,12 +12,13 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import javax.inject.Inject
 
 @InjectViewState
-class EmailLogin: MvpPresenter<AuthModel>()  {
+class EmailLogin: MvpPresenter<AuthModel>()  { // TODO: View Model
 
     @Inject
     lateinit var mAuth: FirebaseAuth
 
     init {
+
         BattleShipsApplication.getAppComponent().inject(this)
     }
 

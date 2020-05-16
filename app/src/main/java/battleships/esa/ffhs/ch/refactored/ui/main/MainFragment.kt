@@ -1,5 +1,7 @@
 package battleships.esa.ffhs.ch.refactored.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -8,9 +10,16 @@ import battleships.esa.ffhs.ch.R
 import battleships.esa.ffhs.ch.old.ui.main.BridgeFragment
 import battleships.esa.ffhs.ch.refactored.ui.main.MainActivity.Companion.isFirstLogin
 import battleships.esa.ffhs.ch.old.viewmodel.MainViewModel
+import battleships.esa.ffhs.ch.refactored.BattleShipsApplication
+import battleships.esa.ffhs.ch.refactored.ui.auth.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
 
 class MainFragment : Fragment() {
+
+    @Inject
+    lateinit var mAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,11 +31,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         // hide NavigationDrawerIcon when we see main fragment, as we can't navigate back anywhere from here
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         // initialize child fragments depending on 'do we know you already'
-        initMainFragment()
+       // initMainFragment()
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -36,7 +48,7 @@ class MainFragment : Fragment() {
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
-    private fun initMainFragment() {
+    /**private fun initMainFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
             if (!isFirstLogin) {
                 childFragmentManager.beginTransaction()
@@ -44,10 +56,13 @@ class MainFragment : Fragment() {
                         BridgeFragment(), "bridge").commit()
             } else {
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_main,
-                        IntroModel(), "intro").commit()
+                    .replace(R.id.fragment_container_main, IntroFragment(), "intro").commit()
             }
         }
-    }
+    }**/
+
+
+
+
 
 }

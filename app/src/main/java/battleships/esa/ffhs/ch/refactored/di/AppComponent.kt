@@ -12,7 +12,7 @@ import battleships.esa.ffhs.ch.refactored.di.game.GameComponent
 import battleships.esa.ffhs.ch.refactored.ui.auth.LoginActivity
 import battleships.esa.ffhs.ch.refactored.ui.auth.presenter.EmailLogin
 import battleships.esa.ffhs.ch.refactored.ui.auth.presenter.GoogleLogin
-import battleships.esa.ffhs.ch.refactored.ui.main.IntroModel
+import battleships.esa.ffhs.ch.refactored.ui.main.MainFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -52,7 +52,6 @@ interface AppComponent {
 
     val shotRepository: ShotRepository
 
-    fun inject(IntroModel: IntroModel)
     fun inject(loginActivity: LoginActivity)
     fun inject(authPresenter: EmailLogin)
     fun inject(authPresenter: GoogleLogin)

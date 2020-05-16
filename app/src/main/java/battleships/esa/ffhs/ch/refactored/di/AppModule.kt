@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import battleships.esa.ffhs.ch.old.model.BOT_PLAYER_ID
 import battleships.esa.ffhs.ch.old.model.OFFLINE_PLAYER_ID
+import battleships.esa.ffhs.ch.refactored.BattleShipsApplication
 import battleships.esa.ffhs.ch.refactored.business.ship.DirectionLogic
 import battleships.esa.ffhs.ch.refactored.data.board.BoardDataSource
 import battleships.esa.ffhs.ch.refactored.data.game.GameDataSource
@@ -160,5 +161,4 @@ object AppModule {
     fun provideDirectionLogic(): DirectionLogic {
         return DirectionLogic()
     }
-
 }
