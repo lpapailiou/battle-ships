@@ -1,57 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bridge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".refactored.ui.bridge.BridgeFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- start game button missing here -->
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/gif_bridge_container"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.GifFragment"
-        android:layout_width="199dp"
-        android:layout_height="184dp"
-        android:layout_marginStart="102dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="103dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/start_game_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/start_game_fragment"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.StartGameFragment"
-        android:layout_width="271dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/bridge_game_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gif_bridge_container" />
-
-    <ListView
-        android:id="@+id/bridge_game_list"
-        android:layout_width="330dp"
-        android:layout_height="250dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start_game_fragment" />
+    <data>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="viewModel"
+            type="ch.ffhs.esa.battleships.business.bridge.BridgeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/bridge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.bridge.BridgeFragment">
+
+        <!-- start game button missing here -->
+
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/intro_image"
+            android:layout_width="199dp"
+            android:layout_height="184dp"
+            android:layout_marginStart="102dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="103dp"
+            android:layout_marginBottom="20dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/Intro"
+            android:scaleType="centerInside"
+            android:src="@drawable/splash"
+            app:layout_constraintBottom_toTopOf="@+id/start_game_fragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.571"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/start_game_fragment"
+            android:name="ch.ffhs.esa.battleships.ui.main.StartGameFragment"
+            android:layout_width="271dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/bridge_game_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/intro_image" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bridge_game_list"
+            android:layout_width="330dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/start_game_fragment" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

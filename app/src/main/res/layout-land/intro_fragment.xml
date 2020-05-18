@@ -5,12 +5,12 @@
     android:id="@+id/intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".refactored.ui.main.IntroModel">
+    tools:context=".ui.main.IntroModel">
 
 
     <fragment
         android:id="@+id/gif_intro_container"
-        android:name="battleships.esa.ffhs.ch.refactored.ui.main.GifFragment"
+        android:name="ch.ffhs.esa.battleships.ui.main.GifFragment"
         android:layout_width="206dp"
         android:layout_height="244dp"
         android:layout_marginStart="100dp"
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/start_game_fragment"
-        android:name="battleships.esa.ffhs.ch.refactored.ui.main.StartGameFragment"
+        android:name="ch.ffhs.esa.battleships.ui.main.StartGameFragment"
         android:layout_width="270dp"
         android:layout_height="61dp"
         android:layout_marginTop="20dp"

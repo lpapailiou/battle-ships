@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/main_fragment">
+    app:startDestination="@id/bridge_fragment">
 
     <fragment
-        android:id="@+id/main_fragment"
-        android:name="battleships.esa.ffhs.ch.refactored.ui.main.MainFragment"
+        android:id="@+id/bridge_fragment"
+        android:name="ch.ffhs.esa.battleships.ui.bridge.BridgeFragment"
         android:label="Welcome to Battle Ships"
-        tools:layout="@layout/main_fragment">
+        tools:layout="@layout/bridge_fragment">
 
         <!-- actions used to navigate manually (via buttons) -->
         <action
@@ -26,7 +26,7 @@
     <!-- fragments used for navigation with nav host -->
     <fragment
         android:id="@+id/board_preparation_fragment"
-        android:name="battleships.esa.ffhs.ch.refactored.ui.boardpreparation.BoardPreparationFragment"
+        android:name="ch.ffhs.esa.battleships.ui.boardpreparation.BoardPreparationFragment"
         android:label="Game Preparation"
         tools:layout="@layout/board_preparation_fragment">
         <argument
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/game_fragment"
-        android:name="battleships.esa.ffhs.ch.refactored.ui.game.GameFragment"
+        android:name="ch.ffhs.esa.battleships.ui.game.GameFragment"
         android:label="Game"
         tools:layout="@layout/game_fragment">
         <argument
@@ -56,17 +56,17 @@
 
     <fragment
         android:id="@+id/score_fragment"
-        android:name="battleships.esa.ffhs.ch.old.ui.main.ScoreFragment"
+        android:name="ch.ffhs.esa.battleships.old.ui.main.ScoreFragment"
         android:label="Game score"
         tools:layout="@layout/score_fragment" />
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="battleships.esa.ffhs.ch.old.ui.settings.SettingsFragment"
+        android:name="ch.ffhs.esa.battleships.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/settings_fragment" />
     <fragment
         android:id="@+id/rules_fragment"
-        android:name="battleships.esa.ffhs.ch.old.ui.rules.RulesFragment"
+        android:name="ch.ffhs.esa.battleships.ui.rules.RulesFragment"
         android:label="Rules"
         tools:layout="@layout/rules_fragment" />
 </navigation>

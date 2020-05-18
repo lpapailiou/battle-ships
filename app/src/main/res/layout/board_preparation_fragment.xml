@@ -7,10 +7,10 @@
         android:id="@+id/game_preparation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".refactored.ui.boardpreparation.BoardPreparationFragment">
+        tools:context=".ui.boardpreparation.BoardPreparationFragment">
 
 
-        <battleships.esa.ffhs.ch.refactored.ui.board.BoardView
+        <ch.ffhs.esa.battleships.ui.board.BoardView
             android:id="@+id/preparation_board"
             android:layout_width="350dp"
             android:layout_height="350dp"
