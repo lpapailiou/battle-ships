@@ -4,7 +4,6 @@
 
     <data>
 
-
         <variable
             name="viewModel"
             type="ch.ffhs.esa.battleships.business.bridge.BridgeViewModel" />
@@ -16,9 +15,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.bridge.BridgeFragment">
-
-        <!-- start game button missing here -->
-
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/intro_image"

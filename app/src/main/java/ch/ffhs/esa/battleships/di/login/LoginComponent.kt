@@ -1,8 +1,7 @@
 package ch.ffhs.esa.battleships.di.login
 
-import ch.ffhs.esa.battleships.ui.auth.LoginActivity
-import ch.ffhs.esa.battleships.ui.auth.presenter.EmailLogin
-import ch.ffhs.esa.battleships.ui.auth.presenter.GoogleLogin
+import ch.ffhs.esa.battleships.ui.auth.LoginFragment
+import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
 import ch.ffhs.esa.battleships.ui.main.IntroModel
 import dagger.Subcomponent
 
@@ -14,8 +13,7 @@ interface LoginComponent {
         fun create(): LoginComponent
     }
 
-    fun inject(IntroModel: IntroModel)
-    fun inject(loginActivity: LoginActivity)
-    fun inject(authPresenter: EmailLogin)
-    fun inject(authPresenter: GoogleLogin)
+    fun inject(introModel: IntroModel)
+    fun inject(loginFragment: LoginFragment)
+    fun inject(googleLoginViewModel: GoogleAuthViewModel)
 }

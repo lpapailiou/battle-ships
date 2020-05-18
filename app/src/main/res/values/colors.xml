@@ -6,6 +6,7 @@
     <color name="colorPrimaryDark">#0a2a00</color>
     <color name="colorAccent">#36ED02</color>
     <color name="colorBackground">#000000</color>
+    <color name="transparent">#CC0a2a00</color>
 
     <color name="colorComplementary">#FA021F</color>
 

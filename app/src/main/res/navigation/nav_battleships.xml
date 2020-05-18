@@ -3,7 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/bridge_fragment">
+    app:startDestination="@id/login_fragment">
+
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="ch.ffhs.esa.battleships.ui.auth.LoginFragment"
+        tools:layout="@layout/bridge_fragment">
+
+        <action
+            android:id="@+id/action_loginFragment_to_bridgeFragment"
+            app:destination="@id/bridge_fragment" />
+
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/bridge_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signup_fragment"
+        android:name="ch.ffhs.esa.battleships.ui.auth.SignupFragment"
+        tools:layout="@layout/signup_fragment"></fragment>
 
     <fragment
         android:id="@+id/bridge_fragment"
@@ -11,7 +31,6 @@
         android:label="Welcome to Battle Ships"
         tools:layout="@layout/bridge_fragment">
 
-        <!-- actions used to navigate manually (via buttons) -->
         <action
             android:id="@+id/action_mainFragment_to_boardPreparationFragment"
             app:destination="@id/board_preparation_fragment" />
@@ -23,7 +42,6 @@
             app:destination="@id/settings_fragment" />
     </fragment>
 
-    <!-- fragments used for navigation with nav host -->
     <fragment
         android:id="@+id/board_preparation_fragment"
         android:name="ch.ffhs.esa.battleships.ui.boardpreparation.BoardPreparationFragment"

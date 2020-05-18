@@ -1,6 +1,5 @@
 package ch.ffhs.esa.battleships.ui.boardpreparation
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.business.boardpreparation.BoardPreparationViewModel
 import ch.ffhs.esa.battleships.business.ship.ShipModel
@@ -52,7 +51,6 @@ class BoardPreparationFragment : Fragment() {
             .create().inject(this)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -9,15 +9,15 @@ import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.ship.DirectionLogic
 import ch.ffhs.esa.battleships.data.board.BoardDataSource
 import ch.ffhs.esa.battleships.data.game.GameDataSource
+import ch.ffhs.esa.battleships.data.player.PlayerDataSource
+import ch.ffhs.esa.battleships.data.ship.ShipDataSource
+import ch.ffhs.esa.battleships.data.shot.ShotDataSource
 import ch.ffhs.esa.battleships.data.source.local.BattleShipsDatabase
 import ch.ffhs.esa.battleships.data.source.local.board.LocalBoardDataSource
 import ch.ffhs.esa.battleships.data.source.local.game.LocalGameDataSource
 import ch.ffhs.esa.battleships.data.source.local.player.LocalPlayerDataSource
 import ch.ffhs.esa.battleships.data.source.local.ship.LocalShipDataSource
 import ch.ffhs.esa.battleships.data.source.local.shot.LocalShotDataSource
-import ch.ffhs.esa.battleships.data.player.PlayerDataSource
-import ch.ffhs.esa.battleships.data.ship.ShipDataSource
-import ch.ffhs.esa.battleships.data.shot.ShotDataSource
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,7 +27,7 @@ import javax.inject.Singleton
 
 @Module
 object AppModule {
-    
+
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalPlayerDataSource
@@ -160,5 +160,4 @@ object AppModule {
     fun provideDirectionLogic(): DirectionLogic {
         return DirectionLogic()
     }
-
 }
