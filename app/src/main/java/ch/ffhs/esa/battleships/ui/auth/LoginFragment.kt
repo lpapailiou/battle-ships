@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
     }
 
 
-    private fun configureGoogleSignIn() {
+    private fun configureGoogleSignIn() { // TODO provide with dagger
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -121,8 +121,9 @@ class LoginFragment : Fragment() {
                 if (account != null) {
                     googleAuthViewModel.firebaseAuthWithGoogle(account!!)
                 }
-            } catch (e: ApiException) {
-                Toast.makeText(requireContext(), "Google sign in failed:", Toast.LENGTH_LONG).show()
+            } catch (e: ApiException) { // TODO remove once all eceptions known are handled gracefully
+//                Toast.makeText(requireContext(), "Google sign in failed:", Toast.LENGTH_LONG).show()
+                throw e
             }
         }
     }
