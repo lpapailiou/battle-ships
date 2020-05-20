@@ -1,0 +1,101 @@
+{
+  "project_info": {
+    "project_number": "523967926840",
+    "firebase_url": "https://esa-battle-ships.firebaseio.com",
+    "project_id": "esa-battle-ships",
+    "storage_bucket": "esa-battle-ships.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523967926840:android:a3c4e9ca75353a8d0bcccd",
+        "android_client_info": {
+          "package_name": "battleships.esa.ffhs.ch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523967926840-t1lg4om8h8juqjf45pvnm4d32cadipp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "battleships.esa.ffhs.ch",
+            "certificate_hash": "b6606640d5f6a2449d1d5dc32c689f3673970c28"
+          }
+        },
+        {
+          "client_id": "523967926840-95inf8qa841110504fg5fbpb08fl3nl8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "battleships.esa.ffhs.ch",
+            "certificate_hash": "c9b697b3251b34cdd6b7bbe232e34330acfd81d8"
+          }
+        },
+        {
+          "client_id": "523967926840-09gapoe8itno2fu4e6apqud776ejknvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQHMPssz9X9FNpe5uPPRwcAucGUFm1EWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523967926840-09gapoe8itno2fu4e6apqud776ejknvj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523967926840:android:5f480d2396fd3c940bcccd",
+        "android_client_info": {
+          "package_name": "ch.ffhs.esa.battleships"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523967926840-mt254p5th9j91cme3qr1vp763igeg3qv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.ffhs.esa.battleships",
+            "certificate_hash": "c9b697b3251b34cdd6b7bbe232e34330acfd81d8"
+          }
+        },
+        {
+          "client_id": "523967926840-3u5l7p7pll7nnc95en2jk1j0pmhua9rk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.ffhs.esa.battleships",
+            "certificate_hash": "b6606640d5f6a2449d1d5dc32c689f3673970c28"
+          }
+        },
+        {
+          "client_id": "523967926840-09gapoe8itno2fu4e6apqud776ejknvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQHMPssz9X9FNpe5uPPRwcAucGUFm1EWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523967926840-09gapoe8itno2fu4e6apqud776ejknvj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

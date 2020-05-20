@@ -3,15 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'com.google.gms.google-services'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "battleships.esa.ffhs.ch"
-        minSdkVersion 21
-        targetSdkVersion 29
+        applicationId "ch.ffhs.esa.battleships"
+        minSdkVersion 17
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -25,8 +26,8 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     sourceSets {
@@ -46,6 +47,7 @@ android {
     }
 }
 
+
 dependencies {
 
     def lifecycle_version = '2.2.0'
@@ -54,6 +56,7 @@ dependencies {
     def room_version = '2.2.5'
     def coroutines = '1.3.4'
     def dagger_version = "2.27"
+    def recyclerview_version = "1.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -72,6 +75,7 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "com.google.android.material:material:$mdc_version"
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
 
     // Change listener for Edittext
     implementation 'androidx.core:core-ktx:1.2.0'
@@ -82,11 +86,22 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
+    // MVP
+    api 'com.arello-mobile:moxy:1.5.5'
+    api 'com.arello-mobile:moxy-app-compat:1.5.5'
+    api 'com.arello-mobile:moxy-android:1.5.5'
+    kapt 'com.arello-mobile:moxy-compiler:1.5.5'
+
     // Room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-core:17.4.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"

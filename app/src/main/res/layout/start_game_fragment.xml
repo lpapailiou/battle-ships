@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".old.ui.main.StartGameFragment">
+    tools:context=".ui.main.StartGameFragment">
 
     <Button
         android:id="@+id/play_vs_bot_button"

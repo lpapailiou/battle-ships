@@ -5,10 +5,10 @@
     android:id="@+id/game_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".refactored.ui.game.GameFragment">
+    tools:context=".ui.game.GameFragment">
 
 
-    <battleships.esa.ffhs.ch.refactored.ui.board.BoardView
+    <ch.ffhs.esa.battleships.ui.board.BoardView
         android:id="@+id/board_active"
         android:layout_width="350dp"
         android:layout_height="350dp"
@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <battleships.esa.ffhs.ch.refactored.ui.board.BoardView
+    <ch.ffhs.esa.battleships.ui.board.BoardView
         android:id="@+id/board_inactive"
         android:layout_width="100dp"
         android:layout_height="100dp"
