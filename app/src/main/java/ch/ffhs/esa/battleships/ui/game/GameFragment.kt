@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.game.GameViewModel
 import ch.ffhs.esa.battleships.ui.board.BoardView
 import javax.inject.Inject
@@ -55,25 +55,37 @@ class GameFragment : Fragment() {
 
         gameViewModel.start(args.gameId, args.currentPlayerId, args.enemyPlayerId)
 
-        gameViewModel.activeBoard.observe(viewLifecycleOwner, Observer { boardModel ->
+        gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {
                 return@Observer
             }
-            activeBoard.setShips(boardModel.ships.value!!)
-            activeBoard.setShots(boardModel.shots.value!!)
+
+            if (activeBoard.boardModel.playerId == 0L || activeBoard.boardModel.playerId == boardModel.playerId) {
+                activeBoard.boardModel = boardModel
+            } else {
+                inactiveBoard.boardModel = boardModel
+            }
         })
 
-        gameViewModel.inactiveBoard.observe(viewLifecycleOwner, Observer { boardModel ->
+        gameViewModel.ownBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {
                 return@Observer
             }
-            inactiveBoard.setShips(boardModel.ships.value!!)
-            inactiveBoard.setShots(boardModel.shots.value!!)
+
+            if (activeBoard.boardModel.playerId == boardModel.playerId) {
+                activeBoard.boardModel = boardModel
+            } else {
+                inactiveBoard.boardModel = boardModel
+            }
         })
 
         activeBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
 
             boardView as BoardView
+
+            if (boardView.boardModel.playerId == gameViewModel.ownBoard.value!!.playerId) {
+                return@OnTouchListener true
+            }
 
             val touchedCell = boardView.getCellAt(motionEvent.x, motionEvent.y)
 
@@ -84,6 +96,14 @@ class GameFragment : Fragment() {
 
             return@OnTouchListener true
         })
+
+        inactiveBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                swapBoards()
+            }
+            return@OnTouchListener true
+        })
+
 
         gameViewModel.gameOverEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
@@ -98,5 +118,11 @@ class GameFragment : Fragment() {
                 dialog.show()
             }
         })
+    }
+
+    private fun swapBoards() {
+        val tmpBoardModel = activeBoard.boardModel
+        activeBoard.boardModel = inactiveBoard.boardModel
+        inactiveBoard.boardModel = tmpBoardModel
     }
 }

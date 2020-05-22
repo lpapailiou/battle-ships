@@ -9,11 +9,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.BOARD_SIZE
-import ch.ffhs.esa.battleships.ui.shot.ShotPainter
+import ch.ffhs.esa.battleships.business.board.BoardModel
 import ch.ffhs.esa.battleships.business.board.Cell
-import ch.ffhs.esa.battleships.business.ship.ShipModel
-import ch.ffhs.esa.battleships.business.shot.ShotModel
 import ch.ffhs.esa.battleships.ui.ship.ShipPainter
+import ch.ffhs.esa.battleships.ui.shot.ShotPainter
 
 // TODO: maybe split into each use cases: preparation, attacking and defending boards?
 open class BoardView(
@@ -26,8 +25,12 @@ open class BoardView(
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
     }
 
-    private var ships: List<ShipModel> = mutableListOf<ShipModel>()
-    private var shots: List<ShotModel> = mutableListOf<ShotModel>()
+    var boardModel = BoardModel(0, 0, 0)
+        set(value) {
+            field = value
+            invalidate()
+        }
+
 
     var gridWidth: Float = 0f
 
@@ -50,19 +53,6 @@ open class BoardView(
         paintBackground = initBackgroundPaint()
     }
 
-    // TODO: write adapter?
-    fun setShips(ships: List<ShipModel>) {
-        this.ships = ships
-        invalidate()
-    }
-
-
-    // TODO: write adapter?
-    fun setShots(updatedShots: List<ShotModel>) {
-        shots = updatedShots
-        invalidate()
-    }
-
     // ----------------------------- basic view handling -----------------------------
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -73,11 +63,11 @@ open class BoardView(
     override fun onDraw(canvas: Canvas) {
         clearCanvas(canvas)
 
-        ships.forEach { ship ->
+        boardModel.ships.value!!.forEach { ship ->
             shipPainter.draw(canvas, ship)
         }
 
-        shots.forEach { shot ->
+        boardModel.shots.value!!.forEach { shot ->
             shotPainter.draw(canvas, shot)
         }
 

@@ -2,7 +2,6 @@ package ch.ffhs.esa.battleships.ui.boardpreparation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -63,12 +62,12 @@ class BoardPreparationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         boardPreparationViewModel.start(args.googlePlayerId)
-        boardPreparationViewModel.ships.observe(viewLifecycleOwner, Observer { ships ->
-            boardView.setShips(ships)
+        boardPreparationViewModel.board.observe(viewLifecycleOwner, Observer { boardModel ->
+            boardView.boardModel = boardModel
         })
 
 
-        // TODO: refactor into custom KeyEvent in BoardView?
+        // TODO: getting big and ugly. refactor into custom KeyEvent in BoardView?
         boardView.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
 
             boardView as BoardView
@@ -112,10 +111,6 @@ class BoardPreparationFragment : Fragment() {
         boardPreparationViewModel.gameReadyEvent.observe(
             viewLifecycleOwner,
             EventObserver {
-                Log.e(
-                    "Tag",
-                    "NAVIGATED SASADSALKDADSAADDLKDSAJDSALKJLKJDALKJDSADSAKJDSALKDSAKJDKJDSALKJDALKJDSAKJDSAKLKDSLKJSALKDSADSAL"
-                )
                 val action =
                     BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
                         boardPreparationViewModel.game.value!!.id,
