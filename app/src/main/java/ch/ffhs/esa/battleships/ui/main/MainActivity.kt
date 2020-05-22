@@ -1,10 +1,6 @@
 package ch.ffhs.esa.battleships.ui.main
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +11,6 @@ import ch.ffhs.esa.battleships.R
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
-
-    companion object {
-        var isFirstLogin: Boolean =
-            false                        // temporary global variable to check if user is logged in for the first time
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,24 +59,5 @@ class MainActivity : AppCompatActivity() {
     private fun setupActionBar(navController: NavController) {
         NavigationUI.setupActionBarWithNavController(this, navController, container)
     }
-
-    // ----------------------------- hardware connector -----------------------------
-
-    fun vibrate() {
-        val vibrator = applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrator.hasVibrator()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(
-                    VibrationEffect.createOneShot(
-                        200,
-                        VibrationEffect.DEFAULT_AMPLITUDE
-                    )
-                )
-            } else {
-                vibrator.vibrate(200)
-            }
-        }
-    }
-
 }
 

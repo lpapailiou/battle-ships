@@ -2,7 +2,10 @@ package ch.ffhs.esa.battleships.ui.game
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -12,8 +15,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.game.GameViewModel
 import ch.ffhs.esa.battleships.ui.board.BoardView
 import javax.inject.Inject
@@ -30,6 +33,8 @@ class GameFragment : Fragment() {
     private lateinit var activeBoard: BoardView
 
     private lateinit var inactiveBoard: BoardView
+
+    private lateinit var vibrator: Vibrator
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -72,12 +77,8 @@ class GameFragment : Fragment() {
         })
 
         activeBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
-
             boardView as BoardView
-
             val touchedCell = boardView.getCellAt(motionEvent.x, motionEvent.y)
-
-
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 gameViewModel.shootAt(touchedCell)
             }
@@ -87,16 +88,48 @@ class GameFragment : Fragment() {
 
         gameViewModel.gameOverEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
-                val dialog: AlertDialog.Builder =
-                    AlertDialog.Builder(context, R.style.AppDialogTheme)
-                dialog.setTitle("THE WAR IS OVER")
-                if (gameViewModel.game.value!!.winnerId == args.currentPlayerId) {
-                    dialog.setMessage("You won! You are the best general!")
-                } else {
-                    dialog.setMessage("You lost! Your wife will be very mad at you.")
-                }
-                dialog.show()
+                displayGameOverDialog()
             }
         })
+
+        enableVibration()
+    }
+
+    private fun displayGameOverDialog() {
+        val dialog: AlertDialog.Builder =
+            AlertDialog.Builder(context, R.style.AppDialogTheme)
+        dialog.setTitle("THE WAR IS OVER")
+        if (gameViewModel.game.value!!.winnerId == args.currentPlayerId) {
+            dialog.setMessage("You won! You are the best general!")
+        } else {
+            dialog.setMessage("You lost! Your wife will be very mad at you.")
+        }
+        dialog.show()
+    }
+
+
+    private fun enableVibration() {
+        vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (!vibrator.hasVibrator()) {
+            return
+        }
+
+        gameViewModel.shipHitEvent.observe(viewLifecycleOwner, Observer {
+            vibrate()
+        })
+
+    }
+
+    private fun vibrate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    200,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
+            vibrator.vibrate(200)
+        }
     }
 }
