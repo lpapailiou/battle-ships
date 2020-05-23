@@ -205,7 +205,9 @@ class GameViewModel @Inject constructor(
         val shot = Shot(x, y, board.id)
         val result = shotRepository.insert(shot)
         val isShotAHit = board.ships.value!!.flatMap { it.getShipCells() }.contains(Cell(x, y))
-        _shipHitEvent.value = Event(Unit)
+        if (isShotAHit) {
+            _shipHitEvent.value = Event(Unit)
+        }
 
         if (result is DataResult.Success) {
             val shotModel = ShotModel(
