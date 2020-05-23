@@ -18,5 +18,4 @@ class BoardModel(
         shots.value = mutableListOf()
     }
 
-
 }
