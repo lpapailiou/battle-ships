@@ -53,7 +53,8 @@
 
         <action
             android:id="@+id/action_boardPreparationFragment_to_gameFragment"
-            app:destination="@id/game_fragment" />
+            app:destination="@id/game_fragment"
+            app:popUpTo="@id/bridge_fragment" />
     </fragment>
 
     <fragment
