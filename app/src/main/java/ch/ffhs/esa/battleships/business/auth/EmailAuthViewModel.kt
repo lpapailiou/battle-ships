@@ -1,5 +1,8 @@
 package ch.ffhs.esa.battleships.business.auth
 
+import android.text.TextUtils
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +21,8 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
 
     private val _loginFailedEvent = MutableLiveData<Event<String>>()
     val loginFailedEvent: LiveData<Event<String>> = _loginFailedEvent
+
+    private val TAG = "FirebaseEmailPassword"
 
     fun createUserWithEmailAndPassword(name: String, email: String, password: String) {
         try {
@@ -74,5 +79,7 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
                 }
             }
     }
+
+
 
 }

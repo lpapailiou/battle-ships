@@ -17,13 +17,17 @@
 
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/bridge_fragment" />
+            app:destination="@id/signup_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/signup_fragment"
-        android:name="ch.ffhs.esa.battleships.ui.auth.SignupFragment"
-        tools:layout="@layout/signup_fragment"></fragment>
+        android:name="ch.ffhs.esa.battleships.ui.auth.SignUpFragment"
+        tools:layout="@layout/signup_fragment">
+        <action
+            android:id="@id/action_loginFragment_to_signupFragment"
+            app:destination="@+id/bridge_fragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/bridge_fragment"

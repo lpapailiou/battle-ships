@@ -121,7 +121,7 @@ class LoginFragment : Fragment() {
                 if (account != null) {
                     googleAuthViewModel.firebaseAuthWithGoogle(account)
                 }
-            } catch (e: ApiException) { // TODO remove once all eceptions known are handled gracefully
+            } catch (e: ApiException) { // TODO remove once all exceptions known are handled gracefully
 //                Toast.makeText(requireContext(), "Google sign in failed:", Toast.LENGTH_LONG).show()
                 throw e
             }
