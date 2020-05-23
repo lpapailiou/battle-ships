@@ -14,9 +14,8 @@ class BoardModel(
     val shots = MutableLiveData<MutableList<ShotModel>>()
 
     init {
-        ships.value = mutableListOf<ShipModel>()
-        shots.value = mutableListOf<ShotModel>()
+        ships.value = mutableListOf()
+        shots.value = mutableListOf()
     }
-
 
 }
