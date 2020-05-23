@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
+import kotlinx.android.synthetic.main.bridge_fragment.*
 import javax.inject.Inject
 
 class BridgeFragment : Fragment() {
@@ -52,12 +55,30 @@ class BridgeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bridgeViewModel.start()
+
+
+
+        play_vs_bot_button.setOnClickListener {
+            navigateToGame()
+        }
+
+        play_vs_friend_button.setOnClickListener {
+            navigateToGame()
+        }
     }
 
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewModel
         listAdapter = ActiveGamesListAdapter(viewModel!!)
         viewDataBinding.bridgeGameList.adapter = listAdapter
+    }
+
+
+    private fun navigateToGame() {
+        val action =
+            BridgeFragmentDirections.actionMainFragmentToBoardPreparationFragment(OFFLINE_PLAYER_ID)
+        findNavController().navigate(action)
+
     }
 
 }
