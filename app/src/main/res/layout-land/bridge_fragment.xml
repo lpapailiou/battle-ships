@@ -15,6 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context=".ui.bridge.BridgeFragment">
 
         <pl.droidsonroids.gif.GifImageView
@@ -37,8 +39,10 @@
             android:layout_height="wrap_content"
 
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="30dp"
             android:text="@string/practice"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintLeft_toRightOf="@id/intro_image"
             app:layout_constraintRight_toLeftOf="@id/play_vs_friend_button"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,15 +57,27 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/play_vs_bot_button" />
 
+
+        <Button
+            android:id="@+id/sign_up_to_play_online_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/sign_up_top_play_online"
+            app:layout_constraintLeft_toLeftOf="@id/play_vs_bot_button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/play_vs_bot_button" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bridge_game_list"
             android:layout_width="330dp"
             android:layout_height="250dp"
             android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/intro_image"
-            app:layout_constraintTop_toBottomOf="@id/play_vs_bot_button" />
+            app:layout_constraintLeft_toLeftOf="@id/play_vs_bot_button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sign_up_to_play_online_button" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

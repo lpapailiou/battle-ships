@@ -17,13 +17,13 @@
 
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/bridge_fragment" />
+            app:destination="@id/signup_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/signup_fragment"
         android:name="ch.ffhs.esa.battleships.ui.auth.SignupFragment"
-        tools:layout="@layout/signup_fragment"></fragment>
+        tools:layout="@layout/signup_fragment" />
 
     <fragment
         android:id="@+id/bridge_fragment"
@@ -31,9 +31,16 @@
         android:label="Welcome to Battle Ships"
         tools:layout="@layout/bridge_fragment">
 
+        <argument
+            android:name="googlePlayerId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_mainFragment_to_boardPreparationFragment"
             app:destination="@id/board_preparation_fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_signupFragment"
+            app:destination="@id/signup_fragment" />
         <action
             android:id="@+id/action_mainFragment_to_scoreFragment"
             app:destination="@id/score_fragment" />

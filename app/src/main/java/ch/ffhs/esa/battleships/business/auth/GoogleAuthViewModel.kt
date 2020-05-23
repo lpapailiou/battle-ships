@@ -27,7 +27,7 @@ class GoogleAuthViewModel @Inject constructor() : ViewModel() {
             firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        _loginSucceededEvent.value = Event("Success!")
+                        _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
 
                     } else {
                         _loginFailedEvent.value = Event("Error") // TODO just as in EmailAuth
