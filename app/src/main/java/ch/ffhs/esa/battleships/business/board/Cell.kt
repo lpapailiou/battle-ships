@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.business.board
 
+import ch.ffhs.esa.battleships.business.shot.ShotModel
 import ch.ffhs.esa.battleships.data.ship.Direction
 import java.util.*
 
@@ -16,8 +17,13 @@ class Cell(val x: Int, val y: Int) {
     }
 
     override fun equals(other: Any?): Boolean {
-        val otherCell: Cell = (other as Cell)
-        return this.x == otherCell.x && this.y == otherCell.y
+        if (other is Cell) {
+            return x == other.x && y == other.y
+        }
+        if (other is ShotModel) {
+            return x == other.x && y == other.y
+        }
+        return super.equals(other)
     }
 
     override fun hashCode(): Int {

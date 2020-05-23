@@ -32,6 +32,7 @@ class ShipPainter @Inject constructor(
         hiddenPaint = initPaint(R.color.colorBackground)
     }
 
+    // TODO: Move heavy work out of draw loop
     fun draw(canvas: Canvas, ship: ShipModel) {
         if (!ship.isVisible) {
             return
@@ -73,11 +74,6 @@ class ShipPainter @Inject constructor(
         val insetWith: Float = STROKE_WIDTH * (3 / 2)
         oval.inset(insetWith, insetWith)                 // resize ships to create padding effect
 
-//        if (shipViewModel.isHidden()) {
-//            canvas.drawOval(oval, hiddenPaint)
-//        } else if (shipViewModel.isPositionValid() && !shipViewModel.isSunken()) {
-//            canvas.drawOval(oval, paint)
-//        }
 
         if (ship.isPositionValid) {
             canvas.drawOval(oval, paint)

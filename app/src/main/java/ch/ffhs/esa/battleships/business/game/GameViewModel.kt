@@ -1,6 +1,5 @@
 package ch.ffhs.esa.battleships.business.game
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -153,10 +152,12 @@ class GameViewModel @Inject constructor(
                     shot.x,
                     shot.y,
                     shot.boardId,
-                    allShipCells.contains(Cell(shot.x, shot.y))
+                    allShipCells.contains(Cell(shot.x, shot.y)),
+                    true
                 )
             }.toMutableList()
-            Log.e("", boardModel.playerId.toString())
+
+            uncoverSunkenEnemyShips(boardModel)
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
         }
@@ -209,15 +210,39 @@ class GameViewModel @Inject constructor(
                 shot.x,
                 shot.y,
                 shot.boardId,
-                isShotAHit
+                isShotAHit,
+                true
             )
+
+
             board.shots.value!!.add(shotModel)
             board.shots.value = board.shots.value
 
+            if (isShotAHit) {
+                uncoverSunkenEnemyShips(board)
+            }
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
         }
     }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun uncoverSunkenEnemyShips(board: BoardModel) {
+        val shotCells = board.shots.value!!.map { Cell(it.x, it.y) }
+        board.ships.value!!
+            .filter { !it.isVisible }
+            .filter { ship ->
+                ship.getShipCells().intersect(shotCells).size == ship.getShipCells().size
+            }.forEach { ship ->
+                ship.isVisible = true
+                val shots = board.shots.value!!.intersect(ship.getShipCells())
+                shots as LinkedHashSet<ShotModel>
+                shots.forEach {
+                    it.isVisible = false
+                }
+            }
+    }
+
 
     private fun placeRandomShot() = viewModelScope.launch {
         var x: Int
