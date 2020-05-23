@@ -2,6 +2,7 @@ package ch.ffhs.esa.battleships.ui.game
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -99,14 +100,6 @@ class GameFragment : Fragment() {
             return@OnTouchListener true
         })
 
-        inactiveBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                swapBoards()
-            }
-            return@OnTouchListener true
-        })
-
-
         gameViewModel.gameOverEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 displayGameOverDialog()
@@ -114,6 +107,17 @@ class GameFragment : Fragment() {
         })
 
         enableVibration()
+
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return
+        }
+
+        inactiveBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                swapBoards()
+            }
+            return@OnTouchListener true
+        })
     }
 
     private fun displayGameOverDialog() {
