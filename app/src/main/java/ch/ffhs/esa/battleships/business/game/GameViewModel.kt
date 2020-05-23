@@ -37,11 +37,11 @@ class GameViewModel @Inject constructor(
     private val _game = MutableLiveData<Game>()
     val game: LiveData<Game> = _game
 
-    private val _activeBoard = MutableLiveData<BoardModel>()
-    val activeBoard: LiveData<BoardModel> = _activeBoard
+    private val _enemyBoard = MutableLiveData<BoardModel>()
+    val enemyBoard: LiveData<BoardModel> = _enemyBoard
 
-    private val _inactiveBoard = MutableLiveData<BoardModel>()
-    val inactiveBoard: LiveData<BoardModel> = _inactiveBoard
+    private val _ownBoard = MutableLiveData<BoardModel>()
+    val ownBoard: LiveData<BoardModel> = _ownBoard
 
     private val _gameOverEvent = MutableLiveData<Event<Unit>>()
     val gameOverEvent: LiveData<Event<Unit>> = _gameOverEvent
@@ -52,10 +52,6 @@ class GameViewModel @Inject constructor(
     private lateinit var player: Player
 
     private lateinit var enemyPlayer: Player
-
-    private lateinit var ownBoard: BoardModel
-
-    private lateinit var enemyBoard: BoardModel
 
     fun start(gameId: Long, currentPlayerId: Long, enemyPlayerId: Long) {
         if (_game.value != null) {
@@ -104,10 +100,9 @@ class GameViewModel @Inject constructor(
                     result.data.gameId,
                     result.data.playerId
                 )
-                enemyBoard = boardModel
                 loadShips(boardModel)
                 loadShots(boardModel)
-                _activeBoard.value = boardModel
+                _enemyBoard.value = boardModel
             }
         }
     }
@@ -121,10 +116,9 @@ class GameViewModel @Inject constructor(
                     result.data.gameId,
                     result.data.playerId
                 )
-                ownBoard = boardModel
                 loadShips(boardModel)
                 loadShots(boardModel)
-                _inactiveBoard.value = boardModel
+                _ownBoard.value = boardModel
             }
         }
     }
@@ -143,8 +137,8 @@ class GameViewModel @Inject constructor(
                     directionLogic
                 )
             }.toMutableList()
-            _activeBoard.value = _activeBoard.value
-            _inactiveBoard.value = _inactiveBoard.value
+            _enemyBoard.value = _enemyBoard.value
+            _ownBoard.value = _ownBoard.value
         }
     }
 
@@ -162,10 +156,10 @@ class GameViewModel @Inject constructor(
                     true
                 )
             }.toMutableList()
-            uncoverSunkenEnemyShips(boardModel)
 
-            _activeBoard.value = _activeBoard.value
-            _inactiveBoard.value = _inactiveBoard.value
+            uncoverSunkenEnemyShips(boardModel)
+            _enemyBoard.value = _enemyBoard.value
+            _ownBoard.value = _ownBoard.value
         }
     }
 
@@ -178,13 +172,13 @@ class GameViewModel @Inject constructor(
             return
         }
 
-        if (enemyBoard.shots.value!!.any { it.x == target.x && it.y == target.y }) {
+        if (_enemyBoard.value!!.shots.value!!.any { it.x == target.x && it.y == target.y }) {
             return
         }
 
 
-        createShot(target.x, target.y, enemyBoard)
-        checkIfGameIsOver(enemyBoard) // TODO: resolve race condition
+        createShot(target.x, target.y, _enemyBoard.value!!)
+        checkIfGameIsOver(_enemyBoard.value!!) // TODO: resolve race condition
         setEnemyPlayerAtTurn()
 
         makeAiMove()
@@ -192,7 +186,7 @@ class GameViewModel @Inject constructor(
 
     private fun makeAiMove() {
         placeRandomShot()
-        checkIfGameIsOver(ownBoard)
+        checkIfGameIsOver(_ownBoard.value!!)
         setHumanPlayerAtTurn()
     }
 
@@ -227,9 +221,8 @@ class GameViewModel @Inject constructor(
             if (isShotAHit) {
                 uncoverSunkenEnemyShips(board)
             }
-
-            _activeBoard.value = _activeBoard.value
-            _inactiveBoard.value = _inactiveBoard.value
+            _enemyBoard.value = _enemyBoard.value
+            _ownBoard.value = _ownBoard.value
         }
     }
 
@@ -258,9 +251,9 @@ class GameViewModel @Inject constructor(
         do {
             x = Random.nextInt(BOARD_SIZE)
             y = Random.nextInt(BOARD_SIZE)
-        } while (ownBoard.shots.value!!.any { it.x == x && it.y == y })
+        } while (_ownBoard.value!!.shots.value!!.any { it.x == x && it.y == y })
 
-        createShot(x, y, ownBoard)
+        createShot(x, y, _ownBoard.value!!)
     }
 
     private fun setHumanPlayerAtTurn() = viewModelScope.launch {
