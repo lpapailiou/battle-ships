@@ -1,8 +1,8 @@
 package ch.ffhs.esa.battleships.ui.auth
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.BattleShipsApplication
-import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.databinding.SignupFragmentBinding
 import ch.ffhs.esa.battleships.event.Event
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.signup_fragment.*
 import javax.inject.Inject
 
@@ -31,7 +28,8 @@ class SignUpFragment: Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     private lateinit var viewDataBinding: SignupFragmentBinding
 
@@ -65,6 +63,7 @@ class SignUpFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseAuth = FirebaseAuth.getInstance()
 
         val successObserver = Observer<Event<String>> {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToBridgeFragment())
@@ -74,10 +73,35 @@ class SignUpFragment: Fragment() {
             Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG).show()
         }
 
-        button_sign_up.setOnClickListener(
-        )
+        button_sign_up.setOnClickListener {
+            signUpUser()
+        }
+    }
+
+        fun signUpUser(){
+            if(edit_text_email_signup.text.toString().isEmpty()){
+                edit_text_email_signup.error = "Please enter email!"
+                edit_text_email_signup.requestFocus()
+                return
+            }
+            if(Patterns.EMAIL_ADDRESS.matcher(edit_text_email_signup.text.toString()).matches()){
+                edit_text_email_signup.error = "Please enter a valid email!"
+                edit_text_email_signup.requestFocus()
+                return
+            }
+
+            if(edit_text_password_signup.text.toString().isEmpty()){
+                edit_text_email_signup.error = "Please enter a password!"
+                edit_text_email_signup.requestFocus()
+                return
+            }
+
 
     }
+
+
+
+
 
     
 

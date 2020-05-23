@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/intro_image">
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/edit_text_email"
+                android:id="@+id/edit_text_email_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:descendantFocusability="beforeDescendants"
@@ -69,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@id/email">
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/edit_text_password"
+                android:id="@+id/edit_text_password_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
