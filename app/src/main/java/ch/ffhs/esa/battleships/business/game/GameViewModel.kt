@@ -46,6 +46,9 @@ class GameViewModel @Inject constructor(
     private val _gameOverEvent = MutableLiveData<Event<Unit>>()
     val gameOverEvent: LiveData<Event<Unit>> = _gameOverEvent
 
+    private val _shipHitEvent = MutableLiveData<Event<Unit>>()
+    val shipHitEvent: LiveData<Event<Unit>> = _shipHitEvent
+
     private lateinit var player: Player
 
     private lateinit var enemyPlayer: Player
@@ -203,6 +206,9 @@ class GameViewModel @Inject constructor(
         val shot = Shot(x, y, board.id)
         val result = shotRepository.insert(shot)
         val isShotAHit = board.ships.value!!.flatMap { it.getShipCells() }.contains(Cell(x, y))
+        if (isShotAHit) {
+            _shipHitEvent.value = Event(Unit)
+        }
 
         if (result is DataResult.Success) {
             val shotModel = ShotModel(

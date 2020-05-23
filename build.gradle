@@ -15,7 +15,7 @@ buildscript {
         if (file('build.local.gradle').exists())
             apply from: 'build.local.gradle'
 
-        classpath "com.android.tools.build:gradle:$project.gradle_version"
+        classpath "com.android.tools.build:gradle:${gradle_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         classpath 'com.google.gms:google-services:4.2.0'
