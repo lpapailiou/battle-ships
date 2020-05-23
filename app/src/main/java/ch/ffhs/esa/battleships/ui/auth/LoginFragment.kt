@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
@@ -74,8 +75,11 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val successObserver = Observer<Event<String>> {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToBridgeFragment())
+        val successObserver = Observer<Event<String>> { event ->
+            val uid = event.getContentIfNotHandled()
+            val action =
+                LoginFragmentDirections.actionLoginFragmentToBridgeFragment(uid!!)
+            findNavController().navigate(action)
         }
 
 
@@ -92,6 +96,12 @@ class LoginFragment : Fragment() {
 
         sign_up_link.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignupFragment())
+        }
+
+        skip_login_link.setOnClickListener {
+            val action =
+                LoginFragmentDirections.actionLoginFragmentToBridgeFragment(OFFLINE_PLAYER_ID)
+            findNavController().navigate(action)
         }
 
         button_sign_in_google.setOnClickListener {
@@ -121,7 +131,7 @@ class LoginFragment : Fragment() {
                 if (account != null) {
                     googleAuthViewModel.firebaseAuthWithGoogle(account)
                 }
-            } catch (e: ApiException) { // TODO remove once all eceptions known are handled gracefully
+            } catch (e: ApiException) { // TODO remove once all exceptions known are handled gracefully
 //                Toast.makeText(requireContext(), "Google sign in failed:", Toast.LENGTH_LONG).show()
                 throw e
             }

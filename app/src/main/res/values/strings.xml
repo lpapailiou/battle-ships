@@ -3,6 +3,7 @@
     <string name="score">View score</string>
     <string name="practice">vs bot</string>
     <string name="online">vs friend</string>
+    <string name="sign_up_top_play_online">Sign up to play online!</string>
     <string name="username">Username</string>
     <string name="Intro">Intro image</string>
     <string name="settings">Settings</string>
@@ -114,7 +115,8 @@
     <string name="action_login_google">Login with Google</string>
     <string name="action_login_facebook">Login with Facebook</string>
 
-    <string name="btn_link_to_register">Not a member? <i><b>Sign up now.</b></i></string>
+    <string name="btn_link_to_register">Not a member? <i><b>Sign up now!</b></i></string>
+    <string name="btn_link_to_skip_login">Or <i><b>skip to play offline</b></i></string>
     <string name="btn_link_to_login">Already registered! <i><b>Login Me.</b></i></string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="or">OR</string>

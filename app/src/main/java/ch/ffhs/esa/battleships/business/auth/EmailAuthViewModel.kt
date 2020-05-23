@@ -39,7 +39,7 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
             firebaseAuth.signInWithEmailAndPassword(emailAuthModel.email, emailAuthModel.password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
-                        _loginSucceededEvent.value = Event("Success!")
+                        _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
                     } else if (!task.isSuccessful) {
                         triggerLoginFailedEvent(task.exception!!)
                     }
