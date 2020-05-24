@@ -3,13 +3,16 @@ package ch.ffhs.esa.battleships.business.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.event.Event
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import javax.inject.Inject
 
-class GoogleAuthViewModel @Inject constructor() : ViewModel() {
+class GoogleAuthViewModel @Inject constructor(
+    private val playerRepository: PlayerRepository
+) : ViewModel() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth

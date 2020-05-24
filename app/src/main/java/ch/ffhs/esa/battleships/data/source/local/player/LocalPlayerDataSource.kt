@@ -28,10 +28,10 @@ class LocalPlayerDataSource internal constructor(
             }
         }
 
-    override suspend fun findByPlayerId(googlePlayerId: String): DataResult<Player> =
+    override suspend fun findByUID(uid: String): DataResult<Player> =
         withContext(ioDispatcher) {
             try {
-                val player = playerDao.findByPlayerId(googlePlayerId)
+                val player = playerDao.findByUID(uid)
                 if (player != null) {
                     return@withContext Success(player)
                 } else {

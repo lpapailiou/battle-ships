@@ -7,8 +7,8 @@ import ch.ffhs.esa.battleships.data.player.Player
 @Dao
 interface PlayerDao {
 
-    @Query("select * from Player where playerId = :playerId")
-    fun findByPlayerId(playerId: String): Player?
+    @Query("select * from Player where uid = :playerId")
+    fun findByUID(playerId: String): Player?
 
     @Query("select * from Player where id = :id")
     fun findById(id: Long): Player?

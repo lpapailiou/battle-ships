@@ -14,17 +14,22 @@ class BridgeViewModel @Inject constructor(
     private val gameRepository: GameRepository
 ) : ViewModel() {
 
-    private val _activeGames = MutableLiveData<List<GameWithPlayerInfo>>()
+    private val _activeGames =
+        MutableLiveData<List<GameWithPlayerInfo>>().apply { value = emptyList() }
     val activeGames: LiveData<List<GameWithPlayerInfo>> = _activeGames
 
-    fun start() {
-        loadGames()
+    fun start(uid: String) {
+        loadGames(uid)
     }
 
-    private fun loadGames() = viewModelScope.launch {
-        val result = gameRepository.findActiveGames()
+    private fun loadGames(uid: String) = viewModelScope.launch {
+        val result = gameRepository.findActiveGames(uid)
         if (result is DataResult.Success) {
             _activeGames.value = result.data
         }
+    }
+
+    fun resumeGame(game: GameWithPlayerInfo) {
+
     }
 }

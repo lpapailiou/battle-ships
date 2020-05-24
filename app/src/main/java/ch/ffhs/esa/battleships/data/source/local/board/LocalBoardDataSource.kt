@@ -26,10 +26,10 @@ class LocalBoardDataSource internal constructor(
             }
         }
 
-    override suspend fun findByGameAndPlayer(gameId: Long, playerId: Long): DataResult<Board> =
+    override suspend fun findByGameAndPlayer(gameId: Long, playerUID: String): DataResult<Board> =
         withContext(ioDispatcher) {
             try {
-                val board = boardDao.findByGameAndPlayer(gameId, playerId)
+                val board = boardDao.findByGameAndPlayer(gameId, playerUID)
                 if (board != null) {
                     return@withContext DataResult.Success(board)
                 } else {

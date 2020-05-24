@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
+import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
 import kotlinx.android.synthetic.main.bridge_fragment.*
 import javax.inject.Inject
@@ -57,13 +58,13 @@ class BridgeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bridgeViewModel.start()
+        bridgeViewModel.start(args.uid)
 
         play_vs_bot_button.setOnClickListener {
-            navigateToGame()
+            startNewGame()
         }
 
-        if (args.googlePlayerId == OFFLINE_PLAYER_ID) {
+        if (args.uid == OFFLINE_PLAYER_ID) {
             play_vs_friend_button.visibility = View.GONE
 
             sign_up_to_play_online_button.setOnClickListener {
@@ -75,20 +76,37 @@ class BridgeFragment : Fragment() {
         sign_up_to_play_online_button.visibility = View.GONE
 
         play_vs_friend_button.setOnClickListener {
-            navigateToGame()
+            startNewGame()
         }
     }
 
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewModel
-        listAdapter = ActiveGamesListAdapter(viewModel!!)
+        listAdapter = ActiveGamesListAdapter(viewModel!!) { game: GameWithPlayerInfo ->
+            resumeGame(game)
+        }
         viewDataBinding.bridgeGameList.adapter = listAdapter
     }
 
 
-    private fun navigateToGame() {
+    private fun startNewGame() {
         val action =
-            BridgeFragmentDirections.actionMainFragmentToBoardPreparationFragment(args.googlePlayerId)
+            BridgeFragmentDirections.actionMainFragmentToBoardPreparationFragment(
+                args.uid
+            )
+        findNavController().navigate(action)
+    }
+
+    private fun resumeGame(game: GameWithPlayerInfo) {
+        val enemyPlayerUID =
+            if (game.attackerUID == args.uid) game.defenderUID else game.attackerUID
+
+        val action =
+            BridgeFragmentDirections.actionMainFragmentToGameFragment(
+                game.gameId,
+                args.uid,
+                enemyPlayerUID
+            )
         findNavController().navigate(action)
     }
 

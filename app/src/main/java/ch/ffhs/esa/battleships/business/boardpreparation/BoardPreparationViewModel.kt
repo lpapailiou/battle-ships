@@ -63,7 +63,7 @@ class BoardPreparationViewModel @Inject constructor(
 
     private fun loadPlayer(playerId: String) {
         viewModelScope.launch {
-            val result = playerRepository.findByPlayerId(playerId)
+            val result = playerRepository.findByUID(playerId)
             if (result is DataResult.Success) {
                 _player.value = result.data
                 _board.value = BoardModel(0, 0, result.data.id)
@@ -76,7 +76,7 @@ class BoardPreparationViewModel @Inject constructor(
 
     private fun loadBot() {
         viewModelScope.launch {
-            val result = playerRepository.findByPlayerId(BOT_PLAYER_ID)
+            val result = playerRepository.findByUID(BOT_PLAYER_ID)
             if (result is DataResult.Success) {
                 _bot.value = result.data // TODO show error dialog
             }

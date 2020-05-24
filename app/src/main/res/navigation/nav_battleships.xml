@@ -32,12 +32,16 @@
         tools:layout="@layout/bridge_fragment">
 
         <argument
-            android:name="googlePlayerId"
+            android:name="uid"
             app:argType="string" />
 
         <action
             android:id="@+id/action_mainFragment_to_boardPreparationFragment"
             app:destination="@id/board_preparation_fragment" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_gameFragment"
+            app:destination="@id/game_fragment" />
         <action
             android:id="@+id/action_mainFragment_to_signupFragment"
             app:destination="@id/signup_fragment" />
@@ -55,7 +59,7 @@
         android:label="Game Preparation"
         tools:layout="@layout/board_preparation_fragment">
         <argument
-            android:name="googlePlayerId"
+            android:name="uid"
             app:argType="string" />
 
         <action
@@ -73,11 +77,11 @@
             android:name="gameId"
             app:argType="long" />
         <argument
-            android:name="currentPlayerId"
-            app:argType="long" />
+            android:name="ownPlayerUID"
+            app:argType="string" />
         <argument
-            android:name="enemyPlayerId"
-            app:argType="long" />
+            android:name="enemyPlayerUID"
+            app:argType="string" />
     </fragment>
 
     <fragment

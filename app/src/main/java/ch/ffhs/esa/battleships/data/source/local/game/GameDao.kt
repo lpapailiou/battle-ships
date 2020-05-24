@@ -11,18 +11,13 @@ import ch.ffhs.esa.battleships.data.shot.Shot
 @Dao
 interface GameDao {
 
-    // ----------------------------- game queries -----------------------------
-
     @Query("SELECT * from game where id = :id")
     fun findById(id: Long): Game?
 
     @Query(
-        "select g.id as gameId, p1.name as attackerName, p2.name as defenderName " +
-                "from Game g " +
-                "inner join Player p1 on p1.id = attackerId " +
-                "inner join Player p2 on p2.id = g.defenderId"
+        "select g.id as gameId, attacker.name as attackerName, defender.name as defenderName, playerAtTurn.name as playerAtTurnName, g.lastChangedAt as lastChangedAt, attacker.uid as attackerUID, defender.uid as defenderUID from Game as g inner join Player as attacker on attacker.id = g.attackerId  inner join Player as defender on defender.id = g.defenderId  inner join Player as playerAtTurn on playerAtTurn.id = g.playerAtTurnId  where attacker.uid = :uid  or defender.uid = :uid  order by g.lastChangedAt desc"
     )
-    fun findAllWithPlayerInfo(): List<GameWithPlayerInfo>
+    fun findAllWithPlayerInfo(uid: String): List<GameWithPlayerInfo>
 
     @Query("SELECT * from game")
     fun getGames(): LiveData<List<Game>>
