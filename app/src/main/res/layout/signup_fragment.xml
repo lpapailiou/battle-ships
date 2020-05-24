@@ -1,114 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/game_preparation"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/intro_image"
-        android:layout_width="199dp"
-        android:layout_height="184dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="36dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/Intro"
-        android:scaleType="centerInside"
-        android:src="@drawable/splash"
-        app:layout_constraintBottom_toTopOf="@id/email"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <data>
+        <import type="android.view.View" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email"
+        <variable
+            name="emailAuthModel"
+            type="ch.ffhs.esa.battleships.business.auth.EmailAuthModel" />
+
+        <variable
+            name="emailAuthViewModel"
+            type="ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/game_preparation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        app:layout_constraintBottom_toTopOf="@id/password"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/intro_image">
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_text_email"
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/intro_image"
+            android:layout_width="199dp"
+            android:layout_height="184dp"
+            android:layout_marginBottom="36dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/Intro"
+            android:scaleType="centerInside"
+            android:src="@drawable/splash"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
-            android:hint="@string/prompt_email"
-            android:imeActionId="6"
-            android:imeActionLabel="@string/prompt_email"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/colorAccent" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@id/password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:errorTextColor="@color/colorComplementary"
+            app:layout_constraintTop_toBottomOf="@id/intro_image">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_email_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:hint="@string/prompt_email"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/prompt_email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        app:layout_constraintBottom_toTopOf="@id/button_login"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        app:layout_constraintVertical_bias="0.0">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_text_password"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:autofillHints=""
-            android:hint="@string/prompt_password"
-            android:imeActionId="6"
-            android:imeActionLabel="@string/prompt_password"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColorHint="@color/colorAccent" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            app:layout_constraintBottom_toTopOf="@id/button_sign_up"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:errorTextColor="@color/colorComplementary"
+            app:layout_constraintTop_toBottomOf="@id/email">
 
-    <Button
-        android:id="@+id/button_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/border_login_button"
-        android:drawableLeft="@drawable/ic_login_variant_white_36dp"
-        android:onClick="onClickEmailLogin"
-        android:text="@string/action_login"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@id/separator"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_password_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:hint="@string/prompt_password"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/prompt_password"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/sign_up_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_boarder_login_button"
-        android:onClick="onClickSignUpButton"
-        android:text="@string/btn_link_to_register"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/separator"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+        <Button
+            android:id="@+id/button_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/border_login_button"
+            android:drawableLeft="@drawable/ic_login_variant_white_36dp"
+            android:text="@string/action_sign_up"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

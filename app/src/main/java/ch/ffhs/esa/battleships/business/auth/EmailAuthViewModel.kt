@@ -19,18 +19,24 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
     private val _loginFailedEvent = MutableLiveData<Event<String>>()
     val loginFailedEvent: LiveData<Event<String>> = _loginFailedEvent
 
+    private val _signUpSucceededEvent = MutableLiveData<Event<String>>()
+    val signUpSucceededEvent: LiveData<Event<String>> = _signUpSucceededEvent
+
+    private val _signUpFailedEvent = MutableLiveData<Event<String>>()
+    val signUpFailedEvent: LiveData<Event<String>> = _signUpFailedEvent
+
     fun createUserWithEmailAndPassword(name: String, email: String, password: String) {
         try {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
-                        updateUserProfile(name)
+                        _signUpSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
                     } else if (!task.isSuccessful) {
-                        triggerLoginFailedEvent(task.exception!!)
+                        triggerSignUpFailedEvent(task.exception!!)
                     }
                 }
         } catch (e: Exception) {
-            triggerLoginFailedEvent(e)
+            triggerSignUpFailedEvent(e)
         }
     }
 
@@ -49,6 +55,20 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    private fun triggerSignUpFailedEvent(e: Exception) {
+        val message = when (e) {
+            is FirebaseAuthUserCollisionException -> "This email already exists."
+            is FirebaseAuthWeakPasswordException -> "The password should be at least 6 characters"
+            is FirebaseAuthInvalidCredentialsException -> "Invalid email address format"
+            is FirebaseAuthEmailException -> "Invalid email address format"
+            is IllegalArgumentException -> "Please enter an email address and password"
+            else -> "Network error, please try restarting"
+        }
+
+        _signUpFailedEvent.value = Event(message)
+
+    }
+
     private fun triggerLoginFailedEvent(e: Exception) {
         val message = when (e) {
             is FirebaseAuthInvalidCredentialsException -> "Invalid email or password"
@@ -59,20 +79,4 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
 
         _loginFailedEvent.value = Event(message)
     }
-
-    private fun updateUserProfile(name: String) {
-        val user = firebaseAuth.currentUser
-
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(name)
-            .build()
-
-        user?.updateProfile(profileUpdates)
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    //do some...
-                }
-            }
-    }
-
 }
