@@ -30,7 +30,7 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
-                        _signUpSucceededEvent.value = Event("Success!")
+                        _signUpSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
                     } else if (!task.isSuccessful) {
                         triggerSignUpFailedEvent(task.exception!!)
                     }
@@ -55,9 +55,11 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun triggerSignUpFailedEvent(e: Exception){
+    private fun triggerSignUpFailedEvent(e: Exception) {
         val message = when (e) {
             is FirebaseAuthUserCollisionException -> "This email already exists."
+            is FirebaseAuthWeakPasswordException -> "The password should be at least 6 characters"
+            is FirebaseAuthInvalidCredentialsException -> "Invalid email address format"
             is FirebaseAuthEmailException -> "Invalid email address format"
             is IllegalArgumentException -> "Please enter an email address and password"
             else -> "Network error, please try restarting"

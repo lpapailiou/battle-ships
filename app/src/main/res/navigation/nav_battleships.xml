@@ -24,9 +24,10 @@
         android:id="@+id/signup_fragment"
         android:name="ch.ffhs.esa.battleships.ui.auth.SignUpFragment"
         tools:layout="@layout/signup_fragment">
+
         <action
-            android:id="@id/action_loginFragment_to_signupFragment"
-            app:destination="@+id/bridge_fragment"/>
+            android:id="@+id/action_signUpFragment_to_bridgeFragment"
+            app:destination="@id/bridge_fragment" />
     </fragment>
 
     <fragment
