@@ -28,6 +28,7 @@
         <action
             android:id="@+id/action_signUpFragment_to_bridgeFragment"
             app:destination="@id/bridge_fragment" />
+
     </fragment>
 
     <fragment
@@ -36,9 +37,16 @@
         android:label="Welcome to Battle Ships"
         tools:layout="@layout/bridge_fragment">
 
+        <argument
+            android:name="googlePlayerId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_mainFragment_to_boardPreparationFragment"
             app:destination="@id/board_preparation_fragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_signupFragment"
+            app:destination="@id/signup_fragment" />
         <action
             android:id="@+id/action_mainFragment_to_scoreFragment"
             app:destination="@id/score_fragment" />
