@@ -61,7 +61,7 @@ class BoardPreparationFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        boardPreparationViewModel.start(args.googlePlayerId)
+        boardPreparationViewModel.start(args.uid)
         boardPreparationViewModel.board.observe(viewLifecycleOwner, Observer { boardModel ->
             boardView.boardModel = boardModel
         })
@@ -114,8 +114,8 @@ class BoardPreparationFragment : Fragment() {
                 val action =
                     BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
                         boardPreparationViewModel.game.value!!.id,
-                        boardPreparationViewModel.player.value!!.id,
-                        boardPreparationViewModel.bot.value!!.id
+                        boardPreparationViewModel.player.value!!.uid,
+                        boardPreparationViewModel.bot.value!!.uid
                     )
                 findNavController().navigate(action)
             })

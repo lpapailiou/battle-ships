@@ -29,4 +29,16 @@ class PlayerRepositoryImpl @Inject constructor(
             return@withContext localPlayerDataSource.insert(player)
         }
     }
+
+//    override suspend fun createIfNotExists(uid: String): DataResult<Long> {
+//        return withContext(ioDispatcher) {
+//            val result = localPlayerDataSource.findByUID(uid)
+//            if (result is DataResult.Success) {
+//                return@withContext DataResult.Success(result.data.id)
+//            }
+//            val player = Player(uid,)
+//
+//            return@withContext localPlayerDataSource.
+//        }
+//    }
 }
