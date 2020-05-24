@@ -28,10 +28,10 @@ class LocalPlayerDataSource internal constructor(
             }
         }
 
-    override suspend fun findByPlayerId(googlePlayerId: String): DataResult<Player> =
+    override suspend fun findByUID(uid: String): DataResult<Player> =
         withContext(ioDispatcher) {
             try {
-                val player = playerDao.findByPlayerId(googlePlayerId)
+                val player = playerDao.findByUID(uid)
                 if (player != null) {
                     return@withContext Success(player)
                 } else {
@@ -42,4 +42,17 @@ class LocalPlayerDataSource internal constructor(
             }
         }
 
+    override suspend fun insert(player: Player): DataResult<Long> =
+        withContext(ioDispatcher) {
+            try {
+                val id = playerDao.insert(player)
+                if (id != 0L) {
+                    return@withContext Success(id)
+                } else {
+                    return@withContext Error(Exception("Could not insert Player"))
+                }
+            } catch (e: Exception) {
+                return@withContext Error(e)
+            }
+        }
 }

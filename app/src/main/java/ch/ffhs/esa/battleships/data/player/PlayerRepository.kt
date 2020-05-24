@@ -6,5 +6,7 @@ interface PlayerRepository {
 
     suspend fun findById(id: Long): DataResult<Player>
 
-    suspend fun findByPlayerId(playerId: String): DataResult<Player>
+    suspend fun findByUID(uid: String): DataResult<Player>
+
+    suspend fun save(player: Player): DataResult<Long>
 }
