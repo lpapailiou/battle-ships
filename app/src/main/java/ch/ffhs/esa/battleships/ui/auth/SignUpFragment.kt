@@ -64,7 +64,12 @@ class SignUpFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         val successObserver = Observer<Event<String>> {
-            findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToBridgeFragment())
+            val uid = it.getContentIfNotHandled()
+            findNavController().navigate(
+                SignUpFragmentDirections.actionSignUpFragmentToBridgeFragment(
+                    uid!!
+                )
+            )
             Toast.makeText(requireContext(), "Successfully registered!", Toast.LENGTH_LONG).show()
         }
 
