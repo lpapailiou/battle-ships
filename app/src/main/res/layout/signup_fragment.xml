@@ -5,6 +5,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="emailAuthModel"
+            type="ch.ffhs.esa.battleships.business.auth.EmailAuthModel" />
+
+        <variable
             name="emailAuthViewModel"
             type="ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel" />
     </data>
@@ -40,6 +44,7 @@
             app:layout_constraintBottom_toTopOf="@id/password"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:errorTextColor="@color/colorComplementary"
             app:layout_constraintTop_toBottomOf="@id/intro_image">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -66,6 +71,7 @@
             app:layout_constraintBottom_toTopOf="@id/button_sign_up"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:errorTextColor="@color/colorComplementary"
             app:layout_constraintTop_toBottomOf="@id/email">
 
             <androidx.appcompat.widget.AppCompatEditText
