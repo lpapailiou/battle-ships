@@ -87,11 +87,11 @@ class LoginFragment : Fragment() {
             Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG).show()
         }
 
-        googleAuthViewModel.loginSucceededEvent.observe(this, successObserver)
-        emailAuthViewModel.loginSucceededEvent.observe(this, successObserver)
+        googleAuthViewModel.loginSucceededEvent.observe(viewLifecycleOwner, successObserver)
+        emailAuthViewModel.loginSucceededEvent.observe(viewLifecycleOwner, successObserver)
 
-        googleAuthViewModel.loginFailedEvent.observe(this, failureObserver)
-        emailAuthViewModel.loginFailedEvent.observe(this, failureObserver)
+        googleAuthViewModel.loginFailedEvent.observe(viewLifecycleOwner, failureObserver)
+        emailAuthViewModel.loginFailedEvent.observe(viewLifecycleOwner, failureObserver)
 
 
         sign_up_link.setOnClickListener {
