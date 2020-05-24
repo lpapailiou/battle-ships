@@ -6,39 +6,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.settings.SettingsFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/intro_image"
+        android:layout_width="199dp"
+        android:layout_height="184dp"
+        android:layout_marginBottom="36dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/Intro"
+        android:scaleType="centerInside"
+        android:src="@drawable/splash"
+        app:layout_constraintBottom_toTopOf="@id/sign_out_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-
-        android:hint="@string/username"
-        android:textColorHint="@color/colorAccent"
-        app:boxStrokeColor="@color/colorAccent"
-        app:hintEnabled="true"
-
-        app:hintTextColor="@color/colorAccent"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:singleLine="true"
-            android:textColor="@color/colorAccent"
-            app:boxStrokeColor="@color/colorAccent"
-            app:colorOnSurface="@color/colorAccent" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        android:text="@string/bye"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/intro_image"
+        app:layout_constraintLeft_toLeftOf="@id/left_guideline"
+        app:layout_constraintRight_toRightOf="@id/right_guideline"
+        app:layout_constraintBottom_toTopOf="@id/sign_out_button" />
 
     <Button
-        android:id="@+id/save_username_button"
+        android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
 
@@ -46,12 +39,11 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="162dp"
         android:layout_marginBottom="198dp"
-        android:text="@string/save_username"
+        android:text="@string/sign_out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_layout" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"
