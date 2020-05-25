@@ -5,32 +5,39 @@
     android:id="@+id/game_active"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".old.ui.game.GameActiveFragment">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".ui.game.GameFragment">
 
-    <FrameLayout
+    <ch.ffhs.esa.battleships.ui.board.BoardView
         android:id="@+id/board_active"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="80dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/board_inactive"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50752395" />
+
+    <ch.ffhs.esa.battleships.ui.board.BoardView
         android:id="@+id/board_inactive"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="80dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/board_active"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toRightOf="@id/guideline"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
