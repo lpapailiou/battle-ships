@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="java.text.SimpleDateFormat" />
 
         <variable
             name="gameWithPlayerInfo"
@@ -15,17 +18,28 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:onClick="@{viewModel.resumeGame(gameWithPlayerInfo)"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:paddingRight="8dp"
         android:paddingBottom="8dp">
 
         <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@string/active_list_item_title(gameWithPlayerInfo.attackerName, gameWithPlayerInfo.defenderName)}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@{gameWithPlayerInfo.attackerName}"
-            android:textColor="@android:color/white" />
+            android:text="@{gameWithPlayerInfo.lastChangedAtFormatted()}"
+            app:layout_constraintLeft_toLeftOf="@id/title"
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -30,9 +30,9 @@ class GameRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun findActiveGames(): DataResult<List<GameWithPlayerInfo>> {
+    override suspend fun findActiveGames(uid: String): DataResult<List<GameWithPlayerInfo>> {
         return withContext(ioDispatcher) {
-            return@withContext localGameDataSource.findActiveGames()
+            return@withContext localGameDataSource.findActiveGames(uid)
         }
     }
 }

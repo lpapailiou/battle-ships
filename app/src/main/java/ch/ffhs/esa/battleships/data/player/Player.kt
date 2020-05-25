@@ -2,11 +2,12 @@ package ch.ffhs.esa.battleships.data.player
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(indices = [Index(value = ["uid"], unique = true)])
 data class Player(
-    @ColumnInfo(index = true) val playerId: String,
+    val uid: String,
     val name: String
 ) {
     @PrimaryKey(autoGenerate = true)

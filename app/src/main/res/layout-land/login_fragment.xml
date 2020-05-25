@@ -36,21 +36,21 @@
             android:contentDescription="@string/Intro"
             android:scaleType="centerInside"
             android:src="@drawable/splash"
-            app:layout_constraintBottom_toTopOf="@id/email"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
             app:layout_constraintBottom_toTopOf="@id/password"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/intro_image"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/intro_image">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_email"
@@ -70,12 +70,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toTopOf="@id/button_login"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/email"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/email">
 
@@ -96,18 +95,16 @@
 
         <Button
             android:id="@+id/button_login"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@drawable/border_login_button"
             android:drawableLeft="@drawable/ic_login_variant_white_36dp"
             android:onClick="@{view -> emailAuthViewModel.signInWithEmailAndPassword(emailAuthModel)}"
             android:text="@string/action_login"
             android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@id/sign_up_link"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/email"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password" />
 
@@ -115,15 +112,13 @@
             android:id="@+id/sign_up_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:background="@drawable/ic_boarder_login_button"
             android:text="@string/btn_link_to_register"
             android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@id/separator"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintLeft_toLeftOf="@id/email"
             app:layout_constraintRight_toLeftOf="@id/skip_login_link"
             app:layout_constraintTop_toBottomOf="@id/button_login" />
 
@@ -131,57 +126,53 @@
             android:id="@+id/skip_login_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
             android:background="@drawable/ic_boarder_login_button"
             android:text="@string/btn_link_to_skip_login"
             android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@id/or"
             app:layout_constraintLeft_toRightOf="@id/sign_up_link"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_login" />
+            app:layout_constraintTop_toTopOf="@id/sign_up_link" />
 
         <View
             android:id="@+id/separator"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_margin="8dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_weight="2"
-            android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@id/or"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/email"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sign_up_link" />
 
         <TextView
             android:id="@+id/or"
-            android:layout_width="30dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
             android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/or"
             android:textColor="@color/colorPrimary"
-            android:translationY="-20dp"
-            app:layout_constraintBottom_toTopOf="@id/separator"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_login" />
+            app:layout_constraintBottom_toBottomOf="@id/separator"
+            app:layout_constraintLeft_toLeftOf="@id/separator"
+            app:layout_constraintRight_toRightOf="@id/separator"
+            app:layout_constraintTop_toTopOf="@id/separator" />
 
         <Button
             android:id="@+id/button_sign_in_google"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:background="@drawable/border_login_brand_button"
             android:drawableLeft="@drawable/ic_google"
             android:text="@string/continue_with_google"
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/email"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator" />
 
