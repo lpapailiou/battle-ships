@@ -11,7 +11,8 @@
     <string name="control_bridge">Control bridge</string>
     <string name="current_game">Current game</string>
     <string name="scores">Scores</string>
-    <string name="save_username">Save</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="bye">See you soon again!</string>
     <string name="change_user_name">Change user name</string>
     <string name="start_the_war">start the war!</string>
     <string name="positioning_hint_board_preparation"><![CDATA[drag&drop to move, click to rotate]]></string>
@@ -46,50 +47,28 @@
 
     <string name="rulesText">
         <![CDATA[
-        <h1>Rules Battle Ship</h1>
-        <h2>Lorem ipsum</h2>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-        accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-        sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-        kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-        sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-        accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-        sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-        kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-        sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-        accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-        sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-        kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-        sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-        accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-        sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
-        kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor
-        sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-        et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-        amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-        consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto
-        odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait
-        nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy
-        nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+        <h1>Play Battle Ship</h1>
+        <h2>Goal</h2>
+        <ul>
+            <li> Sink all of your opponent\'s ships</li>
+        </ul>
+        <br>
+        <h2>Setup</h2>
+        <ul>
+            <li> Each player places ships on the grid</li>
+            <li> The ships must not collide</li>
+            <li> The ships must not be built around corners or have bulges.</li>
+            <li> The ships may also lie on the edge.</li>
+            <li> The ships may not be placed diagonally.</li>
+        </ul>
+        <br>
+        <h2>Rules</h2>
+        <ul>
+            <li> Take turns firing shots by selecting grid coordinates</li>
+            <li> The person who sink all ships has won</li>
+        </ul>
+        <br>
+        <p>&copy; FFHS Schweiz, Lena Papailiou, Ramona Koksa, Sandro Bürki</p>
         ]]>
     </string>
     <string name="Rules">Rules</string>
