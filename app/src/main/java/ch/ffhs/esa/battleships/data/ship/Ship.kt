@@ -19,7 +19,7 @@ data class Ship(
     var y: Int,
     val size: Int,
     var direction: Direction,
-    @ColumnInfo(index = true) var boardUid: String
+    @ColumnInfo(index = true) var boardUid: String?
 ) {
     @PrimaryKey
     var uid: String = ""

@@ -22,7 +22,7 @@ class RemoteShipDataSource internal constructor(
                 return@withContext DataResult.Error(Exception("Ship does not have an Uid assigned"))
             }
 
-            val task = database.child("board").child(ship.boardUid).child("ship").child(ship.uid)
+            val task = database.child("board").child(ship.boardUid!!).child("ship").child(ship.uid)
                 .setValue(ship)
             task.await()
 

@@ -4,14 +4,16 @@ import ch.ffhs.esa.battleships.business.BOARD_SIZE
 import ch.ffhs.esa.battleships.business.STRICT_OVERLAP_RULE
 import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.data.ship.Direction
+import ch.ffhs.esa.battleships.data.ship.Ship
 import kotlin.math.abs
+import kotlin.random.Random
 
 class ShipModel(
     var x: Int,
     var y: Int,
     val size: Int,
     var direction: Direction,
-    var boardUid: String,
+    var boardUid: String?,
     var isVisible: Boolean,
     private val directionLogic: DirectionLogic
 ) {
@@ -61,5 +63,20 @@ class ShipModel(
         y = cell.y - (direction.y * index)
     }
 
+    fun toShip(): Ship {
+        return Ship(
+            x,
+            y,
+            size,
+            direction,
+            boardUid
+        )
+    }
+
+    fun randomizePosition() {
+        x = Random.nextInt(BOARD_SIZE)
+        y = Random.nextInt(BOARD_SIZE)
+        direction = directionLogic.getRandomDirection()
+    }
 
 }
