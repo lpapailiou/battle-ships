@@ -61,9 +61,9 @@ class BoardPreparationViewModel @Inject constructor(
         loadBot()
     }
 
-    private fun loadPlayer(playerId: String) {
+    private fun loadPlayer(uid: String) {
         viewModelScope.launch {
-            val result = playerRepository.findByUID(playerId)
+            val result = playerRepository.findByUID(uid)
             if (result is DataResult.Success) {
                 _player.value = result.data
                 _board.value = BoardModel(0, 0, result.data.id)

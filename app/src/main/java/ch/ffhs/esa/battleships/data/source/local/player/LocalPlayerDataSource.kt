@@ -42,4 +42,17 @@ class LocalPlayerDataSource internal constructor(
             }
         }
 
+    override suspend fun insert(player: Player): DataResult<Long> =
+        withContext(ioDispatcher) {
+            try {
+                val id = playerDao.insert(player)
+                if (id != 0L) {
+                    return@withContext Success(id)
+                } else {
+                    return@withContext Error(Exception("Could not insert Player"))
+                }
+            } catch (e: Exception) {
+                return@withContext Error(e)
+            }
+        }
 }

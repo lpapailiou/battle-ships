@@ -3,12 +3,18 @@ package ch.ffhs.esa.battleships.business.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import ch.ffhs.esa.battleships.data.player.Player
+import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.event.Event
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class EmailAuthViewModel @Inject constructor() : ViewModel() {
+class EmailAuthViewModel @Inject constructor(
+    private val playerRepository: PlayerRepository
+) : ViewModel() {
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
@@ -30,7 +36,9 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
-                        _signUpSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
+                        val uid = firebaseAuth.currentUser!!.uid
+                        savePlayer(uid, email)
+                        _signUpSucceededEvent.value = Event(uid)
                     } else if (!task.isSuccessful) {
                         triggerSignUpFailedEvent(task.exception!!)
                     }
@@ -40,11 +48,17 @@ class EmailAuthViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    private fun savePlayer(uid: String, name: String) = viewModelScope.launch {
+        val player = Player(uid, name)
+        playerRepository.save(player)
+    }
+
     fun signInWithEmailAndPassword(emailAuthModel: EmailAuthModel) {
         try {
             firebaseAuth.signInWithEmailAndPassword(emailAuthModel.email, emailAuthModel.password)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
+                        savePlayer(firebaseAuth.currentUser!!.uid, emailAuthModel.email)
                         _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
                     } else if (!task.isSuccessful) {
                         triggerLoginFailedEvent(task.exception!!)

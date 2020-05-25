@@ -3,11 +3,14 @@ package ch.ffhs.esa.battleships.business.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import ch.ffhs.esa.battleships.data.player.Player
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.event.Event
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GoogleAuthViewModel @Inject constructor(
@@ -30,6 +33,10 @@ class GoogleAuthViewModel @Inject constructor(
             firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        createPlayer(
+                            firebaseAuth.currentUser!!.uid,
+                            firebaseAuth.currentUser!!.email!!
+                        )
                         _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
 
                     } else {
@@ -39,5 +46,11 @@ class GoogleAuthViewModel @Inject constructor(
         } catch (e: Exception) {
             _loginFailedEvent.value = Event("Error")
         }
+    }
+
+
+    private fun createPlayer(uid: String, name: String) = viewModelScope.launch {
+        val player = Player(uid, name)
+        playerRepository.save(player)
     }
 }
