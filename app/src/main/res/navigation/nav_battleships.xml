@@ -92,7 +92,7 @@
 
     <fragment
         android:id="@+id/score_fragment"
-        android:name="ch.ffhs.esa.battleships.old.ui.main.ScoreFragment"
+        android:name="ch.ffhs.esa.battleships.ui.score.ScoreFragment"
         android:label="Game score"
         tools:layout="@layout/score_fragment" />
     <fragment

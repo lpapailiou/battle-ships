@@ -1,4 +1,4 @@
-package ch.ffhs.esa.battleships.old.ui.main
+package ch.ffhs.esa.battleships.ui.score
 
 import android.os.Bundle
 import android.view.LayoutInflater
