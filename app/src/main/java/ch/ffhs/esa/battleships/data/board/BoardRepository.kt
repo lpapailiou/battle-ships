@@ -18,7 +18,7 @@ class BoardRepository @Inject constructor(
         }
     }
 
-    suspend fun findByGameAndPlayer(gameId: Long, playerId: Long): DataResult<Board> {
+    suspend fun findByGameAndPlayer(gameId: Long, playerId: String): DataResult<Board> {
         return withContext(ioDispatcher) {
             return@withContext localBoardDataSource.findByGameAndPlayer(gameId, playerId)
         }

@@ -59,7 +59,7 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gameViewModel.start(args.gameId, args.currentPlayerId, args.enemyPlayerId)
+        gameViewModel.start(args.gameId, args.ownPlayerUID, args.enemyPlayerUID)
 
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {
@@ -124,7 +124,7 @@ class GameFragment : Fragment() {
         val dialog: AlertDialog.Builder =
             AlertDialog.Builder(context, R.style.AppDialogTheme)
         dialog.setTitle("THE WAR IS OVER")
-        if (gameViewModel.game.value!!.winnerId == args.currentPlayerId) {
+        if (gameViewModel.game.value!!.winnerId == gameViewModel.ownBoard.value!!.playerId) {
             dialog.setMessage("You won! You are the best general!")
         } else {
             dialog.setMessage("You lost! Your wife will be very mad at you.")

@@ -53,15 +53,15 @@ class GameViewModel @Inject constructor(
 
     private lateinit var enemyPlayer: Player
 
-    fun start(gameId: Long, currentPlayerId: Long, enemyPlayerId: Long) {
+    fun start(gameId: Long, ownPlayerUID: String, enemyPlayerUID: String) {
         if (_game.value != null) {
             return
         }
         loadGame(gameId)
-        loadPlayer(currentPlayerId)
-        loadEnemyPlayer(enemyPlayerId)
-        loadOwnBoard(gameId, currentPlayerId)
-        loadEnemyBoard(gameId, enemyPlayerId)
+        loadPlayer(ownPlayerUID)
+        loadEnemyPlayer(enemyPlayerUID)
+        loadOwnBoard(gameId, ownPlayerUID)
+        loadEnemyBoard(gameId, enemyPlayerUID)
     }
 
     private fun loadGame(gameId: Long) {
@@ -73,27 +73,27 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun loadPlayer(currentPlayerId: Long) {
+    private fun loadPlayer(currentPlayerUID: String) {
         viewModelScope.launch {
-            val result = playerRepository.findById(currentPlayerId)
+            val result = playerRepository.findByUID(currentPlayerUID)
             if (result is DataResult.Success) {
                 player = result.data
             }
         }
     }
 
-    private fun loadEnemyPlayer(enemyPlayerId: Long) {
+    private fun loadEnemyPlayer(enemyPlayerUID: String) {
         viewModelScope.launch {
-            val result = playerRepository.findById(enemyPlayerId)
+            val result = playerRepository.findByUID(enemyPlayerUID)
             if (result is DataResult.Success) {
                 enemyPlayer = result.data
             }
         }
     }
 
-    private fun loadEnemyBoard(gameId: Long, enemyPlayerId: Long) {
+    private fun loadEnemyBoard(gameId: Long, enemyPlayerUID: String) {
         viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameId, enemyPlayerId)
+            val result = boardRepository.findByGameAndPlayer(gameId, enemyPlayerUID)
             if (result is DataResult.Success) {
                 val boardModel = BoardModel(
                     result.data.id,
@@ -107,9 +107,9 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun loadOwnBoard(gameId: Long, currentPlayerId: Long) {
+    private fun loadOwnBoard(gameId: Long, currentPlayerUID: String) {
         viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameId, currentPlayerId)
+            val result = boardRepository.findByGameAndPlayer(gameId, currentPlayerUID)
             if (result is DataResult.Success) {
                 val boardModel = BoardModel(
                     result.data.id,
