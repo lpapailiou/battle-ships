@@ -12,6 +12,7 @@ import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.event.Event
 import ch.ffhs.esa.battleships.ui.auth.LoginFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.settings_fragment.*
 import javax.inject.Inject
 
 class SettingsFragment : Fragment() {
@@ -23,7 +24,6 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.settings_fragment, container, false)
     }
 
@@ -31,20 +31,14 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         firebaseAuth = FirebaseAuth.getInstance()
 
-        val successObserver = Observer<Event<String>> {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignupFragment())
-        }
-
-        val failureObserver = Observer<Event<String>> {
-            Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG).show()
+        sign_out_button.setOnClickListener {
+            signOut()
+            findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToLoginFragment())
         }
     }
 
     fun signOut(){
         firebaseAuth.signOut()
     }
-
-
-
 }
 
