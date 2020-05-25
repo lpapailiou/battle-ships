@@ -3,9 +3,9 @@ package ch.ffhs.esa.battleships.data.game
 import ch.ffhs.esa.battleships.data.DataResult
 
 interface GameDataSource {
-    suspend fun findById(gameId: Long): DataResult<Game>
+    suspend fun findByUid(uid: String): DataResult<Game>
 
-    suspend fun insert(game: Game): DataResult<Long>
-    suspend fun update(game: Game): DataResult<Int>
+    suspend fun save(game: Game): DataResult<String>
     suspend fun findActiveGames(uid: String): DataResult<List<GameWithPlayerInfo>>
+    suspend fun update(game: Game): DataResult<String>
 }

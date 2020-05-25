@@ -58,14 +58,14 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gameViewModel.start(args.gameId, args.ownPlayerUID, args.enemyPlayerUID)
+        gameViewModel.start(args.gameUid, args.ownPlayerUid, args.enemyPlayerUid)
 
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {
                 return@Observer
             }
 
-            if (activeBoard.boardModel.playerId == 0L || activeBoard.boardModel.playerId == boardModel.playerId) {
+            if (activeBoard.boardModel.playerUid == null || activeBoard.boardModel.playerUid == boardModel.playerUid) {
                 activeBoard.boardModel = boardModel
             } else {
                 inactiveBoard.boardModel = boardModel
@@ -77,7 +77,7 @@ class GameFragment : Fragment() {
                 return@Observer
             }
 
-            if (activeBoard.boardModel.playerId == boardModel.playerId) {
+            if (activeBoard.boardModel.playerUid == boardModel.playerUid) {
                 activeBoard.boardModel = boardModel
             } else {
                 inactiveBoard.boardModel = boardModel
@@ -87,7 +87,7 @@ class GameFragment : Fragment() {
         activeBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
             boardView as BoardView
 
-            if (boardView.boardModel.playerId == gameViewModel.ownBoard.value!!.playerId) {
+            if (boardView.boardModel.playerUid == gameViewModel.ownBoard.value!!.playerUid) {
                 return@OnTouchListener true
             }
 
@@ -120,7 +120,7 @@ class GameFragment : Fragment() {
         val dialog: AlertDialog.Builder =
             AlertDialog.Builder(context, R.style.AppDialogTheme)
         dialog.setTitle("THE WAR IS OVER")
-        if (gameViewModel.game.value!!.winnerId == gameViewModel.ownBoard.value!!.playerId) {
+        if (gameViewModel.game.value!!.winnerUid == gameViewModel.ownBoard.value!!.playerUid) {
             dialog.setMessage("You won! You are the best general!")
         } else {
             dialog.setMessage("You lost! Your wife will be very mad at you.")

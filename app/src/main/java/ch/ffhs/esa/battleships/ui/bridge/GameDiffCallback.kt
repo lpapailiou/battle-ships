@@ -8,7 +8,7 @@ class GameDiffCallback : DiffUtil.ItemCallback<GameWithPlayerInfo>() {
         oldItem: GameWithPlayerInfo,
         newItem: GameWithPlayerInfo
     ): Boolean {
-        return oldItem.gameId == newItem.gameId
+        return oldItem.gameUid == newItem.gameUid
     }
 
     override fun areContentsTheSame(

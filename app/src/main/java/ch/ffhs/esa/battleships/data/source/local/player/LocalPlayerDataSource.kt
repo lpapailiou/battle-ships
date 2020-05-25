@@ -14,24 +14,10 @@ class LocalPlayerDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PlayerDataSource {
 
-    override suspend fun findById(id: Long): DataResult<Player> =
+    override suspend fun findByUid(uid: String): DataResult<Player> =
         withContext(ioDispatcher) {
             try {
-                val player = playerDao.findById(id)
-                if (player != null) {
-                    return@withContext DataResult.Success(player)
-                } else {
-                    return@withContext DataResult.Error(Exception("Player not found"))
-                }
-            } catch (e: Exception) {
-                return@withContext DataResult.Error(e)
-            }
-        }
-
-    override suspend fun findByUID(uid: String): DataResult<Player> =
-        withContext(ioDispatcher) {
-            try {
-                val player = playerDao.findByUID(uid)
+                val player = playerDao.findByUid(uid)
                 if (player != null) {
                     return@withContext Success(player)
                 } else {
@@ -42,15 +28,11 @@ class LocalPlayerDataSource internal constructor(
             }
         }
 
-    override suspend fun insert(player: Player): DataResult<Long> =
+    override suspend fun insert(player: Player): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                val id = playerDao.insert(player)
-                if (id != 0L) {
-                    return@withContext Success(id)
-                } else {
-                    return@withContext Error(Exception("Could not insert Player"))
-                }
+                playerDao.insert(player)
+                return@withContext Success("Success")
             } catch (e: Exception) {
                 return@withContext Error(e)
             }

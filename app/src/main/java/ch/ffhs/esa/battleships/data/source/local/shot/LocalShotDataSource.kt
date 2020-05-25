@@ -12,26 +12,21 @@ class LocalShotDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ShotDataSource {
 
-    override suspend fun findByBoard(boardId: Long): DataResult<List<Shot>> =
+    override suspend fun findByBoard(boardUid: String): DataResult<List<Shot>> =
         withContext(ioDispatcher) {
             try {
-                val shots = shotDao.findByBoard(boardId)
+                val shots = shotDao.findByBoard(boardUid)
                 return@withContext DataResult.Success(shots)
             } catch (e: Exception) {
                 return@withContext DataResult.Error(e)
             }
-
         }
 
-    override suspend fun insert(shot: Shot): DataResult<Long> =
+    override suspend fun insert(shot: Shot): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                val shotId = shotDao.insert(shot)
-                if (shotId != 0L) {
-                    return@withContext DataResult.Success(shotId)
-                } else {
-                    return@withContext DataResult.Error(Exception("Could not save shot"))
-                }
+                shotDao.insert(shot)
+                return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
                 return@withContext DataResult.Error(e)
             }

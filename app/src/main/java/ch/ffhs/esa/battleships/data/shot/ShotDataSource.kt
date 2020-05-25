@@ -4,7 +4,7 @@ import ch.ffhs.esa.battleships.data.DataResult
 
 interface ShotDataSource {
 
-    suspend fun findByBoard(boardId: Long): DataResult<List<Shot>>
+    suspend fun findByBoard(boardUid: String): DataResult<List<Shot>>
 
-    suspend fun insert(shot: Shot): DataResult<Long>
+    suspend fun insert(shot: Shot): DataResult<String>
 }

@@ -5,9 +5,9 @@ import ch.ffhs.esa.battleships.business.ship.ShipModel
 import ch.ffhs.esa.battleships.business.shot.ShotModel
 
 class BoardModel(
-    val id: Long,
-    val gameId: Long,
-    val playerId: Long
+    val uid: String?,
+    val gameUid: String?,
+    val playerUid: String?
 ) {
 
     val ships = MutableLiveData<MutableList<ShipModel>>()

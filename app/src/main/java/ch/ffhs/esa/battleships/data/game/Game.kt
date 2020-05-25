@@ -11,35 +11,38 @@ import java.util.*
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Player::class,
-        parentColumns = ["id"],
-        childColumns = ["attackerId"]
+        parentColumns = ["uid"],
+        childColumns = ["attackerUid"]
     ), ForeignKey(
         entity = Player::class,
-        parentColumns = ["id"],
-        childColumns = ["defenderId"]
+        parentColumns = ["uid"],
+        childColumns = ["defenderUid"]
     ), ForeignKey(
         entity = Player::class,
-        parentColumns = ["id"],
-        childColumns = ["playerAtTurnId"]
+        parentColumns = ["uid"],
+        childColumns = ["playerAtTurnUid"]
     ), ForeignKey(
         entity = Player::class,
-        parentColumns = ["id"],
-        childColumns = ["winnerId"]
+        parentColumns = ["uid"],
+        childColumns = ["winnerUid"]
     )]
 )
 data class Game(
     var lastChangedAt: Date,
     var state: GameState,
     @ColumnInfo(index = true)
-    var attackerId: Long,
-    @ColumnInfo(index = true)
-    var defenderId: Long,
-    @ColumnInfo(index = true)
-    var playerAtTurnId: Long,
-    @ColumnInfo(index = true)
-    var winnerId: Long?
+    var defenderUid: String
 ) {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    var uid: String = ""
+
     @ColumnInfo(index = true)
-    var id: Long = 0
+    var attackerUid: String? = null
+
+    @ColumnInfo(index = true)
+    var playerAtTurnUid: String? = null
+
+    @ColumnInfo(index = true)
+    var winnerUid: String? = null
+
 }

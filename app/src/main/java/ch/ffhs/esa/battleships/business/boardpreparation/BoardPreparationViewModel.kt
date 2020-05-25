@@ -51,22 +51,22 @@ class BoardPreparationViewModel @Inject constructor(
     val gameReadyEvent: LiveData<Event<Unit>> = _gameReadyEvent
 
 
-    fun start(playerId: String) {
+    fun start(ownPlayerUid: String) {
         if (_player.value != null) {
 
             return
         }
 
-        loadPlayer(playerId)
+        loadPlayer(ownPlayerUid)
         loadBot()
     }
 
     private fun loadPlayer(uid: String) {
         viewModelScope.launch {
-            val result = playerRepository.findByUID(uid)
+            val result = playerRepository.findByUid(uid)
             if (result is DataResult.Success) {
                 _player.value = result.data
-                _board.value = BoardModel(0, 0, result.data.id)
+                _board.value = BoardModel(null, null, result.data.uid)
                 initializeShips()
             } else if (result is DataResult.Error) {
                 throw result.exception
@@ -76,7 +76,7 @@ class BoardPreparationViewModel @Inject constructor(
 
     private fun loadBot() {
         viewModelScope.launch {
-            val result = playerRepository.findByUID(BOT_PLAYER_ID)
+            val result = playerRepository.findByUid(BOT_PLAYER_ID)
             if (result is DataResult.Success) {
                 _bot.value = result.data // TODO show error dialog
             }
@@ -98,7 +98,7 @@ class BoardPreparationViewModel @Inject constructor(
                 0,
                 size,
                 Direction.UP,
-                0,
+                "",
                 false,
                 directionLogic
             )
@@ -207,19 +207,17 @@ class BoardPreparationViewModel @Inject constructor(
         val game = Game(
             Date.from(Calendar.getInstance().toInstant()),
             GameState.ACTIVE,
-            _player.value!!.id,
-            _bot.value!!.id,
-            _player.value!!.id,
-            null
+            _player.value!!.uid
         )
+        game.attackerUid = _bot.value!!.uid
+        game.playerAtTurnUid = _player.value!!.uid
         saveGame(game)
     }
 
 
     private fun saveGame(game: Game) = viewModelScope.launch {
-        val result = gameRepository.saveGame(game)
+        val result = gameRepository.save(game)
         if (result is DataResult.Success) {
-            game.id = result.data
             _game.value = game
             onGameSaved()
         }
@@ -231,35 +229,35 @@ class BoardPreparationViewModel @Inject constructor(
     }
 
     private fun createOwnBoard() {
-        val board = Board(_game.value!!.id, _player.value!!.id)
+        val board = Board(_game.value!!.uid, _player.value!!.uid)
         viewModelScope.launch {
             val result = boardRepository.saveBoard(board)
             if (result is DataResult.Success) {
-                saveShips(result.data, false)
+                saveShips(board.uid, false)
             }
         }
     }
 
     private fun createBotPlayerBoard() {
-        val board = Board(_game.value!!.id, _bot.value!!.id)
+        val board = Board(_game.value!!.uid, _bot.value!!.uid)
         viewModelScope.launch {
             val result = boardRepository.saveBoard(board)
             if (result is DataResult.Success) {
                 initializeShips()
                 randomizeShipPositions()
-                saveShips(result.data, true)
+                saveShips(board.uid, true)
             }
         }
     }
 
-    private fun saveShips(boardId: Long, fireGameReadyEvent: Boolean) = viewModelScope.launch {
+    private fun saveShips(boardUid: String, fireGameReadyEvent: Boolean) = viewModelScope.launch {
         _board.value!!.ships.value!!.forEach { shipModel ->
             val ship = Ship(
                 shipModel.x,
                 shipModel.y,
                 shipModel.size,
                 shipModel.direction,
-                boardId
+                boardUid
             )
             shipRepository.insert(ship)
         }

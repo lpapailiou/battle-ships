@@ -113,7 +113,7 @@ class BoardPreparationFragment : Fragment() {
             EventObserver {
                 val action =
                     BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
-                        boardPreparationViewModel.game.value!!.id,
+                        boardPreparationViewModel.game.value!!.uid,
                         boardPreparationViewModel.player.value!!.uid,
                         boardPreparationViewModel.bot.value!!.uid
                     )

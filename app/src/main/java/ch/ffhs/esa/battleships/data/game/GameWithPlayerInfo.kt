@@ -4,13 +4,13 @@ import android.text.format.DateUtils
 import java.util.*
 
 data class GameWithPlayerInfo(
-    val gameId: Long,
+    val gameUid: String,
     val attackerName: String,
     val defenderName: String,
     val playerAtTurnName: String,
     val lastChangedAt: Date,
-    val attackerUID: String,
-    val defenderUID: String
+    val attackerUid: String,
+    val defenderUid: String
 ) {
     fun lastChangedAtFormatted(): CharSequence {
         return DateUtils.getRelativeTimeSpanString(lastChangedAt.time)

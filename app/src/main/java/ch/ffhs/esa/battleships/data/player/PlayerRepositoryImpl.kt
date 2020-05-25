@@ -12,19 +12,13 @@ class PlayerRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PlayerRepository {
 
-    override suspend fun findById(id: Long): DataResult<Player> {
+    override suspend fun findByUid(uid: String): DataResult<Player> {
         return withContext(ioDispatcher) {
-            return@withContext localPlayerDataSource.findById(id)
+            return@withContext localPlayerDataSource.findByUid(uid)
         }
     }
 
-    override suspend fun findByUID(uid: String): DataResult<Player> {
-        return withContext(ioDispatcher) {
-            return@withContext localPlayerDataSource.findByUID(uid)
-        }
-    }
-
-    override suspend fun save(player: Player): DataResult<Long> {
+    override suspend fun save(player: Player): DataResult<String> {
         return withContext(ioDispatcher) {
             return@withContext localPlayerDataSource.insert(player)
         }
@@ -32,7 +26,7 @@ class PlayerRepositoryImpl @Inject constructor(
 
 //    override suspend fun createIfNotExists(uid: String): DataResult<Long> {
 //        return withContext(ioDispatcher) {
-//            val result = localPlayerDataSource.findByUID(uid)
+//            val result = localPlayerDataSource.findByUid(uid)
 //            if (result is DataResult.Success) {
 //                return@withContext DataResult.Success(result.data.id)
 //            }

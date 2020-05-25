@@ -25,7 +25,7 @@ open class BoardView(
         const val CLICK_LIMIT: Int = 6        // makes difference between click and move
     }
 
-    var boardModel = BoardModel(0, 0, 0)
+    var boardModel = BoardModel(null, null, null)
         set(value) {
             field = value
             invalidate()

@@ -80,13 +80,13 @@
         android:label="Game"
         tools:layout="@layout/game_fragment">
         <argument
-            android:name="gameId"
-            app:argType="long" />
-        <argument
-            android:name="ownPlayerUID"
+            android:name="gameUid"
             app:argType="string" />
         <argument
-            android:name="enemyPlayerUID"
+            android:name="ownPlayerUid"
+            app:argType="string" />
+        <argument
+            android:name="enemyPlayerUid"
             app:argType="string" />
     </fragment>
 

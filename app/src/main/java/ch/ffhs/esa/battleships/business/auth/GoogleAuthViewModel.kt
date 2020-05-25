@@ -50,7 +50,8 @@ class GoogleAuthViewModel @Inject constructor(
 
 
     private fun createPlayer(uid: String, name: String) = viewModelScope.launch {
-        val player = Player(uid, name)
+        val player = Player(name)
+        player.uid = uid
         playerRepository.save(player)
     }
 }

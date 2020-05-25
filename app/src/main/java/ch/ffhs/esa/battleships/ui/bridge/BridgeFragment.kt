@@ -98,14 +98,14 @@ class BridgeFragment : Fragment() {
     }
 
     private fun resumeGame(game: GameWithPlayerInfo) {
-        val enemyPlayerUID =
-            if (game.attackerUID == args.uid) game.defenderUID else game.attackerUID
+        val enemyPlayerUid =
+            if (game.attackerUid == args.uid) game.defenderUid else game.attackerUid
 
         val action =
             BridgeFragmentDirections.actionMainFragmentToGameFragment(
-                game.gameId,
+                game.gameUid,
                 args.uid,
-                enemyPlayerUID
+                enemyPlayerUid
             )
         findNavController().navigate(action)
     }
