@@ -10,18 +10,44 @@
         tools:context=".ui.boardpreparation.BoardPreparationFragment">
 
 
+        <TextView
+            android:id="@+id/prepare_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/prepare_your_ships"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/prepare_hint"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/prepare_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/positioning_hint_board_preparation"
+            app:layout_constraintBottom_toTopOf="@+id/preparation_board"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/prepare_title" />
+
+
         <ch.ffhs.esa.battleships.ui.board.BoardView
             android:id="@+id/preparation_board"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            app:layout_constraintBottom_toTopOf="@+id/startgame_button"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/prepare_hint" />
 
         <Button
             android:id="@+id/startgame_button"
@@ -29,40 +55,9 @@
             android:layout_height="wrap_content"
             android:text="@string/start_the_war"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/preparation_board" />
-
-        <TextView
-            android:id="@+id/prepare_hint"
-            android:layout_width="395dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="40dp"
-            android:text="@string/positioning_hint_board_preparation"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/preparation_board"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prepare_title" />
-
-        <TextView
-            android:id="@+id/prepare_title"
-            android:layout_width="395dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="97dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/prepare_your_ships"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/prepare_hint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/preparation_board" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

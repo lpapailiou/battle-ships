@@ -14,7 +14,6 @@ import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.ui.ship.ShipPainter
 import ch.ffhs.esa.battleships.ui.shot.ShotPainter
 
-// TODO: maybe split into each use cases: preparation, attacking and defending boards?
 open class BoardView(
     context: Context,
     attributes: AttributeSet
@@ -57,7 +56,8 @@ open class BoardView(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        gridWidth = (w.toFloat() / BOARD_SIZE)
+        val shorterEdge = minOf(w, h)
+        gridWidth = (shorterEdge.toFloat() / BOARD_SIZE)
     }
 
     override fun onDraw(canvas: Canvas) {
