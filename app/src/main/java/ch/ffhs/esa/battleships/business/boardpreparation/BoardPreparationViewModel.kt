@@ -20,7 +20,9 @@ import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.data.ship.Direction
 import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.event.Event
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -47,6 +49,8 @@ class BoardPreparationViewModel @Inject constructor(
     private val _gameReadyEvent = MutableLiveData<Event<Unit>>()
     val gameReadyEvent: LiveData<Event<Unit>> = _gameReadyEvent
 
+    private val botBoardModel = BoardModel(null, null, BOT_PLAYER_ID)
+
 
     fun start(ownPlayerUid: String) {
         if (_player.value != null) {
@@ -54,37 +58,36 @@ class BoardPreparationViewModel @Inject constructor(
             return
         }
 
+        val boardModel = BoardModel(null, null, ownPlayerUid)
         loadPlayer(ownPlayerUid)
+        initializeShips(boardModel)
+        boardModel.revealShips()
+        _board.value = boardModel
+
         loadBot()
+        initializeShips(botBoardModel)
     }
 
-    private fun loadPlayer(uid: String) {
-        viewModelScope.launch {
-            val result = playerRepository.findByUid(uid)
-            if (result is DataResult.Success) {
-                _player.value = result.data
-                _board.value = BoardModel(null, null, result.data.uid)
-                initializeShips()
-            } else if (result is DataResult.Error) {
-                throw result.exception
-            }
+    private fun loadPlayer(uid: String) = viewModelScope.launch {
+        val result = playerRepository.findByUid(uid)
+        if (result is DataResult.Success) {
+            _player.value = result.data
+        } else if (result is DataResult.Error) {
+            throw result.exception
         }
     }
 
-    private fun loadBot() {
-        viewModelScope.launch {
-            val result = playerRepository.findByUid(BOT_PLAYER_ID)
-            if (result is DataResult.Success) {
-                _bot.value = result.data // TODO show error dialog
-            }
+    private fun loadBot() = viewModelScope.launch {
+        val result = playerRepository.findByUid(BOT_PLAYER_ID)
+        if (result is DataResult.Success) {
+            _bot.value = result.data // TODO show error dialog
         }
     }
 
-    private fun initializeShips() {
+    private fun initializeShips(boardModel: BoardModel) {
         val ships = createShips()
-        _board.value!!.ships.value = ships
-        randomizeShipPositions()
-        showShips()
+        boardModel.ships.value = ships
+        boardModel.randomizeShipPositions()
     }
 
     private fun createShips(): MutableList<ShipModel> {
@@ -101,26 +104,6 @@ class BoardPreparationViewModel @Inject constructor(
                 directionLogic
             )
         }.toMutableList()
-    }
-
-    private fun randomizeShipPositions() {
-        _board.value!!.ships.value!!.forEach { it.randomizePosition() }
-
-        var invalidlyPositionedShips = _board.value!!.getInvalidlyPositionedShips()
-        while (invalidlyPositionedShips.isNotEmpty()) {
-            invalidlyPositionedShips.first().randomizePosition()
-            invalidlyPositionedShips = _board.value!!.getInvalidlyPositionedShips()
-        }
-
-        _board.value!!.updateShipPositionValidity()
-        _board.value = _board.value
-
-    }
-
-    private fun showShips() {
-        _board.value!!.ships.value!!.forEach {
-            it.isVisible = true
-        }
     }
 
     fun getShipAt(cell: Cell): ShipModel? {
@@ -151,15 +134,20 @@ class BoardPreparationViewModel @Inject constructor(
         ship.y = oldY
     }
 
-    fun startGame() {
-        val game = Game(
-            Date.from(Calendar.getInstance().toInstant()),
-            GameState.ACTIVE,
-            _player.value!!.uid
-        )
-        game.attackerUid = _bot.value!!.uid
-        game.playerAtTurnUid = _player.value!!.uid
-        saveGame(game)
+    fun startGame() = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            launch {
+                val game = Game(
+                    Date.from(Calendar.getInstance().toInstant()),
+                    GameState.ACTIVE,
+                    _player.value!!.uid
+                )
+
+                game.attackerUid = _bot.value!!.uid
+                game.playerAtTurnUid = _player.value!!.uid
+                saveGame(game)
+            }
+        }
     }
 
 
@@ -167,50 +155,28 @@ class BoardPreparationViewModel @Inject constructor(
         val result = gameRepository.save(game)
         if (result is DataResult.Success) {
             _game.value = game
-            onGameSaved()
+            saveBoard(_board.value!!)
+            saveBoard(botBoardModel)
+            _gameReadyEvent.value = Event(Unit)
         }
     }
 
-    private fun onGameSaved() {
-        createOwnBoard()
-        createBotPlayerBoard()
-    }
-
-    private fun createOwnBoard() {
-        val board = Board(_game.value!!.uid, _player.value!!.uid)
-        viewModelScope.launch {
-            val result = boardRepository.saveBoard(board)
-            if (result is DataResult.Success) {
-                saveShipsToBoard(board.uid, false)
-            }
+    private suspend fun saveBoard(boardModel: BoardModel) = withContext(Dispatchers.IO) {
+        val board = Board(_game.value!!.uid, boardModel.playerUid!!)
+        val result = boardRepository.saveBoard(board)
+        if (result is DataResult.Success) {
+            saveShipsToBoard(board.uid, boardModel.ships.value!!)
         }
     }
 
-    private fun createBotPlayerBoard() {
-        val board = Board(_game.value!!.uid, _bot.value!!.uid)
-        viewModelScope.launch {
-            val result = boardRepository.saveBoard(board)
-            if (result is DataResult.Success) {
-                initializeShips()
-                randomizeShipPositions()
-                saveShipsToBoard(board.uid, true)
-            }
-        }
-    }
-
-    private fun saveShipsToBoard(boardUid: String, fireGameReadyEvent: Boolean) =
-        viewModelScope.launch {
-            val ships = _board.value!!.ships.value!!
+    private suspend fun saveShipsToBoard(boardUid: String, shipModels: MutableList<ShipModel>) =
+        withContext(Dispatchers.IO) {
+            shipModels
                 .map { it.toShip() }
-
-            ships.forEach {
-                it.boardUid = boardUid
-                shipRepository.insert(it)
-            }
-
-            if (fireGameReadyEvent) {
-                _gameReadyEvent.value = Event(Unit)
-            }
+                .forEach {
+                    it.boardUid = boardUid
+                    shipRepository.insert(it)
+                }
         }
 
     fun isBoardInValidState(): Boolean {

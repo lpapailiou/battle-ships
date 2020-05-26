@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@id/login_fragment">
-    
+
     <fragment
         android:id="@+id/login_fragment"
         android:name="ch.ffhs.esa.battleships.ui.auth.LoginFragment"
@@ -43,7 +43,6 @@
         <action
             android:id="@+id/action_mainFragment_to_boardPreparationFragment"
             app:destination="@id/board_preparation_fragment" />
-
         <action
             android:id="@+id/action_mainFragment_to_gameFragment"
             app:destination="@id/game_fragment" />
@@ -78,6 +77,7 @@
         android:name="ch.ffhs.esa.battleships.ui.game.GameFragment"
         android:label="Game"
         tools:layout="@layout/game_fragment">
+
         <argument
             android:name="gameUid"
             app:argType="string" />
@@ -106,7 +106,6 @@
             app:destination="@id/login_fragment"
             app:popUpTo="@id/login_fragment" />
     </fragment>
-
 
     <fragment
         android:id="@+id/rules_fragment"

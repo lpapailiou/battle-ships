@@ -7,8 +7,8 @@ import java.util.*
 
 class BoardModel(
     val uid: String?,
-    val gameUid: String?,
-    val playerUid: String?
+    var gameUid: String?,
+    var playerUid: String?
 ) {
 
     val ships = MutableLiveData<MutableList<ShipModel>>()
@@ -20,7 +20,21 @@ class BoardModel(
     }
 
 
-    fun getInvalidlyPositionedShips(): HashSet<ShipModel> {
+    fun randomizeShipPositions() {
+        ships.value!!.forEach { it.randomizePosition() }
+
+        var invalidlyPositionedShips = getInvalidlyPositionedShips()
+        while (invalidlyPositionedShips.isNotEmpty()) {
+            invalidlyPositionedShips.first().randomizePosition()
+            invalidlyPositionedShips = getInvalidlyPositionedShips()
+        }
+
+        updateShipPositionValidity()
+
+    }
+
+
+    private fun getInvalidlyPositionedShips(): HashSet<ShipModel> {
         val overlappingShips = getOverlappingShips()
         val shipsOutsideOfBoard = getShipsOutsideOfBoard()
 
@@ -64,5 +78,11 @@ class BoardModel(
 
     fun isBoardInValidState(): Boolean {
         return getInvalidlyPositionedShips().isEmpty()
+    }
+
+    fun revealShips() {
+        ships.value!!.forEach {
+            it.isVisible = true
+        }
     }
 }
