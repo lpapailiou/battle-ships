@@ -177,22 +177,14 @@ class GameViewModel @Inject constructor(
 
 
         createShot(target.x, target.y, _enemyBoard.value!!)
-        checkIfGameIsOver(_enemyBoard.value!!) // TODO: resolve race condition
-        setEnemyPlayerAtTurn()
+        swapTurns()
 
         makeAiMove()
     }
 
     private fun makeAiMove() {
         placeRandomShot()
-        checkIfGameIsOver(_ownBoard.value!!)
-        setHumanPlayerAtTurn()
-    }
-
-    private fun setEnemyPlayerAtTurn() = viewModelScope.launch {
-        val game = game.value
-        game!!.playerAtTurnUid = enemyPlayer.uid
-        gameRepository.save(game)
+        swapTurns()
     }
 
     private fun createShot(x: Int, y: Int, board: BoardModel) = viewModelScope.launch {
@@ -218,6 +210,7 @@ class GameViewModel @Inject constructor(
 
             if (isShotAHit) {
                 uncoverSunkenEnemyShips(board)
+                checkIfGameIsOver(board)
             }
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
@@ -254,10 +247,15 @@ class GameViewModel @Inject constructor(
         createShot(x, y, _ownBoard.value!!)
     }
 
-    private fun setHumanPlayerAtTurn() = viewModelScope.launch {
-        val game = game.value
-        game!!.playerAtTurnUid = player.uid
-        gameRepository.save(game)
+    private fun swapTurns() = viewModelScope.launch {
+
+        _game.value!!.playerAtTurnUid =
+            if (_game.value!!.playerAtTurnUid == ownBoard.value!!.playerUid)
+                enemyBoard.value!!.playerUid
+            else ownBoard.value!!.playerUid
+
+
+        gameRepository.save(_game.value!!)
     }
 
     private fun checkIfGameIsOver(board: BoardModel) {
@@ -267,13 +265,17 @@ class GameViewModel @Inject constructor(
         val hasWon = allShipCells.minus(allShotCells).isEmpty()
 
         if (hasWon) {
+            _game.value!!.winnerUid =
+                if (board.playerUid == ownBoard.value!!.playerUid)
+                    enemyBoard.value!!.playerUid
+                else ownBoard.value!!.playerUid
+
             endGame()
         }
     }
 
     private fun endGame() {
         _game.value!!.state = GameState.ENDED
-        _game.value!!.winnerUid = _game.value!!.playerAtTurnUid
         saveGame()
     }
 
