@@ -11,7 +11,16 @@ interface GameDao {
     fun findByUid(uid: String): Game?
 
     @Query(
-        "select g.uid as gameUid, attacker.name as attackerName, defender.name as defenderName, playerAtTurn.name as playerAtTurnName, g.lastChangedAt as lastChangedAt, attacker.uid as attackerUid, defender.uid as defenderUid from Game as g inner join Player as attacker on attacker.uid = g.attackerUid  inner join Player as defender on defender.uid = g.defenderUid  inner join Player as playerAtTurn on playerAtTurn.uid = g.playerAtTurnUid  where attacker.uid = :uid  or defender.uid = :uid  order by g.lastChangedAt desc"
+        "select g.uid as gameUid, attacker.name as attackerName, " +
+                "defender.name as defenderName, playerAtTurn.name as playerAtTurnName, " +
+                "g.lastChangedAt as lastChangedAt, attacker.uid as attackerUid, " +
+                "defender.uid as defenderUid " +
+                "from Game as g " +
+                "inner join Player as defender on defender.uid = g.defenderUid " +
+                "inner join Player as playerAtTurn on playerAtTurn.uid = g.playerAtTurnUid " +
+                "left join Player as attacker on attacker.uid = g.attackerUid " +
+                "where attacker.uid = :uid or defender.uid = :uid " +
+                "order by g.lastChangedAt desc"
     )
     fun findAllWithPlayerInfo(uid: String): List<GameWithPlayerInfo>
 

@@ -7,4 +7,6 @@ interface GameRepository {
     suspend fun findByUid(uid: String): DataResult<Game>
     suspend fun save(game: Game): DataResult<String>
     suspend fun findActiveGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>>
+
+    suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?>
 }

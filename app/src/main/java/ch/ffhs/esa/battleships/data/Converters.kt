@@ -3,19 +3,8 @@ package ch.ffhs.esa.battleships.data
 import androidx.room.TypeConverter
 import ch.ffhs.esa.battleships.business.game.GameState
 import ch.ffhs.esa.battleships.data.ship.Direction
-import java.util.*
 
 class Converters {
-
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
-    }
 
     @TypeConverter
     fun fromGameState(value: GameState): Int {

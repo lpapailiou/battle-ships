@@ -6,6 +6,8 @@ import ch.ffhs.esa.battleships.data.game.GameDataSource
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class LocalGameDataSource internal constructor(
@@ -56,4 +58,10 @@ class LocalGameDataSource internal constructor(
                 throw e
             }
         }
+
+    override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): Flow<Game?> {
+        TODO("Not yet implemented")
+    }
+
+
 }

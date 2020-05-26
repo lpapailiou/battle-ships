@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.business.boardpreparation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,6 @@ import ch.ffhs.esa.battleships.event.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 class BoardPreparationViewModel @Inject constructor(
@@ -46,17 +46,21 @@ class BoardPreparationViewModel @Inject constructor(
     private val _board = MutableLiveData<BoardModel>()
     val board: LiveData<BoardModel> = _board
 
-    private val _gameReadyEvent = MutableLiveData<Event<Unit>>()
-    val gameReadyEvent: LiveData<Event<Unit>> = _gameReadyEvent
+    private val _gameReadyEvent = MutableLiveData<Event<Game?>>()
+    val gameReadyEvent: LiveData<Event<Game?>> = _gameReadyEvent
 
     private val botBoardModel = BoardModel(null, null, BOT_PLAYER_ID)
 
+    private var isBotGame: Boolean = true
 
-    fun start(ownPlayerUid: String) {
+
+    fun start(ownPlayerUid: String, isBotGame: Boolean) {
         if (_player.value != null) {
 
             return
         }
+
+        this.isBotGame = isBotGame
 
         val boardModel = BoardModel(null, null, ownPlayerUid)
         loadPlayer(ownPlayerUid)
@@ -64,8 +68,10 @@ class BoardPreparationViewModel @Inject constructor(
         boardModel.revealShips()
         _board.value = boardModel
 
-        loadBot()
-        initializeShips(botBoardModel)
+        if (isBotGame) {
+            loadBot()
+            initializeShips(botBoardModel)
+        }
     }
 
     private fun loadPlayer(uid: String) = viewModelScope.launch {
@@ -138,12 +144,15 @@ class BoardPreparationViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             launch {
                 val game = Game(
-                    Date.from(Calendar.getInstance().toInstant()),
+                    System.currentTimeMillis(),
                     GameState.ACTIVE,
                     _player.value!!.uid
                 )
 
-                game.attackerUid = _bot.value!!.uid
+                if (isBotGame) {
+                    game.attackerUid = BOT_PLAYER_ID
+                }
+
                 game.playerAtTurnUid = _player.value!!.uid
                 saveGame(game)
             }
@@ -156,8 +165,11 @@ class BoardPreparationViewModel @Inject constructor(
         if (result is DataResult.Success) {
             _game.value = game
             saveBoard(_board.value!!)
-            saveBoard(botBoardModel)
-            _gameReadyEvent.value = Event(Unit)
+            if (isBotGame) {
+                saveBoard(botBoardModel)
+                _gameReadyEvent.value = Event(_game.value!!)
+            }
+            findOpenGame()
         }
     }
 
@@ -181,5 +193,16 @@ class BoardPreparationViewModel @Inject constructor(
 
     fun isBoardInValidState(): Boolean {
         return _board.value!!.isBoardInValidState()
+    }
+
+    fun findOpenGame() = viewModelScope.launch {
+        Log.e("viewmodel", "before repo find")
+        val result = gameRepository.findLatestGameWithNoOpponent(_player.value!!.uid)
+        if (result is DataResult.Success) {
+            val game = result.data
+            game?.attackerUid = _player.value!!.uid
+            _gameReadyEvent.value = Event(game)
+        }
+        Log.e("viewmodel", "after repo find")
     }
 }

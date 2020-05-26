@@ -1,12 +1,13 @@
 package ch.ffhs.esa.battleships.data.game
 
+import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.FlowCollector
 import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(
@@ -30,6 +31,8 @@ class GameRepositoryImpl @Inject constructor(
                 game.uid = "%s_%s".format(game.defenderUid, dateString)
             }
 
+            game.lastChangedAt = System.currentTimeMillis()
+
             val result = remoteGameDataSource.save(game)
             if (result is DataResult.Error) {
                 throw result.exception
@@ -45,9 +48,30 @@ class GameRepositoryImpl @Inject constructor(
         }
     }
 
+
     override suspend fun findActiveGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>> {
         return withContext(ioDispatcher) {
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
+
+    @InternalCoroutinesApi
+    @ExperimentalCoroutinesApi
+    override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> =
+        withContext(ioDispatcher) {
+            var data: Game? = null
+            Log.e("gamerepo", "before ds call")
+            remoteGameDataSource.findLatestGameWithNoOpponent(ownPlayerUid)
+                .collect(object : FlowCollector<Game?> {
+                    override suspend fun emit(value: Game?) {
+                        Log.e("gamerepo", "inside collect -> emit")
+                        data = value
+                    }
+                })
+
+            Log.e("gamerepo", "before return")
+
+            return@withContext DataResult.Success(data)
+        }
+
 }

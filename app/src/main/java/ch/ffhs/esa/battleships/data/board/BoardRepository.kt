@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.board
 
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.di.AppModule.LocalBoardDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteBoardDataSource
