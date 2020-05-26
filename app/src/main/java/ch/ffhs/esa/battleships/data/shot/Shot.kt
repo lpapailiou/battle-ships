@@ -9,8 +9,8 @@ import ch.ffhs.esa.battleships.data.board.Board
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Board::class,
-        parentColumns = ["id"],
-        childColumns = ["boardId"],
+        parentColumns = ["uid"],
+        childColumns = ["boardUid"],
         onDelete = ForeignKey.CASCADE
     )]
 )
@@ -18,9 +18,8 @@ data class Shot(
     val x: Int,
     val y: Int,
     @ColumnInfo(index = true)
-    val boardId: Long
+    val boardUid: String
 ) {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(index = true)
-    var id: Long = 0
+    @PrimaryKey
+    var uid: String = ""
 }

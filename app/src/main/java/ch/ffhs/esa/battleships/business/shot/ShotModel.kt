@@ -4,13 +4,13 @@ import ch.ffhs.esa.battleships.business.board.Cell
 import java.util.*
 
 class ShotModel(
-    val id: Long = 0,
     val x: Int,
     val y: Int,
-    val boardId: Long,
+    val boardUid: String,
     val isHit: Boolean,
     var isVisible: Boolean
 ) {
+    var shotUid: String = ""
 
     override fun equals(other: Any?): Boolean {
         if (other is Cell) {

@@ -10,25 +10,23 @@ import ch.ffhs.esa.battleships.data.player.Player
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Game::class,
-        parentColumns = ["id"],
-        childColumns = ["gameId"],
+        parentColumns = ["uid"],
+        childColumns = ["gameUid"],
         onDelete = ForeignKey.CASCADE
     ), ForeignKey(
         entity = Player::class,
-        parentColumns = ["id"],
-        childColumns = ["playerId"],
+        parentColumns = ["uid"],
+        childColumns = ["playerUid"],
         onDelete = ForeignKey.CASCADE
     )]
 )
 data class Board(
     @ColumnInfo(index = true)
-    val gameId: Long = 0,
+    val gameUid: String,
 
     @ColumnInfo(index = true)
-    val playerId: Long
+    val playerUid: String
 ) {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(index = true)
-    var id: Long = 0
-
+    @PrimaryKey
+    var uid: String = ""
 }

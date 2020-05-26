@@ -18,6 +18,10 @@ import ch.ffhs.esa.battleships.data.source.local.game.LocalGameDataSource
 import ch.ffhs.esa.battleships.data.source.local.player.LocalPlayerDataSource
 import ch.ffhs.esa.battleships.data.source.local.ship.LocalShipDataSource
 import ch.ffhs.esa.battleships.data.source.local.shot.LocalShotDataSource
+import ch.ffhs.esa.battleships.data.source.remote.board.RemoteBoardDataSource
+import ch.ffhs.esa.battleships.data.source.remote.game.RemoteGameDataSource
+import ch.ffhs.esa.battleships.data.source.remote.ship.RemoteShipDataSource
+import ch.ffhs.esa.battleships.data.source.remote.shot.RemoteShotDataSource
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -46,7 +50,24 @@ object AppModule {
 
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteShipDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteBoardDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteShotDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalShotDataSource
+
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemoteGameDataSource
 
 
     @JvmStatic
@@ -117,6 +138,56 @@ object AppModule {
 
     @JvmStatic
     @Singleton
+    @RemoteGameDataSource
+    @Provides
+    fun provideRemoteGameDataSource(
+        ioDispatcher: CoroutineDispatcher
+    ): GameDataSource {
+        return RemoteGameDataSource(
+            ioDispatcher
+        )
+    }
+
+    @JvmStatic
+    @Singleton
+    @RemoteBoardDataSource
+    @Provides
+    fun provideRemoteBoardDataSource(
+        ioDispatcher: CoroutineDispatcher
+    ): BoardDataSource {
+        return RemoteBoardDataSource(
+            ioDispatcher
+        )
+    }
+
+    @JvmStatic
+    @Singleton
+    @RemoteShotDataSource
+    @Provides
+    fun provideRemoteShotDataSource(
+        ioDispatcher: CoroutineDispatcher
+    ): ShotDataSource {
+        return RemoteShotDataSource(
+            ioDispatcher
+        )
+    }
+
+
+    @JvmStatic
+    @Singleton
+    @RemoteShipDataSource
+    @Provides
+    fun provideRemoteShipDataSource(
+        ioDispatcher: CoroutineDispatcher
+    ): ShipDataSource {
+        return RemoteShipDataSource(
+            ioDispatcher
+        )
+    }
+
+
+    @JvmStatic
+    @Singleton
     @Provides
     fun provideDataBase(context: Context): BattleShipsDatabase {
         return Room.databaseBuilder(
@@ -139,11 +210,11 @@ object AppModule {
             db.execSQL("delete from Game")
             db.execSQL("delete from Player")
             db.execSQL(
-                "INSERT INTO Player values(null, :offlinePlayerId, 'You')",
+                "INSERT INTO Player values(:offlinePlayerUid, 'You')",
                 arrayOf(OFFLINE_PLAYER_ID)
             )
             db.execSQL(
-                "INSERT INTO Player values(null, :botPlayerId, 'BOT')",
+                "INSERT INTO Player values(:botPlayerUid, 'BOT')",
                 arrayOf(BOT_PLAYER_ID)
             )
         }

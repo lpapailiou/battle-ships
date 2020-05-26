@@ -12,10 +12,10 @@ class LocalBoardDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BoardDataSource {
 
-    override suspend fun findById(id: Int): DataResult<Board> =
+    override suspend fun findByUid(uid: String): DataResult<Board> =
         withContext(ioDispatcher) {
             try {
-                val board = boardDao.findById(id)
+                val board = boardDao.findByUid(uid)
                 if (board != null) {
                     return@withContext DataResult.Success(board)
                 } else {
@@ -26,10 +26,13 @@ class LocalBoardDataSource internal constructor(
             }
         }
 
-    override suspend fun findByGameAndPlayer(gameId: Long, playerUID: String): DataResult<Board> =
+    override suspend fun findByGameAndPlayer(
+        gameUid: String,
+        playerUid: String
+    ): DataResult<Board> =
         withContext(ioDispatcher) {
             try {
-                val board = boardDao.findByGameAndPlayer(gameId, playerUID)
+                val board = boardDao.findByGameAndPlayer(gameUid, playerUid)
                 if (board != null) {
                     return@withContext DataResult.Success(board)
                 } else {
@@ -40,17 +43,14 @@ class LocalBoardDataSource internal constructor(
             }
         }
 
-    override suspend fun insert(board: Board): DataResult<Long> =
+    override suspend fun insert(board: Board): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                val boardId = boardDao.insert(board)
-                if (boardId != 0L) {
-                    return@withContext DataResult.Success(boardId)
-                } else {
-                    return@withContext DataResult.Error(Exception("Could not save board!"))
-                }
+                boardDao.insert(board)
+                return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
-                return@withContext DataResult.Error(e)
+//                return@withContext DataResult.Error(e)
+                throw e
             }
         }
 }

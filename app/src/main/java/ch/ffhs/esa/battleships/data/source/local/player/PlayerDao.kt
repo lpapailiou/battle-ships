@@ -10,12 +10,9 @@ import ch.ffhs.esa.battleships.data.player.Player
 interface PlayerDao {
 
     @Query("select * from Player where uid = :uid")
-    fun findByUID(uid: String): Player?
-
-    @Query("select * from Player where id = :id")
-    fun findById(id: Long): Player?
+    fun findByUid(uid: String): Player?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(player: Player): Long
+    fun insert(player: Player)
 
 }

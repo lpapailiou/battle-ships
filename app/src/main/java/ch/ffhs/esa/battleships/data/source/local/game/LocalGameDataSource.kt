@@ -13,10 +13,10 @@ class LocalGameDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : GameDataSource {
 
-    override suspend fun findById(gameId: Long): DataResult<Game> =
+    override suspend fun findByUid(uid: String): DataResult<Game> =
         withContext(ioDispatcher) {
             try {
-                val game = gameDao.findById(gameId)
+                val game = gameDao.findByUid(uid)
                 if (game != null) {
                     return@withContext DataResult.Success(game)
                 } else {
@@ -27,31 +27,13 @@ class LocalGameDataSource internal constructor(
             }
         }
 
-    override suspend fun insert(game: Game): DataResult<Long> =
+    override suspend fun save(game: Game): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                val gameId = gameDao.insert(game)
-                if (gameId != 0L) {
-                    return@withContext DataResult.Success(gameId)
-                } else {
-                    return@withContext DataResult.Error(Exception("Game could not be saved!"))
-                }
+                gameDao.insert(game)
+                return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
-                return@withContext DataResult.Error(e)
-            }
-        }
-
-    override suspend fun update(game: Game): DataResult<Int> =
-        withContext(ioDispatcher) {
-            try {
-                val gameId = gameDao.update(game)
-                if (gameId != 0) {
-                    return@withContext DataResult.Success(gameId)
-                } else {
-                    return@withContext DataResult.Error(Exception("Game could not be saved!"))
-                }
-            } catch (e: Exception) {
-                return@withContext DataResult.Error(e)
+                throw e
             }
         }
 
@@ -62,6 +44,16 @@ class LocalGameDataSource internal constructor(
                 return@withContext DataResult.Success(games)
             } catch (e: Exception) {
                 return@withContext DataResult.Error(e)
+            }
+        }
+
+    override suspend fun update(game: Game): DataResult<String> =
+        withContext(ioDispatcher) {
+            try {
+                gameDao.update(game)
+                return@withContext DataResult.Success("Success")
+            } catch (e: Exception) {
+                throw e
             }
         }
 }

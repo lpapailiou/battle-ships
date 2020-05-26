@@ -53,52 +53,52 @@ class GameViewModel @Inject constructor(
 
     private lateinit var enemyPlayer: Player
 
-    fun start(gameId: Long, ownPlayerUID: String, enemyPlayerUID: String) {
+    fun start(gameUid: String, ownPlayerUid: String, enemyPlayerUid: String) {
         if (_game.value != null) {
             return
         }
-        loadGame(gameId)
-        loadPlayer(ownPlayerUID)
-        loadEnemyPlayer(enemyPlayerUID)
-        loadOwnBoard(gameId, ownPlayerUID)
-        loadEnemyBoard(gameId, enemyPlayerUID)
+        loadGame(gameUid)
+        loadPlayer(ownPlayerUid)
+        loadEnemyPlayer(enemyPlayerUid)
+        loadOwnBoard(gameUid, ownPlayerUid)
+        loadEnemyBoard(gameUid, enemyPlayerUid)
     }
 
-    private fun loadGame(gameId: Long) {
+    private fun loadGame(gameUid: String) {
         viewModelScope.launch {
-            val result = gameRepository.findById(gameId)
+            val result = gameRepository.findByUid(gameUid)
             if (result is DataResult.Success) {
                 _game.value = result.data
             }
         }
     }
 
-    private fun loadPlayer(currentPlayerUID: String) {
+    private fun loadPlayer(currentPlayerUid: String) {
         viewModelScope.launch {
-            val result = playerRepository.findByUID(currentPlayerUID)
+            val result = playerRepository.findByUid(currentPlayerUid)
             if (result is DataResult.Success) {
                 player = result.data
             }
         }
     }
 
-    private fun loadEnemyPlayer(enemyPlayerUID: String) {
+    private fun loadEnemyPlayer(enemyPlayerUid: String) {
         viewModelScope.launch {
-            val result = playerRepository.findByUID(enemyPlayerUID)
+            val result = playerRepository.findByUid(enemyPlayerUid)
             if (result is DataResult.Success) {
                 enemyPlayer = result.data
             }
         }
     }
 
-    private fun loadEnemyBoard(gameId: Long, enemyPlayerUID: String) {
+    private fun loadEnemyBoard(gameUid: String, enemyPlayerUid: String) {
         viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameId, enemyPlayerUID)
+            val result = boardRepository.findByGameAndPlayer(gameUid, enemyPlayerUid)
             if (result is DataResult.Success) {
                 val boardModel = BoardModel(
-                    result.data.id,
-                    result.data.gameId,
-                    result.data.playerId
+                    result.data.uid,
+                    result.data.gameUid,
+                    result.data.playerUid
                 )
                 loadShips(boardModel)
                 loadShots(boardModel)
@@ -107,14 +107,14 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun loadOwnBoard(gameId: Long, currentPlayerUID: String) {
+    private fun loadOwnBoard(gameUid: String, currentPlayerUid: String) {
         viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameId, currentPlayerUID)
+            val result = boardRepository.findByGameAndPlayer(gameUid, currentPlayerUid)
             if (result is DataResult.Success) {
                 val boardModel = BoardModel(
-                    result.data.id,
-                    result.data.gameId,
-                    result.data.playerId
+                    result.data.uid,
+                    result.data.gameUid,
+                    result.data.playerUid
                 )
                 loadShips(boardModel)
                 loadShots(boardModel)
@@ -124,7 +124,7 @@ class GameViewModel @Inject constructor(
     }
 
     private fun loadShips(boardModel: BoardModel) = viewModelScope.launch {
-        val result = shipRepository.findByBoard(boardModel.id)
+        val result = shipRepository.findByBoard(boardModel.uid!!)
         if (result is DataResult.Success) {
             boardModel.ships.value = result.data.map {
                 ShipModel(
@@ -132,8 +132,8 @@ class GameViewModel @Inject constructor(
                     it.y,
                     it.size,
                     it.direction,
-                    it.boardId,
-                    boardModel.playerId == player.id,
+                    it.boardUid,
+                    boardModel.playerUid == player.uid,
                     directionLogic
                 )
             }.toMutableList()
@@ -143,15 +143,14 @@ class GameViewModel @Inject constructor(
     }
 
     private fun loadShots(boardModel: BoardModel) = viewModelScope.launch {
-        val result = shotRepository.findByBoard(boardModel.id)
+        val result = shotRepository.findByBoard(boardModel.uid!!)
         if (result is DataResult.Success) {
             val allShipCells = boardModel.ships.value!!.flatMap { it.getShipCells() }
             boardModel.shots.value = result.data.map { shot ->
                 ShotModel(
-                    0,
                     shot.x,
                     shot.y,
-                    shot.boardId,
+                    shot.boardUid,
                     allShipCells.contains(Cell(shot.x, shot.y)),
                     true
                 )
@@ -168,7 +167,7 @@ class GameViewModel @Inject constructor(
             return
         }
 
-        if (_game.value!!.playerAtTurnId != player.id) {
+        if (_game.value!!.playerAtTurnUid != player.uid) {
             return
         }
 
@@ -178,26 +177,18 @@ class GameViewModel @Inject constructor(
 
 
         createShot(target.x, target.y, _enemyBoard.value!!)
-        checkIfGameIsOver(_enemyBoard.value!!) // TODO: resolve race condition
-        setEnemyPlayerAtTurn()
+        swapTurns()
 
         makeAiMove()
     }
 
     private fun makeAiMove() {
         placeRandomShot()
-        checkIfGameIsOver(_ownBoard.value!!)
-        setHumanPlayerAtTurn()
-    }
-
-    private fun setEnemyPlayerAtTurn() = viewModelScope.launch {
-        val game = game.value
-        game!!.playerAtTurnId = enemyPlayer.id
-        gameRepository.saveGame(game)
+        swapTurns()
     }
 
     private fun createShot(x: Int, y: Int, board: BoardModel) = viewModelScope.launch {
-        val shot = Shot(x, y, board.id)
+        val shot = Shot(x, y, board.uid!!)
         val result = shotRepository.insert(shot)
         val isShotAHit = board.ships.value!!.flatMap { it.getShipCells() }.contains(Cell(x, y))
         if (isShotAHit) {
@@ -206,20 +197,20 @@ class GameViewModel @Inject constructor(
 
         if (result is DataResult.Success) {
             val shotModel = ShotModel(
-                result.data,
                 shot.x,
                 shot.y,
-                shot.boardId,
+                shot.boardUid,
                 isShotAHit,
                 true
             )
-
+            shotModel.shotUid = shot.uid
 
             board.shots.value!!.add(shotModel)
             board.shots.value = board.shots.value
 
             if (isShotAHit) {
                 uncoverSunkenEnemyShips(board)
+                checkIfGameIsOver(board)
             }
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
@@ -256,10 +247,15 @@ class GameViewModel @Inject constructor(
         createShot(x, y, _ownBoard.value!!)
     }
 
-    private fun setHumanPlayerAtTurn() = viewModelScope.launch {
-        val game = game.value
-        game!!.playerAtTurnId = player.id
-        gameRepository.saveGame(game)
+    private fun swapTurns() = viewModelScope.launch {
+
+        _game.value!!.playerAtTurnUid =
+            if (_game.value!!.playerAtTurnUid == ownBoard.value!!.playerUid)
+                enemyBoard.value!!.playerUid
+            else ownBoard.value!!.playerUid
+
+
+        gameRepository.save(_game.value!!)
     }
 
     private fun checkIfGameIsOver(board: BoardModel) {
@@ -269,18 +265,22 @@ class GameViewModel @Inject constructor(
         val hasWon = allShipCells.minus(allShotCells).isEmpty()
 
         if (hasWon) {
+            _game.value!!.winnerUid =
+                if (board.playerUid == ownBoard.value!!.playerUid)
+                    enemyBoard.value!!.playerUid
+                else ownBoard.value!!.playerUid
+
             endGame()
         }
     }
 
     private fun endGame() {
         _game.value!!.state = GameState.ENDED
-        _game.value!!.winnerId = _game.value!!.playerAtTurnId
         saveGame()
     }
 
     private fun saveGame() = viewModelScope.launch {
-        val result = gameRepository.update(_game.value!!)
+        val result = gameRepository.save(_game.value!!)
         if (result is DataResult.Success) {
             _gameOverEvent.value = Event(Unit)
         }

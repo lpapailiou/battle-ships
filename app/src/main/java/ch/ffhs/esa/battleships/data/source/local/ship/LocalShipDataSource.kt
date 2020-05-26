@@ -14,24 +14,20 @@ class LocalShipDataSource @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ShipDataSource {
 
-    override suspend fun insert(ship: Ship): DataResult<Long> =
+    override suspend fun insert(ship: Ship): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                val shipId = shipDao.insert(ship)
-                if (shipId != 0L) {
-                    return@withContext DataResult.Success(shipId)
-                } else {
-                    return@withContext DataResult.Error(Exception("Could not insert ship!"))
-                }
+                shipDao.insert(ship)
+                return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
                 return@withContext DataResult.Error(e)
             }
         }
 
-    override suspend fun loadByBoard(boardId: Long): DataResult<List<Ship>> =
+    override suspend fun loadByBoard(boardUid: String): DataResult<List<Ship>> =
         withContext(ioDispatcher) {
             try {
-                val ships = shipDao.loadByBoard(boardId)
+                val ships = shipDao.loadByBoard(boardUid)
                 if (ships.isNotEmpty()) {
                     return@withContext DataResult.Success(ships)
                 } else {
