@@ -21,6 +21,8 @@ import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.data.shot.Shot
 import ch.ffhs.esa.battleships.data.shot.ShotRepository
 import ch.ffhs.esa.battleships.event.Event
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
@@ -71,8 +73,31 @@ class GameViewModel @Inject constructor(
             val enemyBoard = loadBoard(gameUid, enemyPlayerUid)
             loadShips(enemyBoard)
             loadShots(enemyBoard)
+
             _enemyBoard.value = enemyBoard
+            observeShots(_enemyBoard)
         }
+
+    @OptIn(InternalCoroutinesApi::class)
+    private fun observeShots(boardLiveData: MutableLiveData<BoardModel>) = viewModelScope.launch {
+        shotRepository.observe(boardLiveData.value!!.uid!!)
+            .collect(object : FlowCollector<List<Shot>> {
+                override suspend fun emit(value: List<Shot>) {
+                    val allShipCells =
+                        boardLiveData.value!!.ships.value!!.flatMap { it.getShipCells() }
+                    boardLiveData.value!!.shots.value = value.map {
+                        ShotModel(
+                            it.x,
+                            it.y,
+                            it.boardUid,
+                            allShipCells.contains(Cell(it.x, it.y)),
+                            true
+                        )
+                    }.toMutableList()
+                }
+
+            })
+    }
 
     private fun loadGame(gameUid: String) =
         viewModelScope.launch {

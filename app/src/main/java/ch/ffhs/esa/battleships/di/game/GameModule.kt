@@ -1,8 +1,8 @@
 package ch.ffhs.esa.battleships.di.game
 
 import androidx.lifecycle.ViewModel
-import ch.ffhs.esa.battleships.di.ViewModelKey
 import ch.ffhs.esa.battleships.business.game.GameViewModel
+import ch.ffhs.esa.battleships.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

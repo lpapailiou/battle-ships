@@ -83,24 +83,17 @@ class RemoteGameDataSource internal constructor(
 
                         offer(games)
                         channel.close()
-
-
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
-
+                        throw p0.toException()
                     }
                 }
-
 
                 database.child(FIREBASE_GAME_WITHOUT_ATTACKERS_PATH)
                     .addListenerForSingleValueEvent(callback)
 
-
-
                 awaitClose { database.removeEventListener(callback) }
-
-
 
                 return@callbackFlow
             }
