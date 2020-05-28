@@ -1,6 +1,6 @@
 package ch.ffhs.esa.battleships.data.board
 
-import android.util.Log
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.di.AppModule.LocalBoardDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteBoardDataSource
@@ -23,7 +23,29 @@ class BoardRepository @Inject constructor(
 
     suspend fun findByGameAndPlayer(gameUid: String, playerUid: String): DataResult<Board> {
         return withContext(ioDispatcher) {
-            return@withContext localBoardDataSource.findByGameAndPlayer(gameUid, playerUid)
+            if (playerUid == BOT_PLAYER_ID) {
+                return@withContext localBoardDataSource.findByGameAndPlayer(gameUid, playerUid)
+            }
+            val remoteResult = remoteBoardDataSource.findByGameAndPlayer(gameUid, playerUid)
+
+            if (remoteResult is DataResult.Error) {
+                return@withContext remoteResult
+            }
+
+            if (remoteResult !is DataResult.Success) {
+                throw Exception("this should not happen")
+            }
+
+            val localInsert = localBoardDataSource.insert(remoteResult.data)
+//            if (localInsert is DataResult.Error) {
+//                return@withContext localInsert
+//            }
+
+            if (localInsert !is DataResult.Success) {
+                throw Exception("this should not happen")
+            }
+
+            return@withContext remoteResult
         }
     }
 

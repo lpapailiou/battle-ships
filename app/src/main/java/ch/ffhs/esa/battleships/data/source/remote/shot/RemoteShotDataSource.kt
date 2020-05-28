@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.shot
 
+import ch.ffhs.esa.battleships.business.FIREBASE_BOARD_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.shot.Shot
 import ch.ffhs.esa.battleships.data.shot.ShotDataSource
@@ -27,7 +28,7 @@ class RemoteShotDataSource internal constructor(
                 return@withContext DataResult.Error(Exception("Shot does not have an Uid assigned"))
             }
 
-            val task = database.child("board").child(shot.boardUid).child("shot").child(shot.uid)
+            val task = database.child(FIREBASE_BOARD_PATH).child(shot.boardUid).child("shot").child(shot.uid)
                 .setValue(shot)
             task.await()
 

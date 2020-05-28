@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.ship
 
+import ch.ffhs.esa.battleships.business.FIREBASE_BOARD_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.ship.Ship
 import ch.ffhs.esa.battleships.data.ship.ShipDataSource
@@ -22,7 +23,7 @@ class RemoteShipDataSource internal constructor(
                 return@withContext DataResult.Error(Exception("Ship does not have an Uid assigned"))
             }
 
-            val task = database.child("board").child(ship.boardUid!!).child("ship").child(ship.uid)
+            val task = database.child(FIREBASE_BOARD_PATH).child(ship.boardUid!!).child("ship").child(ship.uid)
                 .setValue(ship)
             task.await()
 
