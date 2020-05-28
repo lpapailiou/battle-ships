@@ -1,6 +1,7 @@
 package ch.ffhs.esa.battleships.data.source.remote.game
 
 import ch.ffhs.esa.battleships.business.FIREBASE_GAME_WITHOUT_ATTACKERS_PATH
+import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.DataResult.Error
 import ch.ffhs.esa.battleships.data.DataResult.Success
@@ -126,5 +127,45 @@ class RemoteGameDataSource internal constructor(
 
             return@withContext Error(task.exception!!)
 
+        }
+
+    @InternalCoroutinesApi
+    @ExperimentalCoroutinesApi
+    override suspend fun findByPlayer(playerUid: String): DataResult<List<Game>> =
+        withContext(ioDispatcher) {
+            val flow = callbackFlow<List<Game>> {
+                val callback = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                        val games = dataSnapshot.children
+                            .map { it.getValue(FirebaseGame::class.java) }
+                            .map { it!!.toGame() }
+
+                        offer(games)
+                        channel.close()
+                    }
+
+                    override fun onCancelled(p0: DatabaseError) {
+                        throw p0.toException()
+                    }
+                }
+
+                database.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game")
+                    .addListenerForSingleValueEvent(callback)
+
+                awaitClose { database.removeEventListener(callback) }
+
+                return@callbackFlow
+            }
+
+            var games: List<Game> = listOf()
+            flow.collect(object : FlowCollector<List<Game>> {
+                override suspend fun emit(value: List<Game>) {
+
+                    games = value
+                }
+            })
+
+            return@withContext DataResult.Success(games)
         }
 }

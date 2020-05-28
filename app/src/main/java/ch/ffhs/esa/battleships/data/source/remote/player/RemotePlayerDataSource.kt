@@ -1,6 +1,5 @@
 package ch.ffhs.esa.battleships.data.source.remote.player
 
-import android.util.Log
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.Player
@@ -68,7 +67,12 @@ class RemotePlayerDataSource internal constructor(
 
     override suspend fun insert(player: Player): DataResult<String> =
         withContext(ioDispatcher) {
-            val task = database.child(FIREBASE_PLAYER_PATH).child(player.uid).setValue(player)
+            val task = database.child(FIREBASE_PLAYER_PATH).child(player.uid).updateChildren(
+                mapOf(
+                    "uid" to player.uid,
+                    "name" to player.name
+                )
+            )
             task.await()
 
             if (task.isSuccessful) {

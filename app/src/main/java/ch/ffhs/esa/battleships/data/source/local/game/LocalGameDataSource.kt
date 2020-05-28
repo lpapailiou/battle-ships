@@ -70,4 +70,8 @@ class LocalGameDataSource internal constructor(
     override suspend fun removeFromOpenGames(game: Game): DataResult<Game> {
         throw Exception("This data is not kept locally")
     }
+
+    override suspend fun findByPlayer(playerUid: String): DataResult<List<Game>> {
+        TODO("Not yet implemented")
+    }
 }

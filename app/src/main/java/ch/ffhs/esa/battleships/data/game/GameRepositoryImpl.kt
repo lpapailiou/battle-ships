@@ -1,13 +1,13 @@
 package ch.ffhs.esa.battleships.data.game
 
 import android.util.Log
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import javax.inject.Inject
@@ -56,11 +56,23 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun findActiveGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>> {
         return withContext(ioDispatcher) {
+            if (playerUid != BOT_PLAYER_ID) {
+                val remoteResult = remoteGameDataSource.findByPlayer(playerUid)
+
+                if (remoteResult is DataResult.Error) {
+                    throw remoteResult.exception
+                }
+
+                remoteResult as DataResult.Success<List<Game>>
+                remoteResult.data.forEach {
+                    localGameDataSource.save(it)
+                }
+            }
+
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
 
-    @InternalCoroutinesApi
     override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> {
         return withContext(ioDispatcher) {
 
@@ -71,7 +83,7 @@ class GameRepositoryImpl @Inject constructor(
                 }
 
                 val opponentUid = result.data.defenderUid!!
-                playerRepository.findByUid(opponentUid) // TODO somewhat dirty. implement a cache method..?
+                playerRepository.findByUid(opponentUid) // TODO somewhat dirty. implement a cache method? Or call remote Player data source directly?
             }
 
             return@withContext result
@@ -80,10 +92,7 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun removeFromOpenGames(game: Game): DataResult<Game> {
         return withContext(ioDispatcher) {
-
-            val result = remoteGameDataSource.removeFromOpenGames(game)
-
-            return@withContext result
+            return@withContext remoteGameDataSource.removeFromOpenGames(game)
         }
     }
 }

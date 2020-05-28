@@ -11,4 +11,5 @@ interface GameDataSource {
 
     suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?>
     suspend fun removeFromOpenGames(game: Game): DataResult<Game>
+    suspend fun findByPlayer(playerUid: String): DataResult<List<Game>>
 }
