@@ -62,8 +62,16 @@ class GameViewModel @Inject constructor(
             loadGame(gameUid)
             loadPlayer(ownPlayerUid)
             loadEnemyPlayer(enemyPlayerUid)
-            loadOwnBoard(gameUid, ownPlayerUid)
-            loadEnemyBoard(gameUid, enemyPlayerUid)
+
+            val ownBoard = loadBoard(gameUid, ownPlayerUid)
+            loadShips(ownBoard)
+            loadShots(ownBoard)
+            _ownBoard.value = ownBoard
+
+            val enemyBoard = loadBoard(gameUid, enemyPlayerUid)
+            loadShips(enemyBoard)
+            loadShots(enemyBoard)
+            _enemyBoard.value = enemyBoard
         }
 
     private fun loadGame(gameUid: String) =
@@ -100,36 +108,18 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    private fun loadEnemyBoard(gameUid: String, enemyPlayerUid: String) {
-        viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameUid, enemyPlayerUid)
-            if (result is DataResult.Success) {
-                val boardModel = BoardModel(
-                    result.data.uid,
-                    result.data.gameUid,
-                    result.data.playerUid
-                )
-                loadShips(boardModel)
-                loadShots(boardModel)
-                _enemyBoard.value = boardModel
-            }
+    private suspend fun loadBoard(gameUid: String, currentPlayerUid: String): BoardModel {
+        val result = boardRepository.findByGameAndPlayer(gameUid, currentPlayerUid)
+        if (result is DataResult.Success) {
+            return BoardModel(
+                result.data.uid,
+                result.data.gameUid,
+                result.data.playerUid
+            )
         }
-    }
 
-    private fun loadOwnBoard(gameUid: String, currentPlayerUid: String) {
-        viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameUid, currentPlayerUid)
-            if (result is DataResult.Success) {
-                val boardModel = BoardModel(
-                    result.data.uid,
-                    result.data.gameUid,
-                    result.data.playerUid
-                )
-                loadShips(boardModel)
-                loadShots(boardModel)
-                _ownBoard.value = boardModel
-            }
-        }
+        result as DataResult.Error
+        throw result.exception
     }
 
     private fun loadShips(boardModel: BoardModel) = viewModelScope.launch {
