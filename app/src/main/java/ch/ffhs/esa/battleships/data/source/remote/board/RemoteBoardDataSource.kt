@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.board
 
+import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.board.Board
 import ch.ffhs.esa.battleships.data.board.BoardDataSource
@@ -33,12 +34,17 @@ class RemoteBoardDataSource internal constructor(
                 return@withContext DataResult.Error(Exception("Board does not have an Uid assigned"))
             }
 
+
             val task = database.child("board").child(board.uid).setValue(board)
+
+
             task.await()
+
 
             if (task.isSuccessful) {
                 return@withContext DataResult.Success("Success")
             }
+
 
             return@withContext DataResult.Error(task.exception!!)
         }

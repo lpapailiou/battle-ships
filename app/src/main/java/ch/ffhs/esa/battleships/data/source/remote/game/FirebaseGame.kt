@@ -1,6 +1,7 @@
-package ch.ffhs.esa.battleships.data.game
+package ch.ffhs.esa.battleships.data.source.remote.game
 
 import ch.ffhs.esa.battleships.business.game.GameState
+import ch.ffhs.esa.battleships.data.game.Game
 
 data class FirebaseGame(
     var state: GameState? = null,
@@ -33,7 +34,11 @@ data class FirebaseGame(
     var year: Long? = null
 
     fun toGame(): Game {
-        val game = Game(System.currentTimeMillis(), state, defenderUid)
+        val game = Game(
+            System.currentTimeMillis(),
+            state,
+            defenderUid
+        )
         game.uid = uid
         game.attackerUid = attackerUid
         game.playerAtTurnUid = playerAtTurnUid

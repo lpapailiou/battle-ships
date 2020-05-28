@@ -6,7 +6,7 @@ import ch.ffhs.esa.battleships.business.shot.ShotModel
 import java.util.*
 
 class BoardModel(
-    val uid: String?,
+    var uid: String?,
     var gameUid: String?,
     var playerUid: String?
 ) {

@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.business.game
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,40 +54,48 @@ class GameViewModel @Inject constructor(
 
     private lateinit var enemyPlayer: Player
 
-    fun start(gameUid: String, ownPlayerUid: String, enemyPlayerUid: String) {
-        if (_game.value != null) {
-            return
+    fun start(gameUid: String, ownPlayerUid: String, enemyPlayerUid: String) =
+        viewModelScope.launch {
+            if (_game.value != null) {
+                return@launch
+            }
+            loadGame(gameUid)
+            loadPlayer(ownPlayerUid)
+            loadEnemyPlayer(enemyPlayerUid)
+            loadOwnBoard(gameUid, ownPlayerUid)
+            loadEnemyBoard(gameUid, enemyPlayerUid)
         }
-        loadGame(gameUid)
-        loadPlayer(ownPlayerUid)
-        loadEnemyPlayer(enemyPlayerUid)
-        loadOwnBoard(gameUid, ownPlayerUid)
-        loadEnemyBoard(gameUid, enemyPlayerUid)
-    }
 
-    private fun loadGame(gameUid: String) {
+    private fun loadGame(gameUid: String) =
         viewModelScope.launch {
             val result = gameRepository.findByUid(gameUid)
             if (result is DataResult.Success) {
                 _game.value = result.data
             }
         }
-    }
 
-    private fun loadPlayer(currentPlayerUid: String) {
-        viewModelScope.launch {
-            val result = playerRepository.findByUid(currentPlayerUid)
-            if (result is DataResult.Success) {
-                player = result.data
-            }
+
+    private suspend fun loadPlayer(currentPlayerUid: String) {
+
+        val result = playerRepository.findByUid(currentPlayerUid)
+
+        if (result is DataResult.Success) {
+            player = result.data!!
+        }
+
+        if (result is DataResult.Error) {
+            throw result.exception
         }
     }
 
+
     private fun loadEnemyPlayer(enemyPlayerUid: String) {
         viewModelScope.launch {
+
             val result = playerRepository.findByUid(enemyPlayerUid)
+
             if (result is DataResult.Success) {
-                enemyPlayer = result.data
+                enemyPlayer = result.data!!
             }
         }
     }

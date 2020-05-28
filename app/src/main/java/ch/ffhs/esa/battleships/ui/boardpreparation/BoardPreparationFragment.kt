@@ -119,31 +119,38 @@ class BoardPreparationFragment : Fragment() {
         boardPreparationViewModel.gameReadyEvent.observe(
             viewLifecycleOwner,
             EventObserver {
-                if (it != null) {
-                    navigateToGame(it)
-                    return@EventObserver
-                }
-
-                navigateToBridge()
+                navigateToGame(it)
             })
+
+        boardPreparationViewModel.waitForEnemyEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                navigateToBridge()
+            }
+        )
 
     }
 
     private fun navigateToGame(game: Game) {
+
+        val enemyPlayerId = if (game.attackerUid!! == args.uid)
+            game.defenderUid else game.attackerUid
+
         val action =
             BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
                 game.uid,
                 args.uid,
-                game.attackerUid!!
+                enemyPlayerId!!
             )
         findNavController().navigate(action)
     }
 
     private fun navigateToBridge() {
+
         showSnackBar("All canons ready! You'll get notified, when an enemy has been found!", false)
-//        val action =
-//            BoardPreparationFragmentDirections.actionBoardPreparationFragmentToBridgeFragment(args.uid)
-//        findNavController().navigate(action)
+        val action =
+            BoardPreparationFragmentDirections.actionBoardPreparationFragmentToBridgeFragment(args.uid)
+        findNavController().navigate(action)
     }
 
     private fun showSnackBar(message: String, isError: Boolean) {

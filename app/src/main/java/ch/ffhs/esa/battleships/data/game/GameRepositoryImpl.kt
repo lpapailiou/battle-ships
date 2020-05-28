@@ -2,17 +2,20 @@ package ch.ffhs.esa.battleships.data.game
 
 import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
+import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(
     @LocalGameDataSource private val localGameDataSource: GameDataSource,
     @RemoteGameDataSource private val remoteGameDataSource: GameDataSource,
+    private val playerRepository: PlayerRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : GameRepository {
 
@@ -24,24 +27,26 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun save(game: Game): DataResult<String> {
         return withContext(ioDispatcher) {
-            var isNew = false
+            game.lastChangedAt = System.currentTimeMillis()
             if (game.uid.isEmpty()) {
-                isNew = true
+                Log.i("GameRepoImpl#save", "about to create a new game!")
                 val dateString = SimpleDateFormat("MMddyyyyHHmmss").format(game.lastChangedAt)
                 game.uid = "%s_%s".format(game.defenderUid, dateString)
             }
 
-            game.lastChangedAt = System.currentTimeMillis()
-
             val result = remoteGameDataSource.save(game)
             if (result is DataResult.Error) {
+                Log.e("GameRepo#save", "Could not save remote game!")
                 throw result.exception
             }
 
-            if (isNew) {
-                localGameDataSource.save(game)
-            } else {
-                localGameDataSource.update(game)
+
+            localGameDataSource.save(game)
+            val localResult = localGameDataSource.update(game)
+
+            if (localResult is DataResult.Error) {
+                Log.e("GameRepoImpl#save", "could not save game locally")
+                return@withContext localResult
             }
 
             return@withContext DataResult.Success(game.uid)
@@ -56,22 +61,29 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     @InternalCoroutinesApi
-    @ExperimentalCoroutinesApi
-    override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> =
-        withContext(ioDispatcher) {
-            var data: Game? = null
-            Log.e("gamerepo", "before ds call")
-            remoteGameDataSource.findLatestGameWithNoOpponent(ownPlayerUid)
-                .collect(object : FlowCollector<Game?> {
-                    override suspend fun emit(value: Game?) {
-                        Log.e("gamerepo", "inside collect -> emit")
-                        data = value
-                    }
-                })
+    override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> {
+        return withContext(ioDispatcher) {
 
-            Log.e("gamerepo", "before return")
+            val result = remoteGameDataSource.findLatestGameWithNoOpponent(ownPlayerUid)
+            if (result is DataResult.Success) {
+                if (result.data == null) {
+                    return@withContext result
+                }
 
-            return@withContext DataResult.Success(data)
+                val opponentUid = result.data.defenderUid!!
+                playerRepository.findByUid(opponentUid) // TODO somewhat dirty. implement a cache method..?
+            }
+
+            return@withContext result
         }
+    }
 
+    override suspend fun removeFromOpenGames(game: Game): DataResult<Game> {
+        return withContext(ioDispatcher) {
+
+            val result = remoteGameDataSource.removeFromOpenGames(game)
+
+            return@withContext result
+        }
+    }
 }

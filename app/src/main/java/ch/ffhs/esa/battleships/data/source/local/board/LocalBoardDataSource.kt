@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.local.board
 
+import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.board.Board
 import ch.ffhs.esa.battleships.data.board.BoardDataSource
@@ -46,11 +47,13 @@ class LocalBoardDataSource internal constructor(
     override suspend fun insert(board: Board): DataResult<String> =
         withContext(ioDispatcher) {
             try {
+
                 boardDao.insert(board)
+
                 return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
-//                return@withContext DataResult.Error(e)
-                throw e
+
+                return@withContext DataResult.Error(e)
             }
         }
 }
