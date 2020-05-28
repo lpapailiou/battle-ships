@@ -37,9 +37,6 @@ class BoardRepository @Inject constructor(
             }
 
             val localInsert = localBoardDataSource.insert(remoteResult.data)
-//            if (localInsert is DataResult.Error) {
-//                return@withContext localInsert
-//            }
 
             if (localInsert !is DataResult.Success) {
                 throw Exception("this should not happen")

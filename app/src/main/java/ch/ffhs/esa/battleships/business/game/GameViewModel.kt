@@ -1,11 +1,11 @@
 package ch.ffhs.esa.battleships.business.game
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.business.BOARD_SIZE
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.board.BoardModel
 import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.business.ship.DirectionLogic
@@ -188,7 +188,9 @@ class GameViewModel @Inject constructor(
         createShot(target.x, target.y, _enemyBoard.value!!)
         swapTurns()
 
-        makeAiMove()
+        if (enemyPlayer.uid == BOT_PLAYER_ID) {
+            makeAiMove()
+        }
     }
 
     private fun makeAiMove() {
