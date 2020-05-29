@@ -15,10 +15,10 @@ import ch.ffhs.esa.battleships.data.board.Board
     )]
 )
 data class Shot(
-    val x: Int,
-    val y: Int,
+    val x: Int = -1,
+    val y: Int = -1,
     @ColumnInfo(index = true)
-    val boardUid: String
+    val boardUid: String = ""
 ) {
     @PrimaryKey
     var uid: String = ""

@@ -37,7 +37,6 @@ class GoogleAuthViewModel @Inject constructor(
                             firebaseAuth.currentUser!!.uid,
                             firebaseAuth.currentUser!!.email!!
                         )
-                        _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
 
                     } else {
                         _loginFailedEvent.value = Event("Error") // TODO just as in EmailAuth
@@ -53,5 +52,6 @@ class GoogleAuthViewModel @Inject constructor(
         val player = Player(name)
         player.uid = uid
         playerRepository.save(player)
+        _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
     }
 }

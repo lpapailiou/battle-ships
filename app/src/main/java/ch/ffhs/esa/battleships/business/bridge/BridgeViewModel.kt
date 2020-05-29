@@ -28,8 +28,4 @@ class BridgeViewModel @Inject constructor(
             _activeGames.value = result.data
         }
     }
-
-    fun resumeGame(game: GameWithPlayerInfo) {
-
-    }
 }

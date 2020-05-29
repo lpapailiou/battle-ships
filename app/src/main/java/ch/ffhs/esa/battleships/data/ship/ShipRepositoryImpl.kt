@@ -31,8 +31,15 @@ class ShipRepositoryImpl @Inject constructor(
     }
 
     override suspend fun findByBoard(boardUid: String): DataResult<List<Ship>> {
-        return withContext(ioDispatcher) {
-            return@withContext localShipDataSource.loadByBoard(boardUid)
+        val remoteResult = remoteShipDataSource.loadByBoard(boardUid)
+
+        if (remoteResult is DataResult.Error) {
+            return remoteResult
         }
+
+        remoteResult as DataResult.Success
+        remoteResult.data.forEach { localShipDataSource.insert(it) }
+
+        return localShipDataSource.loadByBoard(boardUid)
     }
 }

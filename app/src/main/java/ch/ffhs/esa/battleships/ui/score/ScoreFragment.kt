@@ -1,45 +1,55 @@
 package ch.ffhs.esa.battleships.ui.score
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ch.ffhs.esa.battleships.R
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.business.score.ScoreViewModel
+import ch.ffhs.esa.battleships.databinding.ScoreFragmentBinding
+import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
 class ScoreFragment : Fragment() {
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val scoreViewModel by viewModels<ScoreViewModel> { viewModelFactory }
+
+    private lateinit var viewDataBinding: ScoreFragmentBinding
+
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as BattleShipsApplication).appComponent.scoreComponent()
+            .create()
+            .inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.score_fragment, container, false)
+        scoreViewModel.start(firebaseAuth.currentUser!!.uid)
+
+        viewDataBinding = ScoreFragmentBinding.inflate(inflater, container, false).apply {
+            scoreViewModel = this@ScoreFragment.scoreViewModel
+        }
+        return viewDataBinding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initializeObserver()
-    }
-
-    // TODO: add score counter to view (bot games and real games), maybe ranking as soon as we made the connection
-
-    private fun initializeObserver() {
-//        mainViewModel.getGames().observe(viewLifecycleOwner, Observer { games ->
-//            val finishedGames = games.filter { game -> game.state == GameState.ENDED }
-//            val itemsAdapter: ArrayAdapter<String> =
-//                ArrayAdapter<String>(
-//                    (activity as MainActivity),
-//                    android.R.layout.simple_list_item_1,
-//                    finishedGames.map { game -> mainViewModel.printScore(game) }
-//                )
-//            score_game_list.adapter = itemsAdapter
-
-//            val scoreMulti = finishedGames.filter { game -> game.opponentName != "Bot" }.map { game -> game.result * WINNING_SCORE_MULTIPLIER }.sum()
-//            val scoreBot = finishedGames.filter { game -> game.opponentName == "Bot" }.map { game -> game.result * WINNING_SCORE_MULTIPLIER }.sum()
-//            score_points_multiplayer.setText(scoreMulti.toString())
-//            score_points_bot.setText(scoreBot.toString())
-
-
-    }
-
 }

@@ -4,7 +4,8 @@
     <string name="practice">vs bot</string>
     <string name="online">vs friend</string>
     <string name="sign_up_top_play_online">Sign up to play online!</string>
-    <string name="active_list_item_title">%1$s vs. %2$s</string>
+    <string name="active_list_item_title">vs. %1$s</string>
+    <string name="active_list_item_title_enemy_pending">Looking out for an opponent!</string>
     <string name="username">Username</string>
     <string name="Intro">Intro image</string>
     <string name="settings">Settings</string>

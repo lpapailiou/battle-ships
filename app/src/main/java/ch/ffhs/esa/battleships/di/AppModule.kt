@@ -20,6 +20,7 @@ import ch.ffhs.esa.battleships.data.source.local.ship.LocalShipDataSource
 import ch.ffhs.esa.battleships.data.source.local.shot.LocalShotDataSource
 import ch.ffhs.esa.battleships.data.source.remote.board.RemoteBoardDataSource
 import ch.ffhs.esa.battleships.data.source.remote.game.RemoteGameDataSource
+import ch.ffhs.esa.battleships.data.source.remote.player.RemotePlayerDataSource
 import ch.ffhs.esa.battleships.data.source.remote.ship.RemoteShipDataSource
 import ch.ffhs.esa.battleships.data.source.remote.shot.RemoteShotDataSource
 import dagger.Module
@@ -35,6 +36,10 @@ object AppModule {
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
     annotation class LocalPlayerDataSource
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class RemotePlayerDataSource
 
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
@@ -80,6 +85,18 @@ object AppModule {
     ): PlayerDataSource {
         return LocalPlayerDataSource(
             database.playerDao(), ioDispatcher
+        )
+    }
+
+    @JvmStatic
+    @Singleton
+    @RemotePlayerDataSource
+    @Provides
+    fun provideRemotePlayerDataSource(
+        ioDispatcher: CoroutineDispatcher
+    ): PlayerDataSource {
+        return RemotePlayerDataSource(
+            ioDispatcher
         )
     }
 

@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.bridge_fragment.*
 import javax.inject.Inject
 
@@ -61,7 +64,7 @@ class BridgeFragment : Fragment() {
         bridgeViewModel.start(args.uid)
 
         play_vs_bot_button.setOnClickListener {
-            startNewGame()
+            startNewGame(true)
         }
 
         if (args.uid == OFFLINE_PLAYER_ID) {
@@ -76,23 +79,28 @@ class BridgeFragment : Fragment() {
         sign_up_to_play_online_button.visibility = View.GONE
 
         play_vs_friend_button.setOnClickListener {
-            startNewGame()
+            startNewGame(false)
         }
     }
 
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewModel
         listAdapter = ActiveGamesListAdapter(viewModel!!) { game: GameWithPlayerInfo ->
+            if (game.attackerUid == null) {
+                showSnackBar("Still no enemies in sight. Those damn stealth ships!", false)
+                return@ActiveGamesListAdapter
+            }
             resumeGame(game)
         }
         viewDataBinding.bridgeGameList.adapter = listAdapter
     }
 
 
-    private fun startNewGame() {
+    private fun startNewGame(isBotGame: Boolean) {
         val action =
             BridgeFragmentDirections.actionMainFragmentToBoardPreparationFragment(
-                args.uid
+                args.uid,
+                isBotGame
             )
         findNavController().navigate(action)
     }
@@ -105,9 +113,23 @@ class BridgeFragment : Fragment() {
             BridgeFragmentDirections.actionMainFragmentToGameFragment(
                 game.gameUid,
                 args.uid,
-                enemyPlayerUid
+                enemyPlayerUid!!
             )
         findNavController().navigate(action)
+    }
+
+    private fun showSnackBar(message: String, isError: Boolean) {
+        val snackBar =
+            Snackbar.make(requireView(), message, 2000)
+        if (isError) {
+            snackBar.setBackgroundTint(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorComplementary
+                )
+            )
+        }
+        snackBar.show()
     }
 
 }

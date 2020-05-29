@@ -18,6 +18,7 @@ import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.business.boardpreparation.BoardPreparationViewModel
 import ch.ffhs.esa.battleships.business.ship.ShipModel
+import ch.ffhs.esa.battleships.data.game.Game
 import ch.ffhs.esa.battleships.event.EventObserver
 import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.board.BoardView.Companion.CLICK_LIMIT
@@ -61,7 +62,7 @@ class BoardPreparationFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        boardPreparationViewModel.start(args.uid)
+        boardPreparationViewModel.start(args.uid, args.isBotGame)
         boardPreparationViewModel.board.observe(viewLifecycleOwner, Observer { boardModel ->
             boardView.boardModel = boardModel
         })
@@ -107,33 +108,62 @@ class BoardPreparationFragment : Fragment() {
             return@OnTouchListener true
         })
 
-
-        boardPreparationViewModel.gameReadyEvent.observe(
-            viewLifecycleOwner,
-            EventObserver {
-                val action =
-                    BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
-                        boardPreparationViewModel.game.value!!.uid,
-                        boardPreparationViewModel.player.value!!.uid,
-                        boardPreparationViewModel.bot.value!!.uid
-                    )
-                findNavController().navigate(action)
-            })
-
         startgame_button.setOnClickListener {
             if (boardPreparationViewModel.isBoardInValidState()) {
                 boardPreparationViewModel.startGame()
             } else {
-                showSnackBar(it)
+                showSnackBar("Some of your ships are still too close to each other!", true)
             }
         }
+
+        boardPreparationViewModel.gameReadyEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                navigateToGame(it)
+            })
+
+        boardPreparationViewModel.waitForEnemyEvent.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                navigateToBridge()
+            }
+        )
+
     }
 
+    private fun navigateToGame(game: Game) {
 
-    private fun showSnackBar(view: View) {
+        val enemyPlayerId = if (game.attackerUid!! == args.uid)
+            game.defenderUid else game.attackerUid
+
+        val action =
+            BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
+                game.uid,
+                args.uid,
+                enemyPlayerId!!
+            )
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToBridge() {
+
+        showSnackBar("All canons ready! You'll get notified, when an enemy has been found!", false)
+        val action =
+            BoardPreparationFragmentDirections.actionBoardPreparationFragmentToBridgeFragment(args.uid)
+        findNavController().navigate(action)
+    }
+
+    private fun showSnackBar(message: String, isError: Boolean) {
         val snackBar =
-            Snackbar.make(view, "Some of your ships are still too close to each other!", 2000)
-        snackBar.setBackgroundTint(ContextCompat.getColor(view.context, R.color.colorComplementary))
+            Snackbar.make(requireView(), message, 2000)
+        if (isError) {
+            snackBar.setBackgroundTint(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorComplementary
+                )
+            )
+        }
         snackBar.show()
     }
 }

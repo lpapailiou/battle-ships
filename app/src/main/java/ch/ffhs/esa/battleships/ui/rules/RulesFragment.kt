@@ -27,7 +27,6 @@ class RulesFragment : Fragment() {
 
     // TODO: maybe change to html view so images / screenshots could be embedded easily
     // TODO: must be scrollable
-    // TODO: replace text (now: Llorem ipusm)
     fun setText() {
         val string: String = getString(R.string.rulesText)
         val TextView: TextView = (activity as MainActivity).findViewById(R.id.rulesT) as TextView
