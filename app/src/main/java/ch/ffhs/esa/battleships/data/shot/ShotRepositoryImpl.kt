@@ -3,6 +3,12 @@ package ch.ffhs.esa.battleships.data.shot
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.di.AppModule.LocalShotDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteShotDataSource
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class ShotRepositoryImpl @Inject constructor(
@@ -24,6 +30,11 @@ class ShotRepositoryImpl @Inject constructor(
         }
 
         return localShotDataSource.insert(shot)
+    }
+
+    @ExperimentalCoroutinesApi
+    override suspend fun observe(boardUid: String): Flow<List<Shot>> {
+        return remoteShotDataSource.observe(boardUid)
     }
 
 }

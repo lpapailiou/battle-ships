@@ -12,7 +12,9 @@
 
         <action
             android:id="@+id/action_loginFragment_to_bridgeFragment"
-            app:destination="@id/bridge_fragment" />
+            app:destination="@id/bridge_fragment"
+            app:popUpTo="@id/login_fragment"
+            app:popUpToInclusive="true" />
 
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
@@ -62,14 +64,24 @@
         android:name="ch.ffhs.esa.battleships.ui.boardpreparation.BoardPreparationFragment"
         android:label="Game Preparation"
         tools:layout="@layout/board_preparation_fragment">
+
         <argument
             android:name="uid"
             app:argType="string" />
+        <argument
+            android:name="isBotGame"
+            app:argType="boolean" />
 
         <action
             android:id="@+id/action_boardPreparationFragment_to_gameFragment"
             app:destination="@id/game_fragment"
             app:popUpTo="@id/bridge_fragment" />
+
+        <action
+            android:id="@+id/action_boardPreparationFragment_to_bridgeFragment"
+            app:destination="@id/bridge_fragment"
+            app:popUpTo="@id/bridge_fragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

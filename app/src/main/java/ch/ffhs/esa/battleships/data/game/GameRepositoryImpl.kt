@@ -1,6 +1,9 @@
 package ch.ffhs.esa.battleships.data.game
 
+import android.util.Log
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
+import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +15,7 @@ import javax.inject.Inject
 class GameRepositoryImpl @Inject constructor(
     @LocalGameDataSource private val localGameDataSource: GameDataSource,
     @RemoteGameDataSource private val remoteGameDataSource: GameDataSource,
+    private val playerRepository: PlayerRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : GameRepository {
 
@@ -23,35 +27,89 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun save(game: Game): DataResult<String> {
         return withContext(ioDispatcher) {
-            var isNew = false
+            game.lastChangedAt = System.currentTimeMillis()
             if (game.uid.isEmpty()) {
-                isNew = true
+                Log.i("GameRepoImpl#save", "about to create a new game!")
                 val dateString = SimpleDateFormat("MMddyyyyHHmmss").format(game.lastChangedAt)
                 game.uid = "%s_%s".format(game.defenderUid, dateString)
             }
 
             val result = remoteGameDataSource.save(game)
             if (result is DataResult.Error) {
+                Log.e("GameRepo#save", "Could not save remote game!")
                 throw result.exception
             }
 
-            if (isNew) {
-                localGameDataSource.save(game)
-            } else {
-                localGameDataSource.update(game)
+
+            localGameDataSource.save(game)
+            val localResult = localGameDataSource.update(game)
+
+            if (localResult is DataResult.Error) {
+                Log.e("GameRepoImpl#save", "could not save game locally")
+                return@withContext localResult
             }
 
             return@withContext DataResult.Success(game.uid)
         }
     }
 
+
     override suspend fun findActiveGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>> {
         return withContext(ioDispatcher) {
+            if (playerUid != BOT_PLAYER_ID) {
+                val remoteResult = remoteGameDataSource.findByPlayer(playerUid)
+
+                if (remoteResult is DataResult.Error) {
+                    throw remoteResult.exception
+                }
+
+                remoteResult as DataResult.Success<List<Game>>
+                val enemyPlayerUids = remoteResult.data
+                    .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
+                    .toHashSet()
+
+                Log.e("game repo", "about to cache players")
+                enemyPlayerUids.forEach { playerRepository.findByUid(it) }
+                Log.e("game repo", "caching players done")
+
+                remoteResult.data
+                    .forEach { game ->
+                        localGameDataSource.update(game)
+                    }
+                Log.e("game repo", "inserts done")
+            }
+
+            Log.e("game repo", "load local shit")
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
 
+
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {
         return remoteGameDataSource.findAllGamesByPlayer(playerUid)
+    }
+
+    override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> {
+        return withContext(ioDispatcher) {
+
+            val result = remoteGameDataSource.findLatestGameWithNoOpponent(ownPlayerUid)
+            if (result is DataResult.Success) {
+                if (result.data == null) {
+                    return@withContext result
+                }
+
+                val opponentUid = result.data.defenderUid!!
+                playerRepository.findByUid(opponentUid) // TODO somewhat dirty. implement a cache method? Or call remote Player data source directly?
+            }
+
+            return@withContext result
+        }
+    }
+
+    override suspend fun removeFromOpenGames(game: Game): DataResult<Game> {
+        return withContext(ioDispatcher) {
+            return@withContext remoteGameDataSource.removeFromOpenGames(game)
+        }
+
     }
 }

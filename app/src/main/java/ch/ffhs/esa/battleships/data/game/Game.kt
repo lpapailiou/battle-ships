@@ -6,8 +6,9 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import ch.ffhs.esa.battleships.business.game.GameState
 import ch.ffhs.esa.battleships.data.player.Player
-import java.util.*
+import com.google.firebase.database.IgnoreExtraProperties
 
+@IgnoreExtraProperties
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Player::class,
@@ -28,10 +29,10 @@ import java.util.*
     )]
 )
 data class Game(
-    var lastChangedAt: Date,
-    var state: GameState,
+    var lastChangedAt: Long? = null,
+    var state: GameState? = null,
     @ColumnInfo(index = true)
-    var defenderUid: String
+    var defenderUid: String? = null
 ) {
     @PrimaryKey
     var uid: String = ""
@@ -44,5 +45,6 @@ data class Game(
 
     @ColumnInfo(index = true)
     var winnerUid: String? = null
+
 
 }

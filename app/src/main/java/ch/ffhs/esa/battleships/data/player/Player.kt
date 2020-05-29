@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Player(
-    val name: String
+    val name: String = ""
 ) {
     @PrimaryKey
     var uid: String = ""

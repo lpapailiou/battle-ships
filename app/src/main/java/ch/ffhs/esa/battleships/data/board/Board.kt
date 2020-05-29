@@ -22,10 +22,10 @@ import ch.ffhs.esa.battleships.data.player.Player
 )
 data class Board(
     @ColumnInfo(index = true)
-    val gameUid: String,
+    var gameUid: String = "",
 
     @ColumnInfo(index = true)
-    val playerUid: String
+    var playerUid: String = ""
 ) {
     @PrimaryKey
     var uid: String = ""

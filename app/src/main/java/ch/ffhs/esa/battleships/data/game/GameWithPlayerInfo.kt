@@ -5,15 +5,15 @@ import java.util.*
 
 data class GameWithPlayerInfo(
     val gameUid: String,
-    val attackerName: String,
+    val attackerName: String?,
     val defenderName: String,
-    val playerAtTurnName: String,
-    val lastChangedAt: Date,
-    val attackerUid: String,
+    val playerAtTurnName: String?,
+    val lastChangedAt: Long?,
+    val attackerUid: String?,
     val defenderUid: String
 ) {
 
     fun lastChangedAtFormatted(): CharSequence {
-        return DateUtils.getRelativeTimeSpanString(lastChangedAt.time)
+        return DateUtils.getRelativeTimeSpanString(lastChangedAt!!)
     }
 }

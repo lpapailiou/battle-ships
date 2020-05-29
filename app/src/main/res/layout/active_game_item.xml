@@ -29,7 +29,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{@string/active_list_item_title(gameWithPlayerInfo.attackerName, gameWithPlayerInfo.defenderName)}"
+            android:text="@{gameWithPlayerInfo.attackerUid == null ? @string/active_list_item_title_enemy_pending : @string/active_list_item_title(gameWithPlayerInfo.attackerName)}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

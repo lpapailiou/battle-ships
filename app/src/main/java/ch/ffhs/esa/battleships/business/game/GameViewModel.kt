@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.business.BOARD_SIZE
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.board.BoardModel
 import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.business.ship.DirectionLogic
@@ -20,6 +21,8 @@ import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.data.shot.Shot
 import ch.ffhs.esa.battleships.data.shot.ShotRepository
 import ch.ffhs.esa.battleships.event.Event
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
@@ -53,74 +56,95 @@ class GameViewModel @Inject constructor(
 
     private lateinit var enemyPlayer: Player
 
-    fun start(gameUid: String, ownPlayerUid: String, enemyPlayerUid: String) {
-        if (_game.value != null) {
-            return
+    fun start(gameUid: String, ownPlayerUid: String, enemyPlayerUid: String) =
+        viewModelScope.launch {
+            if (_game.value != null) {
+                return@launch
+            }
+            loadGame(gameUid)
+            loadPlayer(ownPlayerUid)
+            loadEnemyPlayer(enemyPlayerUid)
+
+            val ownBoard = loadBoard(gameUid, ownPlayerUid)
+            loadShips(ownBoard)
+            loadShots(ownBoard)
+            _ownBoard.value = ownBoard
+
+            val enemyBoard = loadBoard(gameUid, enemyPlayerUid)
+            loadShips(enemyBoard)
+            loadShots(enemyBoard)
+
+            _enemyBoard.value = enemyBoard
+            observeShots(_enemyBoard)
         }
-        loadGame(gameUid)
-        loadPlayer(ownPlayerUid)
-        loadEnemyPlayer(enemyPlayerUid)
-        loadOwnBoard(gameUid, ownPlayerUid)
-        loadEnemyBoard(gameUid, enemyPlayerUid)
+
+    @OptIn(InternalCoroutinesApi::class)
+    private fun observeShots(boardLiveData: MutableLiveData<BoardModel>) = viewModelScope.launch {
+        shotRepository.observe(boardLiveData.value!!.uid!!)
+            .collect(object : FlowCollector<List<Shot>> {
+                override suspend fun emit(value: List<Shot>) {
+                    val allShipCells =
+                        boardLiveData.value!!.ships.value!!.flatMap { it.getShipCells() }
+                    boardLiveData.value!!.shots.value = value.map {
+                        ShotModel(
+                            it.x,
+                            it.y,
+                            it.boardUid,
+                            allShipCells.contains(Cell(it.x, it.y)),
+                            true
+                        )
+                    }.toMutableList()
+                }
+
+            })
     }
 
-    private fun loadGame(gameUid: String) {
+    private fun loadGame(gameUid: String) =
         viewModelScope.launch {
             val result = gameRepository.findByUid(gameUid)
             if (result is DataResult.Success) {
                 _game.value = result.data
             }
         }
-    }
 
-    private fun loadPlayer(currentPlayerUid: String) {
-        viewModelScope.launch {
-            val result = playerRepository.findByUid(currentPlayerUid)
-            if (result is DataResult.Success) {
-                player = result.data
-            }
+
+    private suspend fun loadPlayer(currentPlayerUid: String) {
+
+        val result = playerRepository.findByUid(currentPlayerUid)
+
+        if (result is DataResult.Success) {
+            player = result.data!!
+        }
+
+        if (result is DataResult.Error) {
+            throw result.exception
         }
     }
+
 
     private fun loadEnemyPlayer(enemyPlayerUid: String) {
         viewModelScope.launch {
+
             val result = playerRepository.findByUid(enemyPlayerUid)
+
             if (result is DataResult.Success) {
-                enemyPlayer = result.data
+                enemyPlayer = result.data!!
             }
         }
     }
 
-    private fun loadEnemyBoard(gameUid: String, enemyPlayerUid: String) {
-        viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameUid, enemyPlayerUid)
-            if (result is DataResult.Success) {
-                val boardModel = BoardModel(
-                    result.data.uid,
-                    result.data.gameUid,
-                    result.data.playerUid
-                )
-                loadShips(boardModel)
-                loadShots(boardModel)
-                _enemyBoard.value = boardModel
-            }
+    private suspend fun loadBoard(gameUid: String, currentPlayerUid: String): BoardModel {
+        val result = boardRepository.findByGameAndPlayer(gameUid, currentPlayerUid)
+        if (result is DataResult.Success) {
+            return BoardModel(
+                result.data.uid,
+                result.data.gameUid,
+                result.data.playerUid
+            )
         }
-    }
 
-    private fun loadOwnBoard(gameUid: String, currentPlayerUid: String) {
-        viewModelScope.launch {
-            val result = boardRepository.findByGameAndPlayer(gameUid, currentPlayerUid)
-            if (result is DataResult.Success) {
-                val boardModel = BoardModel(
-                    result.data.uid,
-                    result.data.gameUid,
-                    result.data.playerUid
-                )
-                loadShips(boardModel)
-                loadShots(boardModel)
-                _ownBoard.value = boardModel
-            }
-        }
+        result as DataResult.Error
+        throw result.exception
     }
 
     private fun loadShips(boardModel: BoardModel) = viewModelScope.launch {
@@ -179,7 +203,9 @@ class GameViewModel @Inject constructor(
         createShot(target.x, target.y, _enemyBoard.value!!)
         swapTurns()
 
-        makeAiMove()
+        if (enemyPlayer.uid == BOT_PLAYER_ID) {
+            makeAiMove()
+        }
     }
 
     private fun makeAiMove() {
