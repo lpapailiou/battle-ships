@@ -11,9 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.business.score.ScoreViewModel
 import ch.ffhs.esa.battleships.databinding.ScoreFragmentBinding
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class ScoreFragment : Fragment() {
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -21,6 +25,7 @@ class ScoreFragment : Fragment() {
     private val scoreViewModel by viewModels<ScoreViewModel> { viewModelFactory }
 
     private lateinit var viewDataBinding: ScoreFragmentBinding
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -40,6 +45,8 @@ class ScoreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        scoreViewModel.start(firebaseAuth.currentUser!!.uid)
+
         viewDataBinding = ScoreFragmentBinding.inflate(inflater, container, false).apply {
             scoreViewModel = this@ScoreFragment.scoreViewModel
         }

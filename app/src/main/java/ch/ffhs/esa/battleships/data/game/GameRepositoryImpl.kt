@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.game
 
+import android.util.Log
 import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
@@ -86,7 +87,17 @@ class GameRepositoryImpl @Inject constructor(
 
 
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {
-        return remoteGameDataSource.findAllGamesByPlayer(playerUid)
+        return withContext(ioDispatcher) {
+            Log.e("game repo", "before remote DS call")
+            val result = remoteGameDataSource.findAllGamesByPlayer(playerUid)
+            if (result is DataResult.Error) {
+                Log.e("game repo", "find all games failed")
+                throw result.exception
+            }
+
+            result as DataResult.Success
+            return@withContext result
+        }
     }
 
     override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> {

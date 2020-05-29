@@ -89,6 +89,7 @@ class RemoteGameDataSource internal constructor(
                         channel.close()
                     }
                 }
+
                 database.child("player").child(playerUid).child("game")
                     .addListenerForSingleValueEvent(callback)
 

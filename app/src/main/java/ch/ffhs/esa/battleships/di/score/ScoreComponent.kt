@@ -5,10 +5,13 @@ import dagger.Subcomponent
 
 @Subcomponent(modules = [ScoreModule::class])
 interface ScoreComponent {
-    @Subcomponent.Factory
-    interface Factory { fun create() : ScoreComponent }
-    fun inject(fragment: ScoreFragment)
 
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(): ScoreComponent
+    }
+
+    fun inject(fragment: ScoreFragment)
 
 
 }

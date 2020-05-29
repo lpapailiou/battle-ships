@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -9,83 +10,82 @@
             type="ch.ffhs.esa.battleships.business.score.ScoreViewModel" />
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/score"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.score.ScoreFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/score"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.score.ScoreFragment">
 
-    <ListView
-        android:id="@+id/score_game_list"
-        android:layout_width="336dp"
-        android:layout_height="340dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="31dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ListView
+            android:id="@+id/score_game_list"
+            android:layout_width="336dp"
+            android:layout_height="340dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="31dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/score_points_multiplayer_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="188dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/points_for_multiplayer_games"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer" />
+        <TextView
+            android:id="@+id/score_points_multiplayer_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="188dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/points_for_multiplayer_games"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/score_points_bot_label"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="41dp"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:layout_marginEnd="237dp"-->
-<!--        android:layout_marginBottom="20dp"-->
-<!--        android:text="@string/points_for_bot_games"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/score_game_list"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/score_points_bot" />-->
-<!--
-    <TextView
-        android:id="@+id/score_points_bot"
-        android:layout_width="242dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="5dp"
-        android:text="@string/_0"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer_label" />-->
+        <!--    <TextView-->
+        <!--        android:id="@+id/score_points_bot_label"-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:layout_marginStart="41dp"-->
+        <!--        android:layout_marginTop="5dp"-->
+        <!--        android:layout_marginEnd="237dp"-->
+        <!--        android:layout_marginBottom="20dp"-->
+        <!--        android:text="@string/points_for_bot_games"-->
+        <!--        app:layout_constraintBottom_toTopOf="@+id/score_game_list"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintTop_toBottomOf="@+id/score_points_bot" />-->
+        <!--
+            <TextView
+                android:id="@+id/score_points_bot"
+                android:layout_width="242dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="41dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="120dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/_0"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.125"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer_label" />-->
 
-    <TextView
-        android:id="@+id/score_points_multiplayer"
-        android:layout_width="242dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="5dp"
-        android:text="@{scoreViewModel.score}"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/score_points_multiplayer_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/score_points_multiplayer"
+            android:layout_width="242dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="41dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="120dp"
+            android:layout_marginBottom="5dp"
+            android:text="@{scoreViewModel.score.toString()}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/score_points_multiplayer_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.125"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
-
 class GameViewModel @Inject constructor(
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
