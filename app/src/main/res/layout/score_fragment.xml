@@ -17,8 +17,7 @@
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/score_points_bot_label" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/score_points_multiplayer_label"
@@ -29,25 +28,24 @@
         android:layout_marginEnd="188dp"
         android:layout_marginBottom="10dp"
         android:text="@string/points_for_multiplayer_games"
-        app:layout_constraintBottom_toTopOf="@+id/score_points_bot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer" />
 
-    <TextView
-        android:id="@+id/score_points_bot_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="237dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/points_for_bot_games"
-        app:layout_constraintBottom_toTopOf="@+id/score_game_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/score_points_bot" />
-
+<!--    <TextView-->
+<!--        android:id="@+id/score_points_bot_label"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="41dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginEnd="237dp"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:text="@string/points_for_bot_games"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/score_game_list"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/score_points_bot" />-->
+<!--
     <TextView
         android:id="@+id/score_points_bot"
         android:layout_width="242dp"
@@ -58,11 +56,10 @@
         android:layout_marginBottom="5dp"
         android:text="@string/_0"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/score_points_bot_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer_label" />
+        app:layout_constraintTop_toBottomOf="@+id/score_points_multiplayer_label" />-->
 
     <TextView
         android:id="@+id/score_points_multiplayer"

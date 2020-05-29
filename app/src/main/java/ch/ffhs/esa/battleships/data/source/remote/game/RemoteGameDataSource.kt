@@ -6,10 +6,14 @@ import ch.ffhs.esa.battleships.data.DataResult.Success
 import ch.ffhs.esa.battleships.data.game.Game
 import ch.ffhs.esa.battleships.data.game.GameDataSource
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -49,5 +53,20 @@ class RemoteGameDataSource internal constructor(
 
     override suspend fun update(game: Game): DataResult<String> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> =
+        withContext(ioDispatcher) {
+        val flow = callbackFlow<List<Game>> {
+            val callback = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    throw p0.toException()
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    p0.children.map { it.getValue() }
+                }
+            }}
+            TODO()
     }
 }

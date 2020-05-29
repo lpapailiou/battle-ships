@@ -50,4 +50,8 @@ class GameRepositoryImpl @Inject constructor(
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
+
+    override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {
+        return remoteGameDataSource.findAllGamesByPlayer(playerUid)
+    }
 }

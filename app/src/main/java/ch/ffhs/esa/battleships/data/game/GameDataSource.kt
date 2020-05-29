@@ -8,4 +8,5 @@ interface GameDataSource {
     suspend fun save(game: Game): DataResult<String>
     suspend fun findActiveGames(uid: String): DataResult<List<GameWithPlayerInfo>>
     suspend fun update(game: Game): DataResult<String>
+    suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>>
 }

@@ -12,6 +12,7 @@ data class GameWithPlayerInfo(
     val attackerUid: String,
     val defenderUid: String
 ) {
+
     fun lastChangedAtFormatted(): CharSequence {
         return DateUtils.getRelativeTimeSpanString(lastChangedAt.time)
     }
