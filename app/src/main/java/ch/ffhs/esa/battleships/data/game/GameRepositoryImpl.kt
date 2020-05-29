@@ -1,6 +1,5 @@
 package ch.ffhs.esa.battleships.data.game
 
-import android.util.Log
 import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
@@ -8,6 +7,8 @@ import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
@@ -34,9 +35,11 @@ class GameRepositoryImpl @Inject constructor(
                 game.uid = "%s_%s".format(game.defenderUid, dateString)
             }
 
-            val result = remoteGameDataSource.save(game)
-            if (result is DataResult.Error) {
-                throw result.exception
+            if (game.attackerUid != BOT_PLAYER_ID) {
+                val result = remoteGameDataSource.save(game)
+                if (result is DataResult.Error) {
+                    throw result.exception
+                }
             }
 
 
@@ -66,10 +69,13 @@ class GameRepositoryImpl @Inject constructor(
                     .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
                     .toHashSet()
 
-                enemyPlayerUids.forEach { playerRepository.findByUid(it) }
+                enemyPlayerUids.forEach {
+                    playerRepository.findByUid(it)
+                }
 
                 remoteResult.data
                     .forEach { game ->
+                        localGameDataSource.save(game)
                         localGameDataSource.update(game)
                     }
             }
@@ -99,5 +105,11 @@ class GameRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher) {
             return@withContext remoteGameDataSource.removeFromOpenGames(game)
         }
+    }
+
+
+    @ExperimentalCoroutinesApi
+    override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
+        return remoteGameDataSource.observe(gameUid, playerUid)
     }
 }

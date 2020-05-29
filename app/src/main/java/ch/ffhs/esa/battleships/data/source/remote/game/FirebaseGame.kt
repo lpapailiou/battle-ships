@@ -35,7 +35,7 @@ data class FirebaseGame(
 
     fun toGame(): Game {
         val game = Game(
-            System.currentTimeMillis(),
+            lastChangedAt,
             state,
             defenderUid
         )

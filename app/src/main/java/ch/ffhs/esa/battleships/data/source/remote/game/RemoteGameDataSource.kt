@@ -16,6 +16,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -87,7 +88,10 @@ class RemoteGameDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
-                        Log.e(null, "remote game data source cancelled - findLastestGameWithNoOpponent")
+                        Log.e(
+                            null,
+                            "remote game data source cancelled - findLastestGameWithNoOpponent"
+                        )
                         throw p0.toException()
                     }
                 }
@@ -170,4 +174,29 @@ class RemoteGameDataSource internal constructor(
 
             return@withContext Success(games)
         }
+
+    @ExperimentalCoroutinesApi
+    override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
+        return callbackFlow {
+            val callback = object : ValueEventListener {
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val game = dataSnapshot.getValue(FirebaseGame::class.java)?.toGame()
+                    if (game != null) {
+                        offer(game!!)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    throw error.toException()
+                }
+
+            }
+
+            database.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game").child(gameUid)
+                .addValueEventListener(callback)
+
+            awaitClose { database.removeEventListener(callback) }
+        }
+    }
 }

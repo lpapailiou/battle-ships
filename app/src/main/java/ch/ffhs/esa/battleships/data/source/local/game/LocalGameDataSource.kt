@@ -7,6 +7,7 @@ import ch.ffhs.esa.battleships.data.game.GameDataSource
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class LocalGameDataSource internal constructor(
@@ -71,5 +72,9 @@ class LocalGameDataSource internal constructor(
 
     override suspend fun findByPlayer(playerUid: String): DataResult<List<Game>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
+        TODO("Local observation not implemented yet")
     }
 }

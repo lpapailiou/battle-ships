@@ -1,6 +1,7 @@
 package ch.ffhs.esa.battleships.data.game
 
 import ch.ffhs.esa.battleships.data.DataResult
+import kotlinx.coroutines.flow.Flow
 
 interface GameDataSource {
 
@@ -12,4 +13,5 @@ interface GameDataSource {
     suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?>
     suspend fun removeFromOpenGames(game: Game): DataResult<Game>
     suspend fun findByPlayer(playerUid: String): DataResult<List<Game>>
+    suspend fun observe(gameUid: String, playerUid: String): Flow<Game>
 }

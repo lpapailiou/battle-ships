@@ -76,7 +76,24 @@ class GameViewModel @Inject constructor(
 
             _enemyBoard.value = enemyBoard
             observeShots(_ownBoard)
+            observeGame(gameUid, ownPlayerUid)
         }
+
+    private fun loadGame(gameUid: String) = viewModelScope.launch {
+        val result = gameRepository.findByUid(gameUid)
+        if (result is DataResult.Success) {
+            _game.value = result.data
+        }
+    }
+
+    @OptIn(InternalCoroutinesApi::class)
+    private suspend fun observeGame(gameUid: String, playerUid: String) {
+        gameRepository.observe(gameUid, playerUid).collect(object : FlowCollector<Game> {
+            override suspend fun emit(value: Game) {
+                _game.value = value
+            }
+        })
+    }
 
     @OptIn(InternalCoroutinesApi::class)
     private fun observeShots(boardLiveData: MutableLiveData<BoardModel>) = viewModelScope.launch {
@@ -95,19 +112,10 @@ class GameViewModel @Inject constructor(
                         )
                     }.toMutableList()
                     boardLiveData.value = boardLiveData.value
-                    swapTurns()
                     checkIfGameIsOver(boardLiveData.value!!)
                 }
             })
     }
-
-    private fun loadGame(gameUid: String) =
-        viewModelScope.launch {
-            val result = gameRepository.findByUid(gameUid)
-            if (result is DataResult.Success) {
-                _game.value = result.data
-            }
-        }
 
 
     private suspend fun loadPlayer(currentPlayerUid: String) {
