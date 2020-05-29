@@ -107,7 +107,7 @@ class RemoteGameDataSource internal constructor(
                 }
             })
 
-            return@withContext DataResult.Success(game)
+            return@withContext Success(game)
         }
 
     override suspend fun removeFromOpenGames(game: Game): DataResult<Game> =
@@ -166,6 +166,6 @@ class RemoteGameDataSource internal constructor(
                 }
             })
 
-            return@withContext DataResult.Success(games)
+            return@withContext Success(games)
         }
 }

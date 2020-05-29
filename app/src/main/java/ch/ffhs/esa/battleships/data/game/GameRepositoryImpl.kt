@@ -64,11 +64,22 @@ class GameRepositoryImpl @Inject constructor(
                 }
 
                 remoteResult as DataResult.Success<List<Game>>
-                remoteResult.data.forEach {
-                    localGameDataSource.save(it)
-                }
+                val enemyPlayerUids = remoteResult.data
+                    .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
+                    .toHashSet()
+
+                Log.e("game repo", "about to cache players")
+                enemyPlayerUids.forEach { playerRepository.findByUid(it) }
+                Log.e("game repo", "caching players done")
+
+                remoteResult.data
+                    .forEach { game ->
+                        localGameDataSource.update(game)
+                    }
+                Log.e("game repo", "inserts done")
             }
 
+            Log.e("game repo", "load local shit")
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
