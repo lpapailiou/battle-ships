@@ -4,6 +4,7 @@ import ch.ffhs.esa.battleships.di.boardpreparation.BoardPreparationComponent
 import ch.ffhs.esa.battleships.di.game.BridgeComponent
 import ch.ffhs.esa.battleships.di.game.GameComponent
 import ch.ffhs.esa.battleships.di.login.LoginComponent
+import ch.ffhs.esa.battleships.di.score.ScoreComponent
 import dagger.Module
 
 
@@ -12,7 +13,8 @@ import dagger.Module
         BoardPreparationComponent::class,
         GameComponent::class,
         BridgeComponent::class,
-        LoginComponent::class
+        LoginComponent::class,
+        ScoreComponent::class
     ]
 )
 object SubcomponentsModule

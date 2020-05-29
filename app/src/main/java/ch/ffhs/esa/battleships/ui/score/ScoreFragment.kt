@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.ui.score
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.business.score.ScoreViewModel
 import ch.ffhs.esa.battleships.databinding.ScoreFragmentBinding
 import javax.inject.Inject
@@ -24,6 +26,14 @@ class ScoreFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as BattleShipsApplication).appComponent.scoreComponent()
+            .create()
+            .inject(this)
     }
 
     override fun onCreateView(

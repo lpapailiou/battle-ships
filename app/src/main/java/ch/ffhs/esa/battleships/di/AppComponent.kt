@@ -11,6 +11,8 @@ import ch.ffhs.esa.battleships.di.game.BridgeComponent
 import ch.ffhs.esa.battleships.di.game.GameComponent
 import ch.ffhs.esa.battleships.di.login.LoginComponent
 import ch.ffhs.esa.battleships.di.login.LoginModule
+import ch.ffhs.esa.battleships.di.score.ScoreComponent
+import ch.ffhs.esa.battleships.di.score.ScoreModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -24,7 +26,8 @@ import javax.inject.Singleton
         AppModuleBinds::class,
         ViewModelBuilderModule::class,
         FirebaseModule::class,
-        LoginModule::class
+        LoginModule::class,
+        ScoreModule::class
 //        RoomModule::class
     ]
 )
@@ -42,6 +45,8 @@ interface AppComponent {
     fun bridgeComponent(): BridgeComponent.Factory
 
     fun loginComponent(): LoginComponent.Factory
+
+    fun scoreComponent(): ScoreComponent.Factory
 
     val playerRepository: PlayerRepository
 
