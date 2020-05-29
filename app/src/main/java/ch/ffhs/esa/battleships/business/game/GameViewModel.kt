@@ -1,6 +1,5 @@
 package ch.ffhs.esa.battleships.business.game
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -76,7 +75,7 @@ class GameViewModel @Inject constructor(
             loadShots(enemyBoard)
 
             _enemyBoard.value = enemyBoard
-            observeShots(_enemyBoard)
+            observeShots(_ownBoard)
         }
 
     @OptIn(InternalCoroutinesApi::class)
@@ -95,6 +94,9 @@ class GameViewModel @Inject constructor(
                             true
                         )
                     }.toMutableList()
+                    boardLiveData.value = boardLiveData.value
+                    swapTurns()
+                    checkIfGameIsOver(boardLiveData.value!!)
                 }
             })
     }
@@ -246,7 +248,7 @@ class GameViewModel @Inject constructor(
 
                 checkIfGameIsOver(board)
 
-                }
+            }
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
         }
@@ -268,7 +270,7 @@ class GameViewModel @Inject constructor(
                 }
             }
 
-        }
+    }
 
 
     private fun placeRandomShot() = viewModelScope.launch {
@@ -308,7 +310,7 @@ class GameViewModel @Inject constructor(
 
             endGame()
         }
-        }
+    }
 
     private suspend fun endGame() {
         _game.value!!.state = GameState.ENDED
