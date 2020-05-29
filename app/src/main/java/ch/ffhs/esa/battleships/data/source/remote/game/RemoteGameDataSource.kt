@@ -70,20 +70,38 @@ class RemoteGameDataSource internal constructor(
         TODO("Not yet implemented")
     }
 
+    @InternalCoroutinesApi
+    @ExperimentalCoroutinesApi
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> =
         withContext(ioDispatcher) {
-        val flow = callbackFlow<List<Game>> {
-            val callback = object : ValueEventListener {
-                override fun onCancelled(p0: DatabaseError) {
-                    throw p0.toException()
-                }
+            val flow = callbackFlow<List<Game>> {
+                val callback = object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+                        throw p0.toException()
+                    }
 
-                override fun onDataChange(p0: DataSnapshot) {
-                    p0.children.map { it.getValue() }
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val games =
+                            p0.children.mapNotNull { it.getValue(FirebaseGame::class.java) }
+                                .map { it.toGame() }
+                        offer(games)
+                        channel.close()
+                    }
                 }
-            }}
-            TODO()
-    }
+                database.child("player").child(playerUid).child("game")
+                    .addListenerForSingleValueEvent(callback)
+
+                awaitClose { database.removeEventListener(callback) }
+            }
+            var gameList: List<Game> = listOf()
+            flow.collect(object : FlowCollector<List<Game>> {
+                override suspend fun emit(value: List<Game>) {
+                    gameList = value
+                }
+            })
+            return@withContext Success(gameList)
+
+        }
 
     @InternalCoroutinesApi
     @ExperimentalCoroutinesApi

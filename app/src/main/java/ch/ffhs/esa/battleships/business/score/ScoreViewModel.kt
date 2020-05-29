@@ -1,8 +1,12 @@
 package ch.ffhs.esa.battleships.business.score
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ch.ffhs.esa.battleships.business.board.BoardModel
 import ch.ffhs.esa.battleships.business.ship.DirectionLogic
+import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.board.BoardRepository
 import ch.ffhs.esa.battleships.data.game.GameRepository
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
@@ -17,10 +21,15 @@ class ScoreViewModel @Inject constructor(
 
 ) : ViewModel() {
 
+    private val _score = MutableLiveData<Int>()
+    val score: LiveData<Int> = _score
+
     fun start(playerUid: String) = viewModelScope.launch {
-        gameRepository.findAllGamesByPlayer(playerUid)
-
+        val result = gameRepository.findAllGamesByPlayer(playerUid)
+        if (result is DataResult.Success){
+            result.data
+            val score = result.data.filter { it.winnerUid == playerUid }.size
+            _score.value = score
+        }
     }
-
-
 }
