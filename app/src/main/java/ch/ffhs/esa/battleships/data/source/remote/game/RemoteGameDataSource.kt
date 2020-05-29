@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.game
 
+import android.util.Log
 import ch.ffhs.esa.battleships.business.FIREBASE_GAME_WITHOUT_ATTACKERS_PATH
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
@@ -36,7 +37,6 @@ class RemoteGameDataSource internal constructor(
             if (game.uid.isEmpty()) {
                 return@withContext Error(Exception("Game does not have an Uid assigned"))
             }
-
 
             val childUpdates = HashMap<String, Any>()
             if (game.attackerUid == null) {
@@ -87,6 +87,7 @@ class RemoteGameDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
+                        Log.e(null, "remote game data source cancelled - findLastestGameWithNoOpponent")
                         throw p0.toException()
                     }
                 }
@@ -146,6 +147,7 @@ class RemoteGameDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
+                        Log.e(null, "remote board data source cancelled - findByPlayer")
                         throw p0.toException()
                     }
                 }

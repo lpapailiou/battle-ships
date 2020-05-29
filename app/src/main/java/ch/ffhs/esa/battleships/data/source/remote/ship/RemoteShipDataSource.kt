@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.ship
 
+import android.util.Log
 import ch.ffhs.esa.battleships.business.FIREBASE_BOARD_PATH
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
@@ -60,6 +61,7 @@ class RemoteShipDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
+                        Log.e(null, "remote shipt data source cancelled - loadByBoard")
                         throw p0.toException()
                     }
                 }

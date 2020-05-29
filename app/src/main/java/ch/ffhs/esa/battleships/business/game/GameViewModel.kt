@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.business.game
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -95,7 +96,6 @@ class GameViewModel @Inject constructor(
                         )
                     }.toMutableList()
                 }
-
             })
     }
 
@@ -186,34 +186,42 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun shootAt(target: Cell) {
+    fun shootAt(target: Cell) = viewModelScope.launch {
         if (_game.value!!.state == GameState.ENDED) {
-            return
+            return@launch
         }
 
         if (_game.value!!.playerAtTurnUid != player.uid) {
-            return
+            return@launch
+        }
+
+        if (_enemyBoard.value == null) {
+            return@launch
+        }
+
+        if (_enemyBoard.value!!.shots.value == null) {
+            return@launch
         }
 
         if (_enemyBoard.value!!.shots.value!!.any { it.x == target.x && it.y == target.y }) {
-            return
+            return@launch
         }
 
 
         createShot(target.x, target.y, _enemyBoard.value!!)
-        swapTurns()
 
+        swapTurns()
         if (enemyPlayer.uid == BOT_PLAYER_ID) {
             makeAiMove()
         }
     }
 
-    private fun makeAiMove() {
+    private suspend fun makeAiMove() {
         placeRandomShot()
         swapTurns()
     }
 
-    private fun createShot(x: Int, y: Int, board: BoardModel) = viewModelScope.launch {
+    private suspend fun createShot(x: Int, y: Int, board: BoardModel) {
         val shot = Shot(x, y, board.uid!!)
         val result = shotRepository.insert(shot)
         val isShotAHit = board.ships.value!!.flatMap { it.getShipCells() }.contains(Cell(x, y))
@@ -233,18 +241,19 @@ class GameViewModel @Inject constructor(
 
             board.shots.value!!.add(shotModel)
             board.shots.value = board.shots.value
-
             if (isShotAHit) {
                 uncoverSunkenEnemyShips(board)
+
                 checkIfGameIsOver(board)
-            }
+
+                }
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun uncoverSunkenEnemyShips(board: BoardModel) {
+    private suspend fun uncoverSunkenEnemyShips(board: BoardModel) {
         val shotCells = board.shots.value!!.map { Cell(it.x, it.y) }
         board.ships.value!!
             .filter { !it.isVisible }
@@ -258,7 +267,8 @@ class GameViewModel @Inject constructor(
                     it.isVisible = false
                 }
             }
-    }
+
+        }
 
 
     private fun placeRandomShot() = viewModelScope.launch {
@@ -273,7 +283,7 @@ class GameViewModel @Inject constructor(
         createShot(x, y, _ownBoard.value!!)
     }
 
-    private fun swapTurns() = viewModelScope.launch {
+    private suspend fun swapTurns() {
 
         _game.value!!.playerAtTurnUid =
             if (_game.value!!.playerAtTurnUid == ownBoard.value!!.playerUid)
@@ -284,7 +294,7 @@ class GameViewModel @Inject constructor(
         gameRepository.save(_game.value!!)
     }
 
-    private fun checkIfGameIsOver(board: BoardModel) {
+    private suspend fun checkIfGameIsOver(board: BoardModel) {
         val allShipCells = board.ships.value!!.flatMap { it.getShipCells() }
         val allShotCells = board.shots.value!!.filter { it.isHit }.map { Cell(it.x, it.y) }
 
@@ -298,14 +308,14 @@ class GameViewModel @Inject constructor(
 
             endGame()
         }
-    }
+        }
 
-    private fun endGame() {
+    private suspend fun endGame() {
         _game.value!!.state = GameState.ENDED
         saveGame()
     }
 
-    private fun saveGame() = viewModelScope.launch {
+    private suspend fun saveGame() {
         val result = gameRepository.save(_game.value!!)
         if (result is DataResult.Success) {
             _gameOverEvent.value = Event(Unit)

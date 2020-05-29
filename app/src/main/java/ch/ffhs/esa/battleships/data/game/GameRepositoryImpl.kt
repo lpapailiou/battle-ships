@@ -9,6 +9,7 @@ import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -27,16 +28,14 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun save(game: Game): DataResult<String> {
         return withContext(ioDispatcher) {
-            game.lastChangedAt = System.currentTimeMillis()
             if (game.uid.isEmpty()) {
-                Log.i("GameRepoImpl#save", "about to create a new game!")
+                game.lastChangedAt = currentTimeMillis()
                 val dateString = SimpleDateFormat("MMddyyyyHHmmss").format(game.lastChangedAt)
                 game.uid = "%s_%s".format(game.defenderUid, dateString)
             }
 
             val result = remoteGameDataSource.save(game)
             if (result is DataResult.Error) {
-                Log.e("GameRepo#save", "Could not save remote game!")
                 throw result.exception
             }
 
@@ -45,7 +44,6 @@ class GameRepositoryImpl @Inject constructor(
             val localResult = localGameDataSource.update(game)
 
             if (localResult is DataResult.Error) {
-                Log.e("GameRepoImpl#save", "could not save game locally")
                 return@withContext localResult
             }
 
@@ -68,18 +66,14 @@ class GameRepositoryImpl @Inject constructor(
                     .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
                     .toHashSet()
 
-                Log.e("game repo", "about to cache players")
                 enemyPlayerUids.forEach { playerRepository.findByUid(it) }
-                Log.e("game repo", "caching players done")
 
                 remoteResult.data
                     .forEach { game ->
                         localGameDataSource.update(game)
                     }
-                Log.e("game repo", "inserts done")
             }
 
-            Log.e("game repo", "load local shit")
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
@@ -94,7 +88,7 @@ class GameRepositoryImpl @Inject constructor(
                 }
 
                 val opponentUid = result.data.defenderUid!!
-                playerRepository.findByUid(opponentUid) // TODO somewhat dirty. implement a cache method? Or call remote Player data source directly?
+                playerRepository.findByUid(opponentUid) // TODO to cache the player locally. somewhat dirty. implement a cache method? Or call remote Player data source directly?
             }
 
             return@withContext result

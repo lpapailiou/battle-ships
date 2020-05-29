@@ -32,7 +32,6 @@ class LocalGameDataSource internal constructor(
         withContext(ioDispatcher) {
             try {
                 gameDao.insert(game)
-                Log.i("LocalGameDataSource#save", "Game saved")
                 return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
                 Log.e("LocalGameDataSource#save", "Game could not be saved")
@@ -53,9 +52,8 @@ class LocalGameDataSource internal constructor(
     override suspend fun update(game: Game): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                Log.i("LocalGameDataSource#update", "Game updated")
                 gameDao.update(game)
-                Log.i("LocalGameDataSource#update", "Game updated")
+                Log.i("LocalGameDataSource#update", "Game updated!!!!!")
                 return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
                 Log.e("LocalGameDataSource#update", "Game could not be updated")

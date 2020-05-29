@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.board
 
+import android.util.Log
 import ch.ffhs.esa.battleships.business.FIREBASE_BOARD_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.board.Board
@@ -44,7 +45,8 @@ class RemoteBoardDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
-
+                        Log.e(null, "remote board data source cancelled - findByGameAndPlayer")
+                        throw p0.toException()
                     }
                 }
 
