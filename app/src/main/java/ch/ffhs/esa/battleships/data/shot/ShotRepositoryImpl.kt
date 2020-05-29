@@ -1,14 +1,11 @@
 package ch.ffhs.esa.battleships.data.shot
 
+import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.di.AppModule.LocalShotDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteShotDataSource
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class ShotRepositoryImpl @Inject constructor(
@@ -16,6 +13,15 @@ class ShotRepositoryImpl @Inject constructor(
     @RemoteShotDataSource private val remoteShotDataSource: ShotDataSource
 ) : ShotRepository {
     override suspend fun findByBoard(boardUid: String): DataResult<List<Shot>> {
+        val remoteResult = remoteShotDataSource.findByBoard(boardUid)
+
+        if (remoteResult is DataResult.Error) {
+            return remoteResult
+        }
+
+        remoteResult as DataResult.Success
+        remoteResult.data.forEach { localShotDataSource.insert(it) }
+
         return localShotDataSource.findByBoard(boardUid)
     }
 

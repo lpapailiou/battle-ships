@@ -7,6 +7,7 @@ import ch.ffhs.esa.battleships.data.game.GameDataSource
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class LocalGameDataSource internal constructor(
@@ -32,7 +33,6 @@ class LocalGameDataSource internal constructor(
         withContext(ioDispatcher) {
             try {
                 gameDao.insert(game)
-                Log.i("LocalGameDataSource#save", "Game saved")
                 return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
                 Log.e("LocalGameDataSource#save", "Game could not be saved")
@@ -53,9 +53,8 @@ class LocalGameDataSource internal constructor(
     override suspend fun update(game: Game): DataResult<String> =
         withContext(ioDispatcher) {
             try {
-                Log.i("LocalGameDataSource#update", "Game updated")
                 gameDao.update(game)
-                Log.i("LocalGameDataSource#update", "Game updated")
+                Log.i("LocalGameDataSource#update", "Game updated!!!!!")
                 return@withContext DataResult.Success("Success")
             } catch (e: Exception) {
                 Log.e("LocalGameDataSource#update", "Game could not be updated")
@@ -77,5 +76,9 @@ class LocalGameDataSource internal constructor(
 
     override suspend fun findByPlayer(playerUid: String): DataResult<List<Game>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
+        TODO("Local observation not implemented yet")
     }
 }

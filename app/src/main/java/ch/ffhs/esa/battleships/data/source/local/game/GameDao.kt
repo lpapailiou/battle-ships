@@ -29,5 +29,4 @@ interface GameDao {
 
     @Update
     suspend fun update(game: Game)
-
 }

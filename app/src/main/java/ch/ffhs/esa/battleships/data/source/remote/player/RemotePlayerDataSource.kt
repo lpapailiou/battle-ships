@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.player
 
+import android.util.Log
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.Player
@@ -39,7 +40,8 @@ class RemotePlayerDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
-
+                        Log.e(null, "remote player data source cancelled - findByUid")
+                        throw p0.toException()
                     }
                 }
 

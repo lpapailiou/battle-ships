@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.remote.game
 
+import android.util.Log
 import ch.ffhs.esa.battleships.business.FIREBASE_GAME_WITHOUT_ATTACKERS_PATH
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
@@ -17,6 +18,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -38,7 +40,6 @@ class RemoteGameDataSource internal constructor(
             if (game.uid.isEmpty()) {
                 return@withContext Error(Exception("Game does not have an Uid assigned"))
             }
-
 
             val childUpdates = HashMap<String, Any>()
             if (game.attackerUid == null) {
@@ -122,6 +123,10 @@ class RemoteGameDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
+                        Log.e(
+                            null,
+                            "remote game data source cancelled - findLastestGameWithNoOpponent"
+                        )
                         throw p0.toException()
                     }
                 }
@@ -181,6 +186,7 @@ class RemoteGameDataSource internal constructor(
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
+                        Log.e(null, "remote board data source cancelled - findByPlayer")
                         throw p0.toException()
                     }
                 }
@@ -203,4 +209,29 @@ class RemoteGameDataSource internal constructor(
 
             return@withContext Success(games)
         }
+
+    @ExperimentalCoroutinesApi
+    override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
+        return callbackFlow {
+            val callback = object : ValueEventListener {
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val game = dataSnapshot.getValue(FirebaseGame::class.java)?.toGame()
+                    if (game != null) {
+                        offer(game!!)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    throw error.toException()
+                }
+
+            }
+
+            database.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game").child(gameUid)
+                .addValueEventListener(callback)
+
+            awaitClose { database.removeEventListener(callback) }
+        }
+    }
 }

@@ -15,11 +15,11 @@ import ch.ffhs.esa.battleships.data.board.Board
     )]
 )
 data class Ship(
-    var x: Int,
-    var y: Int,
-    val size: Int,
-    var direction: Direction,
-    @ColumnInfo(index = true) var boardUid: String?
+    var x: Int = -1,
+    var y: Int = -1,
+    val size: Int = -1,
+    var direction: Direction = Direction.DOWN,
+    @ColumnInfo(index = true) var boardUid: String? = ""
 ) {
     @PrimaryKey
     var uid: String = ""

@@ -88,7 +88,7 @@ class GameFragment : Fragment() {
         activeBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
             boardView as BoardView
 
-            if (boardView.boardModel.playerUid == gameViewModel.ownBoard.value!!.playerUid) {
+            if (boardView.boardModel.playerUid == gameViewModel.ownBoard.value?.playerUid) {
                 return@OnTouchListener true
             }
 
