@@ -120,7 +120,7 @@ class BridgeFragment : Fragment() {
 
     private fun showSnackBar(message: String, isError: Boolean) {
         val snackBar =
-            Snackbar.make(requireView(), message, 2000)
+            Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
         if (isError) {
             snackBar.setBackgroundTint(
                 ContextCompat.getColor(

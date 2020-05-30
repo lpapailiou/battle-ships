@@ -14,8 +14,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -235,4 +233,29 @@ class RemoteGameDataSource internal constructor(
             awaitClose { database.removeEventListener(callback) }
         }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun observeByPlayer(playerUid: String): Flow<List<Game>> = callbackFlow {
+        val callback = object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val games = dataSnapshot.children.mapNotNull {
+                    it.getValue(FirebaseGame::class.java)?.toGame()
+                }
+                offer(games)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                database.removeEventListener(this)
+                throw error.toException()
+            }
+
+        }
+
+        database.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game")
+            .addValueEventListener(callback)
+
+        awaitClose { database.removeEventListener(callback) }
+    }
+
 }

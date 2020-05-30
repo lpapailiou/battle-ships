@@ -81,4 +81,8 @@ class LocalGameDataSource internal constructor(
     override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
         TODO("Local observation not implemented yet")
     }
+
+    override suspend fun observeByPlayer(playerUid: String): Flow<List<Game>> {
+        TODO("Not yet implemented")
+    }
 }

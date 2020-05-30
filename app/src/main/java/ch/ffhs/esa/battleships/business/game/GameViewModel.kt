@@ -74,8 +74,10 @@ class GameViewModel @Inject constructor(
             loadShots(enemyBoard)
 
             _enemyBoard.value = enemyBoard
-            observeShots(_ownBoard)
-            observeGame(gameUid, ownPlayerUid)
+            if (enemyPlayerUid != BOT_PLAYER_ID) {
+                observeShots(_ownBoard)
+                observeGame(gameUid, ownPlayerUid)
+            }
         }
 
     private fun loadGame(gameUid: String) = viewModelScope.launch {

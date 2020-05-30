@@ -6,11 +6,9 @@ import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
 import ch.ffhs.esa.battleships.di.AppModule.RemoteGameDataSource
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.transform
 import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
 import javax.inject.Inject
@@ -56,34 +54,38 @@ class GameRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun findActiveGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>> {
-        return withContext(ioDispatcher) {
-            if (playerUid != BOT_PLAYER_ID) {
-                val remoteResult = remoteGameDataSource.findByPlayer(playerUid)
+    @ExperimentalCoroutinesApi
+    @OptIn(InternalCoroutinesApi::class)
+    override suspend fun observeActiveGamesFromPlayer(playerUid: String): Flow<List<GameWithPlayerInfo>> =
+        withContext(ioDispatcher) {
+            remoteGameDataSource.observeByPlayer(playerUid)
+                .transform { remoteGames ->
+                    val enemyPlayerUids = remoteGames
+                        .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
+                        .toHashSet()
 
-                if (remoteResult is DataResult.Error) {
-                    throw remoteResult.exception
-                }
+                    // cache player info locally. dirty.
+                    enemyPlayerUids.forEach {
+                        playerRepository.findByUid(it)
+                    }
 
-                remoteResult as DataResult.Success<List<Game>>
-                val enemyPlayerUids = remoteResult.data
-                    .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
-                    .toHashSet()
-
-                enemyPlayerUids.forEach {
-                    playerRepository.findByUid(it)
-                }
-
-                remoteResult.data
-                    .forEach { game ->
+                    // cache game info locally. dirty too..
+                    remoteGames.forEach { game ->
                         localGameDataSource.save(game)
                         localGameDataSource.update(game)
                     }
-            }
 
-            return@withContext localGameDataSource.findActiveGames(playerUid)
+                    val localResult = localGameDataSource.findActiveGames(playerUid)
+
+                    if (localResult is DataResult.Success) {
+                        emit(localResult.data)
+                        return@transform
+                    }
+
+                    localResult as DataResult.Error
+                    throw localResult.exception
+                }
         }
-    }
 
 
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {

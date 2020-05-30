@@ -15,4 +15,5 @@ interface GameDataSource {
     suspend fun removeFromOpenGames(game: Game): DataResult<Game>
     suspend fun findByPlayer(playerUid: String): DataResult<List<Game>>
     suspend fun observe(gameUid: String, playerUid: String): Flow<Game>
+    suspend fun observeByPlayer(playerUid: String): Flow<List<Game>>
 }
