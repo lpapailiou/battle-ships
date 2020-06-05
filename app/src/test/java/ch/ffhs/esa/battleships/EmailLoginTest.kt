@@ -1,9 +1,9 @@
 package ch.ffhs.esa.battleships
 
 import android.app.Activity
-import androidx.lifecycle.ViewModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
+import ch.ffhs.esa.battleships.data.player.Player
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
@@ -19,8 +19,7 @@ import org.mockito.MockitoAnnotations
 import java.lang.Exception
 import java.util.concurrent.Executor
 
-class EmailLoginTest @javax.inject.Inject constructor(
-) : ViewModel() {
+class EmailLoginTest() : LogInListener  {
 
     companion object {
         private const val SUCCESS = 1
@@ -30,11 +29,13 @@ class EmailLoginTest @javax.inject.Inject constructor(
 
     private lateinit var successTask: Task<AuthResult>
     private lateinit var failureTask: Task<AuthResult>
+    private lateinit var player: PlayerRepository
 
     @Mock
-    private lateinit var mAuth: PlayerRepository
-    private lateinit var emailModel: EmailAuthModel
-    private lateinit var logInModel: EmailAuthViewModel
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var logInModel: EmailAuthModel
+    private lateinit var loginViewModel: EmailAuthViewModel
+
 
     private var logInResult = UNDEF
 
@@ -45,7 +46,7 @@ class EmailLoginTest @javax.inject.Inject constructor(
             override fun isComplete(): Boolean = true
 
             override fun isSuccessful(): Boolean = true
-            // ...
+
             override fun addOnCompleteListener(executor: Executor,
                                                onCompleteListener: OnCompleteListener<AuthResult>
             ): Task<AuthResult> {
@@ -110,14 +111,14 @@ class EmailLoginTest @javax.inject.Inject constructor(
             override fun isComplete(): Boolean = true
 
             override fun isSuccessful(): Boolean = false
-            // ...
+
             override fun addOnCompleteListener(executor: Executor,
                                                onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
                 onCompleteListener.onComplete(failureTask)
                 return failureTask
             }
 
-            override fun getException(): Exception? {
+            override fun getException(): java.lang.Exception? {
                 TODO("Not yet implemented")
             }
 
@@ -169,33 +170,36 @@ class EmailLoginTest @javax.inject.Inject constructor(
                 TODO("Not yet implemented")
             }
         }
-        logInModel = EmailAuthViewModel(mAuth)
+        logInModel = EmailAuthModel("", "")
+        loginViewModel = EmailAuthViewModel(player)
     }
 
     @Test
     fun logInSuccess_test() {
-        val email = "test@test.ch"
+        val email = "test1@test.ch"
         val password = "123456"
-        Mockito.`when`(logInModel.signInWithEmailAndPassword(email, password))
+        Mockito.`when`(mAuth!!.signInWithEmailAndPassword(email, password))
             .thenReturn(successTask)
-        logInModel.signInWithEmailAndPassword(email, password)
+        loginViewModel!!.signInWithEmailAndPassword(EmailAuthModel(email, password))
         assert(logInResult == SUCCESS)
     }
 
-
     @Test
     fun logInFailure_test() {
-        val email = "test@test.ch"
+        val email = "test1@test.ch"
         val password = "123_456"
-        Mockito.`when`(logInModel.signInWithEmailAndPassword(email, password))
+        Mockito.`when`(mAuth!!.signInWithEmailAndPassword(email, password))
             .thenReturn(failureTask)
-        logInModel.signInWithEmailAndPassword(email, password)
+        loginViewModel!!.signInWithEmailAndPassword(EmailAuthModel(email, password))
         assert(logInResult == FAILURE)
     }
 
+    override fun logInSuccess(email: String?, password: String?) {
+        logInResult = SUCCESS
+    }
 
-
-
-
+    override fun logInFailure(exception: Exception?, email: String?, password: String?) {
+        logInResult = FAILURE
+    }
 
 }
