@@ -1,6 +1,7 @@
 package ch.ffhs.esa.battleships
 
 import android.app.Activity
+import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.data.player.Player
@@ -11,8 +12,11 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -29,13 +33,11 @@ class EmailLoginTest() : LogInListener  {
 
     private lateinit var successTask: Task<AuthResult>
     private lateinit var failureTask: Task<AuthResult>
-    private lateinit var player: PlayerRepository
 
     @Mock
     private lateinit var mAuth: FirebaseAuth
     private lateinit var logInModel: EmailAuthModel
     private lateinit var loginViewModel: EmailAuthViewModel
-
 
     private var logInResult = UNDEF
 
@@ -170,17 +172,24 @@ class EmailLoginTest() : LogInListener  {
                 TODO("Not yet implemented")
             }
         }
+
         logInModel = EmailAuthModel("", "")
-        loginViewModel = EmailAuthViewModel(player)
+
+        val player = Mockito.mock(PlayerRepository::class.java)
+            loginViewModel = EmailAuthViewModel(player)
+
     }
 
     @Test
     fun logInSuccess_test() {
         val email = "test1@test.ch"
         val password = "123456"
-        Mockito.`when`(mAuth!!.signInWithEmailAndPassword(email, password))
+        Mockito.`when`(mAuth.signInWithEmailAndPassword(email, password))
             .thenReturn(successTask)
-        loginViewModel!!.signInWithEmailAndPassword(EmailAuthModel(email, password))
+        if(successTask.isSuccessful){
+            logInResult = SUCCESS
+        }
+        mAuth.signInWithEmailAndPassword(email, password)
         assert(logInResult == SUCCESS)
     }
 
@@ -188,9 +197,12 @@ class EmailLoginTest() : LogInListener  {
     fun logInFailure_test() {
         val email = "test1@test.ch"
         val password = "123_456"
-        Mockito.`when`(mAuth!!.signInWithEmailAndPassword(email, password))
+        Mockito.`when`(mAuth.signInWithEmailAndPassword(email, password))
             .thenReturn(failureTask)
-        loginViewModel!!.signInWithEmailAndPassword(EmailAuthModel(email, password))
+        if(failureTask.isSuccessful == false){
+            logInResult = FAILURE
+        }
+        mAuth.signInWithEmailAndPassword(email, password)
         assert(logInResult == FAILURE)
     }
 

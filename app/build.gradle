@@ -24,6 +24,7 @@ android {
         testOptions {
             reportDir "$rootDir/test-reports"
             resultsDir "$rootDir/test-results"
+            unitTests.returnDefaultValues = true
         }
 
     }
