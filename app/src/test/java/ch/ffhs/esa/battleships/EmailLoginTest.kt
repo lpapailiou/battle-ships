@@ -199,7 +199,7 @@ class EmailLoginTest() : LogInListener  {
         val password = "123_456"
         Mockito.`when`(mAuth.signInWithEmailAndPassword(email, password))
             .thenReturn(failureTask)
-        if(failureTask.isSuccessful == false){
+        if(!failureTask.isSuccessful){
             logInResult = FAILURE
         }
         mAuth.signInWithEmailAndPassword(email, password)
