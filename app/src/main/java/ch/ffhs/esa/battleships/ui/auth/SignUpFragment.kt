@@ -19,7 +19,9 @@ import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.databinding.SignupFragmentBinding
 import ch.ffhs.esa.battleships.event.Event
+import ch.ffhs.esa.battleships.ui.main.MainActivity
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.signup_fragment.*
 import javax.inject.Inject
@@ -71,6 +73,8 @@ class SignUpFragment : Fragment() {
         val successObserver = Observer<Event<String>> {
             val uid = it.getContentIfNotHandled()
             navOwnPlayerId = uid ?: ""
+            skipLogin = true
+            (activity as MainActivity).setMenuVisible(true)
             findNavController().navigate(
                 SignUpFragmentDirections.actionSignUpFragmentToMainFragment()
             )

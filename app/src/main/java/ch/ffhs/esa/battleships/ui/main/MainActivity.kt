@@ -6,8 +6,11 @@ import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -94,7 +97,24 @@ class MainActivity : AppCompatActivity() {
                 item?.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_wifi_off_24)
             }
         }
+
+        if (!skipLogin && navOwnPlayerId == "") {
+            setMenuVisible(false)
+        }
         return true
+    }
+
+    fun setMenuVisible(isVisible: Boolean) {
+        if (menu != null) {
+            for (item in menu!!) {
+                item.setVisible(isVisible)
+            }
+            if (isVisible) {
+                navGameId.value = navGameId.value
+            } else {
+                invalidateOptionsMenu()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

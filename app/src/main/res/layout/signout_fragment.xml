@@ -10,6 +10,7 @@
         android:id="@+id/intro_image"
         android:layout_width="199dp"
         android:layout_height="184dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="36dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/Intro"

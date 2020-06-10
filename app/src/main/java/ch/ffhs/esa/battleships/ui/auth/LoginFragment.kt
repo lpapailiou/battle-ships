@@ -21,6 +21,7 @@ import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
 import ch.ffhs.esa.battleships.databinding.LoginFragmentBinding
 import ch.ffhs.esa.battleships.event.Event
+import ch.ffhs.esa.battleships.ui.main.MainActivity
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 import ch.ffhs.esa.battleships.ui.main.MainFragment
@@ -83,6 +84,8 @@ class LoginFragment : Fragment() {
         val successObserver = Observer<Event<String>> { event ->
             val uid = event.getContentIfNotHandled()
             navOwnPlayerId = uid ?: ""
+            skipLogin = true
+            (activity as MainActivity).setMenuVisible(true)
 
             try {
                 (parentFragment as MainFragment).initMainFragment()
@@ -119,6 +122,8 @@ class LoginFragment : Fragment() {
         }
 
         skip_login_link.setOnClickListener {
+            skipLogin = true
+            (activity as MainActivity).setMenuVisible(true)
             try {
                 (parentFragment as MainFragment).initMainFragment()
             } catch (e: Exception) {
@@ -129,6 +134,8 @@ class LoginFragment : Fragment() {
         }
 
         button_sign_in_google.setOnClickListener {
+            skipLogin = true
+            (activity as MainActivity).setMenuVisible(true)
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, CODE_SIGN_IN)
         }
