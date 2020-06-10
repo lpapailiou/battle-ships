@@ -2,10 +2,12 @@ package ch.ffhs.esa.battleships.ui.boardpreparation
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +27,7 @@ import ch.ffhs.esa.battleships.ui.board.BoardView.Companion.CLICK_LIMIT
 import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.gameId
 import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.game.GameHostFragmentDirections
+import ch.ffhs.esa.battleships.ui.main.MainActivity
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.board_preparation_fragment.*
@@ -48,6 +51,8 @@ class BoardPreparationFragment : Fragment() {
     private var touchedOffsetY: Int = 0
     private var touchedOffsetX: Int = 0
 
+    private var progressBarRunning = false
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -61,7 +66,6 @@ class BoardPreparationFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.board_preparation_fragment, container, false)
         boardView = view.findViewById(R.id.preparation_board)
-
         return view
     }
 
@@ -70,7 +74,6 @@ class BoardPreparationFragment : Fragment() {
         boardPreparationViewModel.board.observe(viewLifecycleOwner, Observer { boardModel ->
             boardView.boardModel = boardModel
         })
-
 
         // TODO: getting big and ugly. refactor into custom KeyEvent in BoardView?
         boardView.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
@@ -114,6 +117,7 @@ class BoardPreparationFragment : Fragment() {
 
         startgame_button.setOnClickListener {
             if (boardPreparationViewModel.isBoardInValidState()) {
+                startProgressBar()
                 boardPreparationViewModel.startGame()
             } else {
                 showSnackBar("Some of your ships are still too close to each other!", true)
@@ -123,6 +127,7 @@ class BoardPreparationFragment : Fragment() {
         boardPreparationViewModel.gameReadyEvent.observe(
             viewLifecycleOwner,
             EventObserver {
+                stopProgressBar()
                 navigateToGame(it)
             })
 
@@ -133,6 +138,35 @@ class BoardPreparationFragment : Fragment() {
             }
         )
 
+    }
+
+    private fun startProgressBar() {
+        progressBarRunning = true
+        println("-------------- prog bar started")
+        val handler = Handler()
+        var progressBar = (activity as MainActivity).findViewById<View>(R.id.progress_Bar) as ProgressBar
+        progressBar.visibility = View.VISIBLE
+
+        var i = progressBar!!.progress
+        Thread(Runnable {
+            while (progressBarRunning) {
+                i += 5
+                handler.post(Runnable {
+                    progressBar!!.progress = i
+                })
+                try {
+                    Thread.sleep(100)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+        }).start()
+    }
+
+    private fun stopProgressBar() {
+        var progressBar = (activity as MainActivity).findViewById<View>(R.id.progress_Bar) as ProgressBar
+        progressBar.visibility = View.GONE
+        progressBarRunning = false
     }
 
     private fun navigateToGame(game: Game) {

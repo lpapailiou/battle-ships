@@ -48,11 +48,17 @@ class ScoreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         skipLogin = true
-        scoreViewModel.start(firebaseAuth.currentUser!!.uid)    // TODO: crashes when not connected
 
-        viewDataBinding = ScoreFragmentBinding.inflate(inflater, container, false).apply {
-            scoreViewModel = this@ScoreFragment.scoreViewModel
+        if (firebaseAuth.currentUser != null) {
+            scoreViewModel.start(firebaseAuth.currentUser!!.uid)
+
+            viewDataBinding = ScoreFragmentBinding.inflate(inflater, container, false).apply {
+                scoreViewModel = this@ScoreFragment.scoreViewModel
+            }
+        } else {
+            viewDataBinding = ScoreFragmentBinding.inflate(inflater, container, false)  // TODO: try to add statistics for bot games
         }
+
         return viewDataBinding.root
     }
 }

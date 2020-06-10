@@ -22,7 +22,6 @@
 
     <string name="rulesText">
         <![CDATA[
-        <h1>Play Battle Ship</h1>
         <h2>Goal</h2>
         <ul>
             <li> Sink all of your opponent\'s ships</li>
@@ -32,9 +31,9 @@
         <ul>
             <li> Each player places ships on the grid</li>
             <li> The ships must not collide</li>
-            <li> The ships must not be built around corners or have bulges.</li>
-            <li> The ships may also lie on the edge.</li>
-            <li> The ships may not be placed diagonally.</li>
+            <li> The ships must not be built around corners or have bulges</li>
+            <li> The ships may also lie on the edge</li>
+            <li> The ships may not be placed diagonally</li>
         </ul>
         <br>
         <h2>Rules</h2>

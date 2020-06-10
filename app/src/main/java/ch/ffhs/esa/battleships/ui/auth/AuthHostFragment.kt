@@ -25,10 +25,15 @@ class AuthHostFragment : Fragment() {
         initMainFragment()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initMainFragment()
+    }
+
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
     open fun initMainFragment() {
-        if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
+        if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_auth) != null) {
             try {
                 val auth: FirebaseAuth = FirebaseAuth.getInstance()
                 if (auth.currentUser != null) {

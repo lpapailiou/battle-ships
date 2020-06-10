@@ -10,43 +10,46 @@
         android:id="@+id/intro_image"
         android:layout_width="199dp"
         android:layout_height="184dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="120dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/Intro"
         android:scaleType="centerInside"
         android:src="@drawable/splash"
-        app:layout_constraintBottom_toTopOf="@id/sign_out_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.538" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/bye"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/sign_out_button"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintLeft_toLeftOf="@id/left_guideline"
-        app:layout_constraintRight_toRightOf="@id/right_guideline"
-        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline" />
+        app:layout_constraintRight_toRightOf="@id/right_guideline" />
 
     <Button
         android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
 
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/sign_out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.748"
         app:layout_constraintLeft_toLeftOf="@id/left_guideline"
         app:layout_constraintRight_toRightOf="@id/right_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline"
+        app:layout_constraintVertical_bias="0.018" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"

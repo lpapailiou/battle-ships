@@ -1,6 +1,7 @@
 package ch.ffhs.esa.battleships.ui.game
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -20,6 +22,7 @@ import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.game.GameViewModel
 import ch.ffhs.esa.battleships.ui.board.BoardView
+import ch.ffhs.esa.battleships.ui.main.MainActivity
 import javax.inject.Inject
 
 class GameFragment : Fragment() {
@@ -60,7 +63,6 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         gameViewModel.start(args.gameUid, args.ownPlayerUid, args.enemyPlayerUid)
-
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {
                 return@Observer
