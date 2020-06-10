@@ -23,6 +23,7 @@ import ch.ffhs.esa.battleships.data.ship.Direction
 import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.event.Event
 import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.activeGame
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -185,6 +186,7 @@ class BoardPreparationViewModel @Inject constructor(
             saveShipsToBoard(botBoardModel.uid!!, botBoardModel.ships.value!!)
             Log.d("bot gameCreation", "ships 2/2 saved")
 
+            activeGame = game
             _gameReadyEvent.value = Event(game)
             Log.d("bot gameCreation", "game ready to launch")
             return@launch
@@ -222,7 +224,7 @@ class BoardPreparationViewModel @Inject constructor(
         saveBoard(_board.value!!, openGame)
 
         saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
-
+        activeGame = openGame
         _gameReadyEvent.value = Event(openGame)
 
         } catch (e: Exception) {

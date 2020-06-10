@@ -18,7 +18,6 @@ class RulesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        skipLogin = true
         return inflater.inflate(R.layout.rules_fragment, container, false)
     }
 
@@ -27,8 +26,6 @@ class RulesFragment : Fragment() {
         setText()
     }
 
-    // TODO: maybe change to html view so images / screenshots could be embedded easily
-    // TODO: must be scrollable
     fun setText() {
         val string: String = getString(R.string.rulesText)
         val TextView: TextView = (activity as MainActivity).findViewById(R.id.rulesT) as TextView

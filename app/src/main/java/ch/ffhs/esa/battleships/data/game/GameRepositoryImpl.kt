@@ -109,7 +109,7 @@ class GameRepositoryImpl @Inject constructor(
                 }
 
                 val opponentUid = result.data.defenderUid!!
-                playerRepository.findByUid(opponentUid) // TODO to cache the player locally. somewhat dirty. implement a cache method? Or call remote Player data source directly?
+                playerRepository.findByUid(opponentUid)
             }
 
             return@withContext result

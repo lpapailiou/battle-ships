@@ -1,29 +1,25 @@
 package ch.ffhs.esa.battleships.ui.bridge
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
-import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
-import ch.ffhs.esa.battleships.ui.game.GameHostFragment
-import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.gameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navIsBotGame
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -40,9 +36,6 @@ class BridgeFragment : Fragment() {
     private lateinit var viewDataBinding: BridgeFragmentBinding
 
     private lateinit var listAdapter: ActiveGamesListAdapter
-
-    private val args: BridgeFragmentArgs by navArgs()
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -69,7 +62,7 @@ class BridgeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bridgeViewModel.start(navUid)
+        bridgeViewModel.start(navOwnPlayerId)
 
         val auth: FirebaseAuth = FirebaseAuth.getInstance()
         val isLoggedIn = auth.currentUser != null
@@ -108,33 +101,22 @@ class BridgeFragment : Fragment() {
 
 
     private fun startNewGame(isBotGame: Boolean) {
+        navIsBotGame = isBotGame
         val action =
-             MainFragmentDirections.actionMainFragmentToGameHostFragment(
-                 navUid,
-                isBotGame,
-                 "",
-                 "",
-                 ""
-            )
+             MainFragmentDirections.actionMainFragmentToGameHostFragment()
         if (isBotGame) {
-            navUid = ""
-            gameId.value = null
+            navOwnPlayerId = ""
+            navGameId.value = null
         }
         findNavController().navigate(action)
     }
 
     private fun resumeGame(game: GameWithPlayerInfo) {
         val enemyPlayerUid =
-            if (game.attackerUid == navUid) game.defenderUid else game.attackerUid
-
+            if (game.attackerUid == navOwnPlayerId) game.defenderUid else game.attackerUid
+        navEnemyId = enemyPlayerUid!!
         val action =
-            MainFragmentDirections.actionMainFragmentToGameHostFragment(
-                "",
-                false,
-                game.gameUid,
-                navUid,
-                enemyPlayerUid!!
-            )
+            MainFragmentDirections.actionMainFragmentToGameHostFragment()
         findNavController().navigate(action)
     }
 
@@ -146,6 +128,13 @@ class BridgeFragment : Fragment() {
                 ContextCompat.getColor(
                     requireContext(),
                     R.color.colorComplementary
+                )
+            )
+        } else {
+            snackBar.setBackgroundTint(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorAccent
                 )
             )
         }

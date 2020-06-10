@@ -32,6 +32,7 @@ class RemoteGameDataSource internal constructor(
 
     override suspend fun findByUid(uid: String): DataResult<Game> =
         withContext(ioDispatcher) {
+            Log.d("implementationMissing", "=====================>>>>>>>>>>>> RemoteGameDataSource.findByUid() not implemented!")
             TODO("Not implemented yet")
         }
 
@@ -64,10 +65,12 @@ class RemoteGameDataSource internal constructor(
 
     override suspend fun findActiveGames(uid: String): DataResult<List<GameWithPlayerInfo>> =
         withContext(ioDispatcher) {
+            Log.d("implementationMissing", "=====================>>>>>>>>>>>> RemoteGameDataSource.findActiveGames() not implemented!")
             TODO("Not implemented yet")
         }
 
     override suspend fun update(game: Game): DataResult<String> {
+        Log.d("implementationMissing", "=====================>>>>>>>>>>>> RemoteGameDataSource.update() not implemented!")
         TODO("Not yet implemented")
     }
 

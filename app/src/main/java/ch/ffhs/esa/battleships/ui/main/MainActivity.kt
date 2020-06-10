@@ -7,14 +7,24 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import ch.ffhs.esa.battleships.R
-import com.google.android.gms.auth.api.Auth
+import ch.ffhs.esa.battleships.data.game.Game
+import ch.ffhs.esa.battleships.ui.auth.AuthHostFragment
+import ch.ffhs.esa.battleships.ui.auth.AuthHostFragmentDirections
+import ch.ffhs.esa.battleships.ui.auth.SignUpFragment
+import ch.ffhs.esa.battleships.ui.auth.SignUpFragmentDirections
+import ch.ffhs.esa.battleships.ui.rules.RulesFragment
+import ch.ffhs.esa.battleships.ui.rules.RulesFragmentDirections
+import ch.ffhs.esa.battleships.ui.score.ScoreFragment
+import ch.ffhs.esa.battleships.ui.score.ScoreFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.main_activity.*
 
@@ -22,8 +32,14 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var skipLogin: Boolean = false
-        var navUid: String = ""
+        var navOwnPlayerId: String = ""
+        var navEnemyId: String = ""
+        var navGameId: MutableLiveData<String> = MutableLiveData()
+        var navIsBotGame: Boolean = false
+        var activeGame: Game? = null
     }
+
+    var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
@@ -38,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             setupActionBar(navController)
 
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
-            navUid = auth.currentUser?.uid ?: ""
+            navOwnPlayerId = auth.currentUser?.uid ?: ""
 
             if (!hasWifi()) {
                 skipLogin = true
@@ -59,12 +75,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_toolbar, menu)
+        this.menu = menu
         val item: MenuItem? = menu?.getItem(2)
         if (item != null) {
-//            mainViewModel.getCurrentGame().observe(this, Observer {           // remove 'current game' menu item if there is no current game
-//                item.setVisible(it != null)
-//                invalidateOptionsMenu()     // TODO: not clean yet, menu item is still visible when game was ended
-//            })
+            item.setVisible(false)
+            navGameId.observe(this, Observer {
+                item.setVisible(navGameId.value != null)
+                invalidateOptionsMenu()
+            })
         }
 
         val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -80,11 +98,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val navController = Navigation.findNavController(
-            this,
-            R.id.nav_host_fragment
-        )
-        val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
+        var navigated = false
+        if (item == menu?.getItem(2)) {
+            var currentFragment: Fragment? = null
+            supportFragmentManager.fragments.forEach {
+                it.childFragmentManager.fragments.forEach {
+                    currentFragment = it
+                }
+            }
+            if (currentFragment != null && navGameId.value != null) {
+                if (currentFragment is MainFragment) {
+                    val action =
+                        MainFragmentDirections.actionMainFragmentToGameHostFragment()
+                    (currentFragment as MainFragment).findNavController().navigate(action)
+                } else if (currentFragment is ScoreFragment) {
+                    val action =
+                        ScoreFragmentDirections.actionScoreFragmentToGameHostFragment()
+                    (currentFragment as ScoreFragment).findNavController().navigate(action)
+                } else if (currentFragment is RulesFragment) {
+                    val action =
+                        RulesFragmentDirections.actionRulesFragmentToGameHostFragment()
+                    (currentFragment as RulesFragment).findNavController().navigate(action)
+                } else if (currentFragment is AuthHostFragment) {
+                    val action =
+                        AuthHostFragmentDirections.actionAuthHostFragmentToGameHostFragment()
+                    (currentFragment as AuthHostFragment).findNavController().navigate(action)
+                } else if (currentFragment is SignUpFragment) {
+                    val action =
+                        SignUpFragmentDirections.actionSignUpFragmentToGameHostFragment()
+                    (currentFragment as SignUpFragment).findNavController().navigate(action)
+                }
+            }
+
+        } else {
+            val navController = Navigation.findNavController(
+                this,
+                R.id.nav_host_fragment
+            )
+            navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
+        }
         return navigated || super.onOptionsItemSelected(item)
     }
 

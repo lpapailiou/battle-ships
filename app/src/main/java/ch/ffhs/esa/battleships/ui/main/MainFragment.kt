@@ -9,7 +9,7 @@ import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.ui.auth.LoginFragment
 import ch.ffhs.esa.battleships.ui.bridge.BridgeFragment
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.Exception
@@ -40,21 +40,14 @@ class MainFragment : Fragment() {
                     for (i in childFragmentManager.fragments) {
                         if (i is BridgeFragment) {
                             frag = i
-                            frag.arguments = null
                             break
                         }
                     }
                     if (frag == null) {
                         frag = BridgeFragment()
                     }
-                    var args: Bundle = Bundle()
-                    if (navUid == "") {
-                        navUid = OFFLINE_PLAYER_ID
-                        args.putString("uid", OFFLINE_PLAYER_ID)
-                        frag.arguments = args
-                    } else {
-                        args.putString("uid", navUid)
-                        frag.arguments = args
+                    if (navOwnPlayerId == "") {
+                        navOwnPlayerId = OFFLINE_PLAYER_ID
                     }
                     childFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_main, frag, "bridge").commit()

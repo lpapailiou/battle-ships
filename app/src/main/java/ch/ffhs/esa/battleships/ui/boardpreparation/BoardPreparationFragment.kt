@@ -1,8 +1,8 @@
 package ch.ffhs.esa.battleships.ui.boardpreparation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.board.Cell
@@ -24,11 +23,12 @@ import ch.ffhs.esa.battleships.data.game.Game
 import ch.ffhs.esa.battleships.event.EventObserver
 import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.board.BoardView.Companion.CLICK_LIMIT
-import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.gameId
-import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.game.GameHostFragmentDirections
 import ch.ffhs.esa.battleships.ui.main.MainActivity
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navIsBotGame
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.board_preparation_fragment.*
 import javax.inject.Inject
@@ -40,8 +40,6 @@ class BoardPreparationFragment : Fragment() {
 
     private val boardPreparationViewModel by viewModels<BoardPreparationViewModel> { viewModelFactory }
 
-    private val args: BoardPreparationFragmentArgs by navArgs()
-
     lateinit var boardView: BoardView
 
     private var touchedShip: ShipModel? = null
@@ -50,8 +48,6 @@ class BoardPreparationFragment : Fragment() {
 
     private var touchedOffsetY: Int = 0
     private var touchedOffsetX: Int = 0
-
-    private var progressBarRunning = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -69,13 +65,13 @@ class BoardPreparationFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        boardPreparationViewModel.start(args.uid, args.isBotGame)
+        boardPreparationViewModel.start(navOwnPlayerId, navIsBotGame)
         boardPreparationViewModel.board.observe(viewLifecycleOwner, Observer { boardModel ->
             boardView.boardModel = boardModel
         })
 
-        // TODO: getting big and ugly. refactor into custom KeyEvent in BoardView?
         boardView.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
 
             boardView as BoardView
@@ -141,53 +137,23 @@ class BoardPreparationFragment : Fragment() {
     }
 
     private fun startProgressBar() {
-        progressBarRunning = true
-        println("-------------- prog bar started")
-        val handler = Handler()
         var progressBar = (activity as MainActivity).findViewById<View>(R.id.progress_Bar) as ProgressBar
         progressBar.visibility = View.VISIBLE
-
-        var i = progressBar!!.progress
-        Thread(Runnable {
-            while (progressBarRunning) {
-                i += 5
-                handler.post(Runnable {
-                    progressBar!!.progress = i
-                })
-                try {
-                    Thread.sleep(100)
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
-            }
-        }).start()
     }
 
     private fun stopProgressBar() {
         var progressBar = (activity as MainActivity).findViewById<View>(R.id.progress_Bar) as ProgressBar
         progressBar.visibility = View.GONE
-        progressBarRunning = false
     }
 
     private fun navigateToGame(game: Game) {
-        val enemyPlayerId = if (game.attackerUid!! == args.uid)
+        val enemyPlayerId = if (game.attackerUid!! == navOwnPlayerId)
             game.defenderUid else game.attackerUid
         navEnemyId = enemyPlayerId!!
-        navUid = args.uid
-        gameId.value = game.uid
-
-        /*
-        val action =
-            BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
-                game.uid,
-                args.uid,
-                enemyPlayerId!!
-            )
-        findNavController().navigate(action)*/
+        navGameId.value = game.uid
     }
 
     private fun navigateToBridge() {
-
         showSnackBar("All canons ready! You'll get notified, when an enemy has been found!", false)
         val action = GameHostFragmentDirections.actionGameHostFragmentToMainFragment()
         findNavController().navigate(action)
@@ -201,6 +167,13 @@ class BoardPreparationFragment : Fragment() {
                 ContextCompat.getColor(
                     requireContext(),
                     R.color.colorComplementary
+                )
+            )
+        } else {
+            snackBar.setBackgroundTint(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorAccent
                 )
             )
         }

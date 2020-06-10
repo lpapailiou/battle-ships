@@ -24,6 +24,7 @@ class RemoteBoardDataSource internal constructor(
 
     override suspend fun findByUid(uid: String): DataResult<Board> {
         TODO("Not yet implemented")
+        Log.d("implementationMissing", "=====================>>>>>>>>>>>> RemoateBoardDataSource.findByUid() not implemented!")
     }
 
     @InternalCoroutinesApi

@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.data.source.local.shot
 
+import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.shot.Shot
 import ch.ffhs.esa.battleships.data.shot.ShotDataSource
@@ -35,5 +36,6 @@ class LocalShotDataSource internal constructor(
 
     override suspend fun observe(boardUid: String): Flow<List<Shot>> {
         TODO("Local observation not implemented")
+        Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalShotDataSource.observe() not implemented!")
     }
 }

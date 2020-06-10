@@ -22,6 +22,9 @@ import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.data.shot.Shot
 import ch.ffhs.esa.battleships.data.shot.ShotRepository
 import ch.ffhs.esa.battleships.event.Event
+import ch.ffhs.esa.battleships.ui.game.GameHostFragment
+import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
@@ -367,6 +370,7 @@ try {
 
     private suspend fun endGame() {
         _game.value!!.state = GameState.ENDED
+        navGameId.value = null
         saveGame()
     }
 
