@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.game.GameRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +19,12 @@ class ScoreViewModel @Inject constructor(
     val score: LiveData<Int> = _score
 
     fun start(playerUid: String) = viewModelScope.launch {
-        loadGames(playerUid)
+        try {
+            Log.d("procedureLogger", "------------- >>>>>>> score start()")
+            loadGames(playerUid)
+        } catch (e: Exception) {
+            println(e.stackTrace)
+        }
     }
 
     private suspend fun loadGames(playerUid: String) {

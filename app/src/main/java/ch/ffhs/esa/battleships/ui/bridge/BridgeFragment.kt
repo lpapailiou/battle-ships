@@ -1,11 +1,14 @@
 package ch.ffhs.esa.battleships.ui.bridge
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +20,13 @@ import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
+import ch.ffhs.esa.battleships.ui.game.GameHostFragment
+import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.gameId
+import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
+import ch.ffhs.esa.battleships.ui.main.MainFragmentDirections
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.bridge_fragment.*
 import javax.inject.Inject
 
@@ -60,18 +69,20 @@ class BridgeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bridgeViewModel.start(navUid)
 
-        bridgeViewModel.start(args.uid)
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val isLoggedIn = auth.currentUser != null
 
         play_vs_bot_button.setOnClickListener {
             startNewGame(true)
         }
 
-        if (args.uid == OFFLINE_PLAYER_ID) {
+        if (!isLoggedIn || !(activity as MainActivity).hasWifi()) {
             play_vs_friend_button.visibility = View.GONE
 
             sign_up_to_play_online_button.setOnClickListener {
-                findNavController().navigate(BridgeFragmentDirections.actionMainFragmentToSignupFragment())
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToAuthHostFragment())
             }
             return
         }
@@ -98,21 +109,30 @@ class BridgeFragment : Fragment() {
 
     private fun startNewGame(isBotGame: Boolean) {
         val action =
-            BridgeFragmentDirections.actionMainFragmentToBoardPreparationFragment(
-                args.uid,
-                isBotGame
+             MainFragmentDirections.actionMainFragmentToGameHostFragment(
+                 navUid,
+                isBotGame,
+                 "",
+                 "",
+                 ""
             )
+        if (isBotGame) {
+            navUid = ""
+            gameId.value = null
+        }
         findNavController().navigate(action)
     }
 
     private fun resumeGame(game: GameWithPlayerInfo) {
         val enemyPlayerUid =
-            if (game.attackerUid == args.uid) game.defenderUid else game.attackerUid
+            if (game.attackerUid == navUid) game.defenderUid else game.attackerUid
 
         val action =
-            BridgeFragmentDirections.actionMainFragmentToGameFragment(
+            MainFragmentDirections.actionMainFragmentToGameHostFragment(
+                "",
+                false,
                 game.gameUid,
-                args.uid,
+                navUid,
                 enemyPlayerUid!!
             )
         findNavController().navigate(action)

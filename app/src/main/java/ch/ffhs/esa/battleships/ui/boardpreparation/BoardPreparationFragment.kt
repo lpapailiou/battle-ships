@@ -22,6 +22,10 @@ import ch.ffhs.esa.battleships.data.game.Game
 import ch.ffhs.esa.battleships.event.EventObserver
 import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.board.BoardView.Companion.CLICK_LIMIT
+import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.gameId
+import ch.ffhs.esa.battleships.ui.game.GameHostFragment.Companion.navEnemyId
+import ch.ffhs.esa.battleships.ui.game.GameHostFragmentDirections
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.board_preparation_fragment.*
 import javax.inject.Inject
@@ -132,24 +136,26 @@ class BoardPreparationFragment : Fragment() {
     }
 
     private fun navigateToGame(game: Game) {
-
         val enemyPlayerId = if (game.attackerUid!! == args.uid)
             game.defenderUid else game.attackerUid
+        navEnemyId = enemyPlayerId!!
+        navUid = args.uid
+        gameId.value = game.uid
 
+        /*
         val action =
             BoardPreparationFragmentDirections.actionBoardPreparationFragmentToGameFragment(
                 game.uid,
                 args.uid,
                 enemyPlayerId!!
             )
-        findNavController().navigate(action)
+        findNavController().navigate(action)*/
     }
 
     private fun navigateToBridge() {
 
         showSnackBar("All canons ready! You'll get notified, when an enemy has been found!", false)
-        val action =
-            BoardPreparationFragmentDirections.actionBoardPreparationFragmentToBridgeFragment(args.uid)
+        val action = GameHostFragmentDirections.actionGameHostFragmentToMainFragment()
         findNavController().navigate(action)
     }
 

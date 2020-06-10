@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.ui.auth
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.BattleShipsApplication
+import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.databinding.SignupFragmentBinding
 import ch.ffhs.esa.battleships.event.Event
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navUid
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.signup_fragment.*
 import javax.inject.Inject
@@ -59,22 +62,26 @@ class SignUpFragment : Fragment() {
         return viewDataBinding.root
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAuth = FirebaseAuth.getInstance()
 
         val successObserver = Observer<Event<String>> {
             val uid = it.getContentIfNotHandled()
+            navUid = uid ?: ""
             findNavController().navigate(
-                SignUpFragmentDirections.actionSignUpFragmentToBridgeFragment(
-                    uid!!
-                )
+                SignUpFragmentDirections.actionSignUpFragmentToMainFragment()
             )
-            Toast.makeText(requireContext(), "Successfully registered!", Toast.LENGTH_LONG).show()
+            val toast = Toast.makeText(requireContext(), "Successfully registered!", Toast.LENGTH_LONG)
+            toast.view.setBackgroundColor(R.color.colorComplementary)
+            toast.show()
         }
 
         val failureObserver = Observer<Event<String>> {
-            Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG).show()
+            val toast = Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG)
+            toast.view.setBackgroundColor(R.color.colorComplementary)
+            toast.show()
         }
 
         emailAuthViewModel.signUpSucceededEvent.observe(viewLifecycleOwner, successObserver)

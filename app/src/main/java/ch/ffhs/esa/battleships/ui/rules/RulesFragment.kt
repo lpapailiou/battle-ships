@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 
 
 class RulesFragment : Fragment() {
@@ -17,6 +18,7 @@ class RulesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        skipLogin = true
         return inflater.inflate(R.layout.rules_fragment, container, false)
     }
 

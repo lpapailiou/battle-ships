@@ -17,7 +17,7 @@ import ch.ffhs.esa.battleships.data.shot.Shot
 
 @Database(
     entities = [Game::class, Board::class, Ship::class, Shot::class, Player::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

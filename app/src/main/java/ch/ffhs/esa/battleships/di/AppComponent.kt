@@ -11,6 +11,7 @@ import ch.ffhs.esa.battleships.di.game.BridgeComponent
 import ch.ffhs.esa.battleships.di.game.GameComponent
 import ch.ffhs.esa.battleships.di.login.LoginComponent
 import ch.ffhs.esa.battleships.di.login.LoginModule
+import ch.ffhs.esa.battleships.di.main.MainModule
 import ch.ffhs.esa.battleships.di.score.ScoreComponent
 import ch.ffhs.esa.battleships.di.score.ScoreModule
 import dagger.BindsInstance
@@ -27,7 +28,8 @@ import javax.inject.Singleton
         ViewModelBuilderModule::class,
         FirebaseModule::class,
         LoginModule::class,
-        ScoreModule::class
+        ScoreModule::class,
+        MainModule::class
 //        RoomModule::class
     ]
 )

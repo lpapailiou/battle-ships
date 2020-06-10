@@ -32,7 +32,6 @@ class ShipPainter @Inject constructor(
         hiddenPaint = initPaint(R.color.colorBackground)
     }
 
-    // TODO: Move heavy work out of draw loop
     fun draw(canvas: Canvas, ship: ShipModel) {
         if (!ship.isVisible) {
             return
@@ -75,7 +74,7 @@ class ShipPainter @Inject constructor(
         oval.inset(insetWith, insetWith)                 // resize ships to create padding effect
 
 
-        if (ship.isPositionValid) {
+        if (ship.isPositionValid && !ship.isSunk) {
             canvas.drawOval(oval, paint)
             return
         }

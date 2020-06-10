@@ -29,11 +29,20 @@ class RemotePlayerDataSource internal constructor(
             val flow = callbackFlow<Player?> {
                 val callback = object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                        val player = dataSnapshot.children
-                            .map { it.getValue(Player::class.java) }
+                        val playerIter = dataSnapshot.children
+                        var player = Player()
+                        for (snapshot in playerIter) {
+                            if (snapshot.child("uid").value == uid) {
+                                val newPlayer = Player(snapshot.child("name").value.toString())
+                                newPlayer.uid = uid
+                                player = newPlayer
+                                break
+                            }
+                        }
+                        /*val player = dataSnapshot.children
+                            .map { it.getValue(Player::class.java) }        // does not work because it.getValue(Player::class.java) -> String cannot be cast to Player
                             .firstOrNull { it!!.uid == uid }
-
+                        */
                         offer(player)
                         channel.close()
 
@@ -61,7 +70,8 @@ class RemotePlayerDataSource internal constructor(
             })
 
             if (player == null) {
-                return@withContext DataResult.Error(Exception("Player not found in remote data source!"))
+                return@withContext DataResult.Success(Player())     // TODO: repair
+                //return@withContext DataResult.Error(Exception("Player not found in remote data source!"))
             }
 
             return@withContext DataResult.Success(player!!)

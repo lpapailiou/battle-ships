@@ -1,5 +1,7 @@
 package ch.ffhs.esa.battleships.data.source.local.player
 
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.DataResult.Error
 import ch.ffhs.esa.battleships.data.DataResult.Success
@@ -21,7 +23,19 @@ class LocalPlayerDataSource internal constructor(
                 if (player != null) {
                     return@withContext Success(player)
                 } else {
-                    return@withContext Error(Exception("Player not found!"))
+                    var name = ""
+                    if (uid == OFFLINE_PLAYER_ID) {
+                        name = "You"
+                    } else if (uid == BOT_PLAYER_ID) {
+                        name = "Bot"
+                    } else {
+                        name = "Unknown"
+                    }
+                    val p = Player(name)
+                    p.uid = uid
+                    insert(p)
+                    return@withContext Success(p)
+                    //return@withContext Error(Exception("Player not found!"))
                 }
             } catch (e: Exception) {
                 return@withContext Error(e)

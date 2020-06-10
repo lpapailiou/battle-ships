@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.business.score.ScoreViewModel
 import ch.ffhs.esa.battleships.databinding.ScoreFragmentBinding
+import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -45,7 +47,8 @@ class ScoreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        scoreViewModel.start(firebaseAuth.currentUser!!.uid)
+        skipLogin = true
+        scoreViewModel.start(firebaseAuth.currentUser!!.uid)    // TODO: crashes when not connected
 
         viewDataBinding = ScoreFragmentBinding.inflate(inflater, container, false).apply {
             scoreViewModel = this@ScoreFragment.scoreViewModel

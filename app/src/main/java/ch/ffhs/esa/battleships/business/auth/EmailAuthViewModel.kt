@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.business.auth
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.event.Event
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,9 +51,14 @@ class EmailAuthViewModel @Inject constructor(
     }
 
     private fun savePlayer(uid: String, name: String) = viewModelScope.launch {
-        val player = Player(name)
-        player.uid = uid
-        playerRepository.save(player)
+        try {
+            Log.d("procedureLogger", "------------- >>>>>>> auth savePlayer()")
+            val player = Player(name)
+            player.uid = uid
+            playerRepository.save(player)
+        } catch (e: Exception) {
+            println(e.stackTrace)
+        }
     }
 
     fun signInWithEmailAndPassword(emailAuthModel: EmailAuthModel) {

@@ -80,7 +80,6 @@ class GameRepositoryImpl @Inject constructor(
                         localGameDataSource.update(game)
                     }
             }
-
             return@withContext localGameDataSource.findActiveGames(playerUid)
         }
     }
