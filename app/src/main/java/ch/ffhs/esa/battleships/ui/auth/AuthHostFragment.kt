@@ -21,18 +21,17 @@ class AuthHostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)       // hide navigation drawer icon
-        initMainFragment()
+        initAuthFragment()
     }
 
     override fun onResume() {
         super.onResume()
-        initMainFragment()
+        initAuthFragment()
     }
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
-    open fun initMainFragment() {
+    open fun initAuthFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_auth) != null) {
             try {
                 val auth: FirebaseAuth = FirebaseAuth.getInstance()
