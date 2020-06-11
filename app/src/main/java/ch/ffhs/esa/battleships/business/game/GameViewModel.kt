@@ -90,7 +90,8 @@ class GameViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 Log.d("gameviewmodelexception", "failed to load game")
-                println(e.stackTrace)
+                println(e.stackTrace.toString())
+                throw e
             }
         }
 
@@ -102,7 +103,7 @@ class GameViewModel @Inject constructor(
                 _game.value = result.data
             }
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 
@@ -141,7 +142,7 @@ class GameViewModel @Inject constructor(
                 }
             })
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 
@@ -172,7 +173,7 @@ class GameViewModel @Inject constructor(
                     Log.d("launchGame: ", "own player loaded: " + enemyPlayer.name)
                 }
             } catch (e: Exception) {
-                println(e.stackTrace)
+                println(e.stackTrace.toString())
             }
         }
     }
@@ -211,7 +212,7 @@ class GameViewModel @Inject constructor(
             _ownBoard.value = _ownBoard.value
         }
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 
@@ -236,7 +237,7 @@ class GameViewModel @Inject constructor(
             _ownBoard.value = _ownBoard.value
         }
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 
@@ -271,7 +272,7 @@ class GameViewModel @Inject constructor(
             makeAiMove()
         }
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 
@@ -345,7 +346,7 @@ class GameViewModel @Inject constructor(
 
         createShot(x, y, _ownBoard.value!!)
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 

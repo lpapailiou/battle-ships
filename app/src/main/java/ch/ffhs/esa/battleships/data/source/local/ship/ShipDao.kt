@@ -14,4 +14,5 @@ interface ShipDao {
 
     @Query("select * from Ship where boardUid = :boardId")
     fun loadByBoard(boardId: String): List<Ship>
+
 }

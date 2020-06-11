@@ -60,9 +60,6 @@ class BoardPreparationViewModel @Inject constructor(
         if (_player.value != null) {
             return
         }
-        if (isBotGame) {
-            prepareBotPlayers()
-        }
 
         this.isBotGame = isBotGame
 
@@ -87,22 +84,9 @@ class BoardPreparationViewModel @Inject constructor(
             throw result.exception
         }
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println ("=================================================>>> >> EX 2")
+            println(e.stackTrace.toString())
         }
-    }
-
-    private fun prepareBotPlayers() = viewModelScope.launch {   // TODO: safety net, probably not even used
-        try {
-            Log.d("procedureLogger", "------------- >>>>>>> boardpreparation prepareBotPlayers()")
-            var bot: Player? = null
-            bot = Player("Bot")
-            bot.uid = BOT_PLAYER_ID
-            savePlayer(bot)
-            var offlineplayer: Player? = null
-            offlineplayer = Player("You")
-            offlineplayer.uid = OFFLINE_PLAYER_ID
-            savePlayer(offlineplayer)
-        } catch (e: Exception) {}
     }
 
     private fun initializeShips(boardModel: BoardModel) {
@@ -238,7 +222,7 @@ class BoardPreparationViewModel @Inject constructor(
 
         } catch (e: Exception) {
             Log.d("gameCreation", "something went wrong here")
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
             throw e
         }
     }

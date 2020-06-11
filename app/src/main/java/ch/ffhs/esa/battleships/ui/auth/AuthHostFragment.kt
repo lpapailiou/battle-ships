@@ -65,7 +65,7 @@ class AuthHostFragment : Fragment() {
                         .replace(R.id.fragment_container_auth, frag, "login").commit()
                 }
             } catch (e: Exception) {
-                println(e.stackTrace)
+                println(e.stackTrace.toString())
             }
         }
     }

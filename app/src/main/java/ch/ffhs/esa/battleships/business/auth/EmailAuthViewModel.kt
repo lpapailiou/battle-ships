@@ -57,7 +57,7 @@ class EmailAuthViewModel @Inject constructor(
             player.uid = uid
             playerRepository.save(player)
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 

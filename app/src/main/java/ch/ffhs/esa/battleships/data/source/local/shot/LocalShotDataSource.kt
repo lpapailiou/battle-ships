@@ -38,4 +38,5 @@ class LocalShotDataSource internal constructor(
         TODO("Local observation not implemented")
         Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalShotDataSource.observe() not implemented!")
     }
+
 }

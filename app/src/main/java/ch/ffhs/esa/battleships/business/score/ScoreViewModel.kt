@@ -23,7 +23,7 @@ class ScoreViewModel @Inject constructor(
             Log.d("procedureLogger", "------------- >>>>>>> score start()")
             loadGames(playerUid)
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 

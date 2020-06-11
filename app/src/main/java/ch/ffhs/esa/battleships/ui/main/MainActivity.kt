@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 
@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
         try {
             super.onBackPressed()
         } catch (e: Exception) {
-            e.stackTrace
+            println(e.stackTrace.toString())
         }
     }
 

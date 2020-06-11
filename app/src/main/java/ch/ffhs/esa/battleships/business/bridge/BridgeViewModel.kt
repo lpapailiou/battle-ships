@@ -47,7 +47,7 @@ class BridgeViewModel @Inject constructor(
         }
 
         } catch (e: Exception) {
-            println(e.stackTrace)
+            println(e.stackTrace.toString())
         }
     }
 }
