@@ -370,7 +370,6 @@ try {
 
     private suspend fun endGame() {
         _game.value!!.state = GameState.ENDED
-        navGameId.value = null
         saveGame()
     }
 
