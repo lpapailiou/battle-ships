@@ -2,6 +2,7 @@ package ch.ffhs.esa.battleships.data.game
 
 import android.util.Log
 import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.di.AppModule.LocalGameDataSource
@@ -58,7 +59,7 @@ class GameRepositoryImpl @Inject constructor(
 
     override suspend fun findActiveGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>> {
         return withContext(ioDispatcher) {
-            if (playerUid != BOT_PLAYER_ID) {
+            if (playerUid != BOT_PLAYER_ID && playerUid != OFFLINE_PLAYER_ID) {
                 val remoteResult = remoteGameDataSource.findByPlayer(playerUid)
 
                 if (remoteResult is DataResult.Error) {

@@ -20,6 +20,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.game.GameViewModel
 import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
@@ -62,7 +64,9 @@ class GameFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        if (navEnemyId == BOT_PLAYER_ID) {
+            navOwnPlayerId = OFFLINE_PLAYER_ID
+        }
         gameViewModel.start(navGameId.value!!, navOwnPlayerId, navEnemyId)
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {

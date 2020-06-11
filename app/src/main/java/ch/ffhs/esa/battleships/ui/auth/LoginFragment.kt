@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
@@ -83,7 +84,7 @@ class LoginFragment : Fragment() {
 
         val successObserver = Observer<Event<String>> { event ->
             val uid = event.getContentIfNotHandled()
-            navOwnPlayerId = uid ?: ""
+            navOwnPlayerId = uid ?: OFFLINE_PLAYER_ID
             skipLogin = true
             (activity as MainActivity).setMenuVisible(true)
 
