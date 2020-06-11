@@ -90,6 +90,7 @@ class BridgeFragment : Fragment() {
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewModel
         listAdapter = ActiveGamesListAdapter(viewModel!!) { game: GameWithPlayerInfo ->
+            navGameId.value = game.gameUid
             if (game.attackerUid == null) {
                 showSnackBar("Still no enemies in sight. Those damn stealth ships!", false)
                 return@ActiveGamesListAdapter
