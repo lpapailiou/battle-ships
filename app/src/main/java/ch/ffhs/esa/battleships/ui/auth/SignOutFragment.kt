@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.signout_fragment.*
@@ -29,7 +30,7 @@ class SignOutFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         sign_out_button.setOnClickListener {
-            navOwnPlayerId = ""
+            navOwnPlayerId = OFFLINE_PLAYER_ID
             signOut()
             findNavController().navigate(AuthHostFragmentDirections.actionAuthHostFragmentToMainFragment())
         }

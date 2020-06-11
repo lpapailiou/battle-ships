@@ -24,6 +24,7 @@ import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.event.Event
 import ch.ffhs.esa.battleships.ui.main.MainActivity
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.activeGame
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -55,6 +56,7 @@ class BoardPreparationViewModel @Inject constructor(
 
 
     fun start(ownPlayerUid: String, isBotGame: Boolean) {
+
         if (_player.value != null) {
             return
         }
@@ -163,8 +165,9 @@ class BoardPreparationViewModel @Inject constructor(
             System.currentTimeMillis(),
             GameState.ACTIVE
         )
-
+            Log.d("gameCreation", "is a bot game created? " + isBotGame)
         if (isBotGame) {
+
             game.defenderUid = _player.value!!.uid
 
             game.attackerUid = BOT_PLAYER_ID
@@ -189,11 +192,13 @@ class BoardPreparationViewModel @Inject constructor(
             activeGame = game
             _gameReadyEvent.value = Event(game)
             Log.d("bot gameCreation", "game ready to launch")
+
             return@launch
 
         }
 
         val openGame = findOpenGame()
+            Log.d("gameCreation", "is open game found? " + openGame)
         if (openGame == null) {
             game.defenderUid = _player.value!!.uid
             game.playerAtTurnUid = _player.value!!.uid
@@ -215,21 +220,26 @@ class BoardPreparationViewModel @Inject constructor(
 
         openGame.attackerUid = _player.value!!.uid
         openGame.playerAtTurnUid = _player.value!!.uid
-
+            Log.d("gameCreation", "current player is set as attaccker; it's your turn now")
         saveGame(openGame)
         gameRepository.removeFromOpenGames(openGame)
+            Log.d("gameCreation", "game saved")
 
         _board.value!!.gameUid = openGame.uid
         _board.value!!.playerUid = _player.value!!.uid
         saveBoard(_board.value!!, openGame)
+            Log.d("gameCreation", "board saved")
 
         saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
+            Log.d("gameCreation", "ships saved to board")
         activeGame = openGame
         _gameReadyEvent.value = Event(openGame)
+            Log.d("gameCreation", "game ready")
 
         } catch (e: Exception) {
             Log.d("gameCreation", "something went wrong here")
             println(e.stackTrace)
+            throw e
         }
     }
 

@@ -24,15 +24,18 @@ class LocalPlayerDataSource internal constructor(
                     return@withContext Success(player)
                 } else {
                     var name = ""
-                    if (uid == OFFLINE_PLAYER_ID) {
+                    var id = ""
+                    if (uid == OFFLINE_PLAYER_ID || uid == "") {
                         name = "You"
+                        id = OFFLINE_PLAYER_ID
                     } else if (uid == BOT_PLAYER_ID) {
                         name = "Bot"
+                        id = BOT_PLAYER_ID
                     } else {
                         name = "Unknown"
                     }
                     val p = Player(name)
-                    p.uid = uid
+                    p.uid = id
                     insert(p)
                     return@withContext Success(p)
                     //return@withContext Error(Exception("Player not found!"))

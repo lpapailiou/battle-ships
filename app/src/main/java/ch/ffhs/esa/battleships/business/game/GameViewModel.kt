@@ -65,7 +65,9 @@ class GameViewModel @Inject constructor(
 
             try {
                 Log.d("procedureLogger", "------------- >>>>>>> game start()")
+                Log.d("gameInfo", "launching game (id: " + gameUid + ") as own player (id: " + ownPlayerUid + ") and defender (id: " + enemyPlayerUid +")")
                 if (_game.value != null) {
+                    Log.d("gameViewModel", "game has ID")
                     return@launch
                 }
                 loadGame(gameUid)
@@ -84,7 +86,10 @@ class GameViewModel @Inject constructor(
                 _enemyBoard.value = enemyBoard
                 observeShots(_ownBoard)
                 observeGame(gameUid, ownPlayerUid)
+
+
             } catch (e: Exception) {
+                Log.d("gameviewmodelexception", "failed to load game")
                 println(e.stackTrace)
             }
         }
@@ -147,6 +152,7 @@ class GameViewModel @Inject constructor(
 
         if (result is DataResult.Success) {
             player = result.data!!
+            Log.d("launchGame: ", "own player loaded: " + player.name)
         }
 
         if (result is DataResult.Error) {
@@ -157,16 +163,18 @@ class GameViewModel @Inject constructor(
 
     private fun loadEnemyPlayer(enemyPlayerUid: String) {
         viewModelScope.launch {
-try {
-    Log.d("procedureLogger", "------------- >>>>>>> game loadEnemyPlayer()")
-    val result = playerRepository.findByUid(enemyPlayerUid)
+            try {
+                Log.d("procedureLogger", "------------- >>>>>>> game loadEnemyPlayer()")
+                val result = playerRepository.findByUid(enemyPlayerUid)
 
-    if (result is DataResult.Success) {
-        enemyPlayer = result.data!!
-    }
-} catch (e: Exception) {
-    println(e.stackTrace)
-}   }
+                if (result is DataResult.Success) {
+                    enemyPlayer = result.data!!
+                    Log.d("launchGame: ", "own player loaded: " + enemyPlayer.name)
+                }
+            } catch (e: Exception) {
+                println(e.stackTrace)
+            }
+        }
     }
 
     private suspend fun loadBoard(gameUid: String, currentPlayerUid: String): BoardModel {
@@ -292,7 +300,7 @@ try {
             shotModel.shotUid = shot.uid
 
             board.shots.value!!.add(shotModel)
-            //board.shots.value = board.shots.value
+            board.shots.value = board.shots.value
 
             if (isShotAHit) {
                 uncoverSunkenEnemyShips(board)

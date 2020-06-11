@@ -1,6 +1,7 @@
 package ch.ffhs.esa.battleships.data.source.remote.player
 
 import android.util.Log
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.Player
@@ -30,7 +31,7 @@ class RemotePlayerDataSource internal constructor(
                 val callback = object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val playerIter = dataSnapshot.children
-                        var player = Player()
+                        var player = Player("Unknown")
                         for (snapshot in playerIter) {
                             if (snapshot.child("uid").value == uid) {
                                 val newPlayer = Player(snapshot.child("name").value.toString())
@@ -70,7 +71,7 @@ class RemotePlayerDataSource internal constructor(
             })
 
             if (player == null) {
-                return@withContext DataResult.Success(Player())     // TODO: repair
+                return@withContext DataResult.Success(Player("Unknown"))     // TODO: repair
                 //return@withContext DataResult.Error(Exception("Player not found in remote data source!"))
             }
 

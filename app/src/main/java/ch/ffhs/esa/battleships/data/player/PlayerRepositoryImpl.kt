@@ -20,8 +20,12 @@ class PlayerRepositoryImpl @Inject constructor(
     override suspend fun findByUid(uid: String): DataResult<Player> {
         return withContext(ioDispatcher) {
 
-            if (uid == OFFLINE_PLAYER_ID) { //BOT_PLAYER_ID
-                return@withContext localPlayerDataSource.findByUid(uid)
+            if (uid == BOT_PLAYER_ID || uid == OFFLINE_PLAYER_ID || uid == "") { //BOT_PLAYER_ID
+                var proxyUid = uid
+                if (proxyUid == "") {
+                    proxyUid = OFFLINE_PLAYER_ID
+                }
+                return@withContext localPlayerDataSource.findByUid(proxyUid)
             }
             val findResult = remotePlayerDataSource.findByUid(uid)
 

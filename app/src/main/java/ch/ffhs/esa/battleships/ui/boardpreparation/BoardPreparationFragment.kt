@@ -162,21 +162,12 @@ class BoardPreparationFragment : Fragment() {
     private fun showSnackBar(message: String, isError: Boolean) {
         val snackBar =
             Snackbar.make(requireView(), message, 2000)
-        if (isError) {
-            snackBar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorComplementary
-                )
+        snackBar.setBackgroundTint(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorComplementary
             )
-        } else {
-            snackBar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorAccent
-                )
-            )
-        }
+        )
         snackBar.show()
     }
 }

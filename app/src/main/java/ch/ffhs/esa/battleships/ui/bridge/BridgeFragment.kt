@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
@@ -103,11 +104,11 @@ class BridgeFragment : Fragment() {
 
     private fun startNewGame(isBotGame: Boolean) {
         navIsBotGame = isBotGame
+        navGameId.value = null
         val action =
              MainFragmentDirections.actionMainFragmentToGameHostFragment()
         if (isBotGame) {
-            navOwnPlayerId = ""
-            navGameId.value = null
+            navOwnPlayerId = OFFLINE_PLAYER_ID
         }
         findNavController().navigate(action)
     }
@@ -124,21 +125,12 @@ class BridgeFragment : Fragment() {
     private fun showSnackBar(message: String, isError: Boolean) {
         val snackBar =
             Snackbar.make(requireView(), message, 2000)
-        if (isError) {
-            snackBar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorComplementary
-                )
+        snackBar.setBackgroundTint(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorComplementary
             )
-        } else {
-            snackBar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorAccent
-                )
-            )
-        }
+        )
         snackBar.show()
     }
 

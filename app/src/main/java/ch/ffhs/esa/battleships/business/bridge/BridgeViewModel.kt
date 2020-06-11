@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.game.GameRepository
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
@@ -34,8 +35,8 @@ class BridgeViewModel @Inject constructor(
             _activeGames.value = result.data
         }
 
-        if (playerUid != BOT_PLAYER_ID) {
-            val localResult = gameRepository.findActiveGamesFromPlayer(BOT_PLAYER_ID)
+        if (playerUid != OFFLINE_PLAYER_ID) {
+            val localResult = gameRepository.findActiveGamesFromPlayer(OFFLINE_PLAYER_ID)
             if (localResult is DataResult.Success) {
                 if (_activeGames.value == null) {
                     _activeGames.value = localResult.data

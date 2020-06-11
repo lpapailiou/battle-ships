@@ -19,6 +19,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.data.game.Game
 import ch.ffhs.esa.battleships.ui.auth.AuthHostFragment
 import ch.ffhs.esa.battleships.ui.auth.AuthHostFragmentDirections
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var skipLogin: Boolean = false
-        var navOwnPlayerId: String = ""
+        var navOwnPlayerId: String = OFFLINE_PLAYER_ID
         var navEnemyId: String = ""
         var navGameId: MutableLiveData<String> = MutableLiveData()
         var navIsBotGame: Boolean = false
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
             navOwnPlayerId = auth.currentUser?.uid ?: ""
 
-            if (!hasWifi()) {
+            if (!hasWifi() || navOwnPlayerId != "") {
                 skipLogin = true
             }
 
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (!skipLogin && navOwnPlayerId == "") {
+        if (!skipLogin) {
             setMenuVisible(false)
         }
         return true

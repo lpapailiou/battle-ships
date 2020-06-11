@@ -35,7 +35,7 @@ class MainFragment : Fragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
             try {
                 val auth: FirebaseAuth = FirebaseAuth.getInstance()
-                if (skipLogin || auth?.currentUser != null) {
+                if (skipLogin) {
                     var frag: Fragment? = null
                     for (i in childFragmentManager.fragments) {
                         if (i is BridgeFragment) {
@@ -46,8 +46,8 @@ class MainFragment : Fragment() {
                     if (frag == null) {
                         frag = BridgeFragment()
                     }
-                    if (navOwnPlayerId == "") {
-                        navOwnPlayerId = OFFLINE_PLAYER_ID
+                    if (navOwnPlayerId == OFFLINE_PLAYER_ID && auth.currentUser != null) {
+                        navOwnPlayerId = auth.currentUser!!.uid
                     }
                     childFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_main, frag, "bridge").commit()
