@@ -309,8 +309,6 @@ class GameViewModel @Inject constructor(
                 checkIfGameIsOver(board)
             }
 
-
-
             _enemyBoard.value = _enemyBoard.value
             _ownBoard.value = _ownBoard.value
         }
