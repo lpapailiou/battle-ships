@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             setupActionBar(navController)
 
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
-            navOwnPlayerId = auth.currentUser?.uid ?: ""
+            navOwnPlayerId = auth.currentUser?.uid ?: OFFLINE_PLAYER_ID
 
             if (!hasWifi() || navOwnPlayerId != OFFLINE_PLAYER_ID) {
                 skipLogin = true
