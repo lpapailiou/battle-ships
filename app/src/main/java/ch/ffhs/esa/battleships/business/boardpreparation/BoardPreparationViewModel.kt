@@ -77,14 +77,13 @@ class BoardPreparationViewModel @Inject constructor(
     private fun loadPlayer(uid: String) = viewModelScope.launch {
         try {
             Log.d("procedureLogger", "------------- >>>>>>> boardpreparation loadPlayer()")
-        val result = playerRepository.findByUid(uid)
-        if (result is DataResult.Success) {
-            _player.value = result.data
-        } else if (result is DataResult.Error) {
-            throw result.exception
-        }
+            val result = playerRepository.findByUid(uid)
+            if (result is DataResult.Success) {
+                _player.value = result.data
+            } else if (result is DataResult.Error) {
+                throw result.exception
+            }
         } catch (e: Exception) {
-            println ("=================================================>>> >> EX 2")
             println(e.stackTrace.toString())
         }
     }
