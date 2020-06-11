@@ -75,6 +75,7 @@
     <string name="continue_with_google">Continue with Google</string>
     <string name="or">OR</string>
     <string name="Connection">Connection</string>
+    <string name="there_is_no_wifi_in_these_waters">There is no WIFI in these waters!</string>
 
 
 </resources>

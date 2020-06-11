@@ -36,7 +36,21 @@ class AuthHostFragment : Fragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_auth) != null) {
             try {
                 val auth: FirebaseAuth = FirebaseAuth.getInstance()
-                if (auth.currentUser != null) {
+                if (!(activity as MainActivity).hasWifi()) {
+                    var frag: Fragment? = null
+                    for (i in childFragmentManager.fragments) {
+                        if (i is NoWifiFragment) {
+                            frag = i
+                            break
+                        }
+                    }
+                    if (frag == null) {
+                        frag = NoWifiFragment()
+                    }
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_auth,
+                            frag, "noWifi").commit()
+                } else if (auth.currentUser != null) {
                     var frag: Fragment? = null
                     for (i in childFragmentManager.fragments) {
                         if (i is SignOutFragment) {
