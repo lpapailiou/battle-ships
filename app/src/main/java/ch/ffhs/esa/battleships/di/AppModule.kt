@@ -23,6 +23,7 @@ import ch.ffhs.esa.battleships.data.source.remote.game.RemoteGameDataSource
 import ch.ffhs.esa.battleships.data.source.remote.player.RemotePlayerDataSource
 import ch.ffhs.esa.battleships.data.source.remote.ship.RemoteShipDataSource
 import ch.ffhs.esa.battleships.data.source.remote.shot.RemoteShotDataSource
+import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -93,10 +94,12 @@ object AppModule {
     @RemotePlayerDataSource
     @Provides
     fun provideRemotePlayerDataSource(
-        ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher,
+        firebaseDatabase: FirebaseDatabase
     ): PlayerDataSource {
         return RemotePlayerDataSource(
-            ioDispatcher
+            ioDispatcher,
+            firebaseDatabase
         )
     }
 
@@ -158,10 +161,12 @@ object AppModule {
     @RemoteGameDataSource
     @Provides
     fun provideRemoteGameDataSource(
-        ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher,
+        firebaseDatabase: FirebaseDatabase
     ): GameDataSource {
         return RemoteGameDataSource(
-            ioDispatcher
+            ioDispatcher,
+            firebaseDatabase
         )
     }
 
@@ -170,10 +175,12 @@ object AppModule {
     @RemoteBoardDataSource
     @Provides
     fun provideRemoteBoardDataSource(
-        ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher,
+        firebaseDatabase: FirebaseDatabase
     ): BoardDataSource {
         return RemoteBoardDataSource(
-            ioDispatcher
+            ioDispatcher,
+            firebaseDatabase
         )
     }
 
@@ -182,10 +189,12 @@ object AppModule {
     @RemoteShotDataSource
     @Provides
     fun provideRemoteShotDataSource(
-        ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher,
+        firebaseDatabase: FirebaseDatabase
     ): ShotDataSource {
         return RemoteShotDataSource(
-            ioDispatcher
+            ioDispatcher,
+            firebaseDatabase
         )
     }
 
@@ -195,10 +204,12 @@ object AppModule {
     @RemoteShipDataSource
     @Provides
     fun provideRemoteShipDataSource(
-        ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher,
+        firebaseDatabase: FirebaseDatabase
     ): ShipDataSource {
         return RemoteShipDataSource(
-            ioDispatcher
+            ioDispatcher,
+            firebaseDatabase
         )
     }
 

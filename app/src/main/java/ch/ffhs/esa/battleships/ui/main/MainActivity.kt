@@ -6,10 +6,8 @@ import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -18,8 +16,10 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
+import ch.ffhs.esa.battleships.data.ConnectivityListener
 import ch.ffhs.esa.battleships.data.game.Game
 import ch.ffhs.esa.battleships.ui.auth.AuthHostFragment
 import ch.ffhs.esa.battleships.ui.auth.AuthHostFragmentDirections
@@ -30,7 +30,10 @@ import ch.ffhs.esa.battleships.ui.rules.RulesFragmentDirections
 import ch.ffhs.esa.battleships.ui.score.ScoreFragment
 import ch.ffhs.esa.battleships.ui.score.ScoreFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.main_activity.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,11 +46,19 @@ class MainActivity : AppCompatActivity() {
         var activeGame: Game? = null
     }
 
+    @Inject
+    lateinit var connectivityListener: ConnectivityListener
+
+
     var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
+
+            (application as BattleShipsApplication).appComponent.mainComponent()
+                .create().inject(this)
+
             setContentView(R.layout.main_activity)
 
             val navController = Navigation.findNavController(
@@ -64,13 +75,16 @@ class MainActivity : AppCompatActivity() {
                 skipLogin = true
             }
 
+            connectivityListener.observeConnectivity()
+
         } catch (e: Exception) {
             println(e.stackTrace.toString())
         }
     }
 
     open fun hasWifi(): Boolean {
-        val connManager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connManager: ConnectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val mWifi: NetworkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
         return mWifi.isConnected
     }
@@ -82,9 +96,9 @@ class MainActivity : AppCompatActivity() {
         this.menu = menu
         val item: MenuItem? = menu?.getItem(2)
         if (item != null) {
-            item.setVisible(false)
+            item.isVisible = false
             navGameId.observe(this, Observer {
-                item.setVisible(navGameId.value != null)
+                item.isVisible = navGameId.value != null
                 invalidateOptionsMenu()
             })
         }
@@ -108,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     fun setMenuVisible(isVisible: Boolean) {
         if (menu != null) {
             for (item in menu!!) {
-                item.setVisible(isVisible)
+                item.isVisible = isVisible
             }
             if (isVisible) {
                 navGameId.value = navGameId.value

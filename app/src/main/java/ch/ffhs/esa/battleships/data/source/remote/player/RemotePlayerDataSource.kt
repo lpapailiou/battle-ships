@@ -1,16 +1,14 @@
 package ch.ffhs.esa.battleships.data.source.remote.player
 
 import android.util.Log
-import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.FIREBASE_PLAYER_PATH
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.player.Player
 import ch.ffhs.esa.battleships.data.player.PlayerDataSource
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.FlowCollector
@@ -18,10 +16,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class RemotePlayerDataSource internal constructor(
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val firebaseDatabase: FirebaseDatabase
 ) : PlayerDataSource {
-
-    val database = Firebase.database.reference
 
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
@@ -55,9 +52,10 @@ class RemotePlayerDataSource internal constructor(
                     }
                 }
 
-                database.child(FIREBASE_PLAYER_PATH).addListenerForSingleValueEvent(callback)
+                firebaseDatabase.reference.child(FIREBASE_PLAYER_PATH)
+                    .addListenerForSingleValueEvent(callback)
 
-                awaitClose { database.removeEventListener(callback) }
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
 
                 return@callbackFlow
             }
@@ -80,12 +78,13 @@ class RemotePlayerDataSource internal constructor(
 
     override suspend fun insert(player: Player): DataResult<String> =
         withContext(ioDispatcher) {
-            val task = database.child(FIREBASE_PLAYER_PATH).child(player.uid).updateChildren(
-                mapOf(
-                    "uid" to player.uid,
-                    "name" to player.name
+            val task = firebaseDatabase.reference.child(FIREBASE_PLAYER_PATH).child(player.uid)
+                .updateChildren(
+                    mapOf(
+                        "uid" to player.uid,
+                        "name" to player.name
+                    )
                 )
-            )
             task.await()
 
             if (task.isSuccessful) {

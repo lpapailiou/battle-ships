@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
-import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.board.BoardModel
 import ch.ffhs.esa.battleships.business.board.Cell
 import ch.ffhs.esa.battleships.business.game.GameState
@@ -22,11 +21,6 @@ import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.data.ship.Direction
 import ch.ffhs.esa.battleships.data.ship.ShipRepository
 import ch.ffhs.esa.battleships.event.Event
-import ch.ffhs.esa.battleships.ui.main.MainActivity
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.activeGame
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
-import com.google.android.material.bottomappbar.BottomAppBar
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -144,79 +138,79 @@ class BoardPreparationViewModel @Inject constructor(
     fun startGame() = viewModelScope.launch {
         try {
             Log.d("procedureLogger", "------------- >>>>>>> boardpreparation startGame()")
-        val game = Game(
-            System.currentTimeMillis(),
-            GameState.ACTIVE
-        )
-            Log.d("gameCreation", "is a bot game created? " + isBotGame)
-        if (isBotGame) {
+            val game = Game(
+                System.currentTimeMillis(),
+                GameState.ACTIVE
+            )
+            Log.d("gameCreation", "is a bot game created? $isBotGame")
+            if (isBotGame) {
 
-            game.defenderUid = _player.value!!.uid
+                game.defenderUid = _player.value!!.uid
 
-            game.attackerUid = BOT_PLAYER_ID
-            game.playerAtTurnUid = _player.value!!.uid
+                game.attackerUid = BOT_PLAYER_ID
+                game.playerAtTurnUid = _player.value!!.uid
 
-            saveGame(game)
-            Log.d("bot gameCreation", "game saved")
-            _board.value!!.gameUid = game.uid
-            game.playerAtTurnUid = _player.value!!.uid
-            saveBoard(_board.value!!, game)
-            Log.d("bot gameCreation", "board 1/2 saved")
-            saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
-            Log.d("bot gameCreation", "ships 1/2 saved")
+                saveGame(game)
+                Log.d("bot gameCreation", "game saved")
+                _board.value!!.gameUid = game.uid
+                game.playerAtTurnUid = _player.value!!.uid
+                saveBoard(_board.value!!, game)
+                Log.d("bot gameCreation", "board 1/2 saved")
+                saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
+                Log.d("bot gameCreation", "ships 1/2 saved")
 
-            botBoardModel.gameUid = game.uid
-            botBoardModel.playerUid = BOT_PLAYER_ID
-            saveBoard(botBoardModel, game)
-            Log.d("bot gameCreation", "board 2/2 saved")
-            saveShipsToBoard(botBoardModel.uid!!, botBoardModel.ships.value!!)
-            Log.d("bot gameCreation", "ships 2/2 saved")
+                botBoardModel.gameUid = game.uid
+                botBoardModel.playerUid = BOT_PLAYER_ID
+                saveBoard(botBoardModel, game)
+                Log.d("bot gameCreation", "board 2/2 saved")
+                saveShipsToBoard(botBoardModel.uid!!, botBoardModel.ships.value!!)
+                Log.d("bot gameCreation", "ships 2/2 saved")
 
-            activeGame = game
-            _gameReadyEvent.value = Event(game)
-            Log.d("bot gameCreation", "game ready to launch")
+//                activeGame = game
+                _gameReadyEvent.value = Event(game)
+                Log.d("bot gameCreation", "game ready to launch")
 
-            return@launch
+                return@launch
 
-        }
+            }
 
-        val openGame = findOpenGame()
-            Log.d("gameCreation", "is open game found? " + openGame)
-        if (openGame == null) {
-            game.defenderUid = _player.value!!.uid
-            game.playerAtTurnUid = _player.value!!.uid
-            saveGame(game)
-            Log.d("online gameCreation", "game saved")
+            val openGame = findOpenGame()
+            Log.d("gameCreation", "is open game found? $openGame")
+            if (openGame == null) {
+                game.defenderUid = _player.value!!.uid
+                game.playerAtTurnUid = _player.value!!.uid
+                saveGame(game)
+                Log.d("online gameCreation", "game saved")
 
-            _board.value!!.gameUid = game.uid
-            _board.value!!.playerUid = _player.value!!.uid
-            saveBoard(_board.value!!, game)
-            Log.d("online gameCreation", "board 1/1 saved")
+                _board.value!!.gameUid = game.uid
+                _board.value!!.playerUid = _player.value!!.uid
+                saveBoard(_board.value!!, game)
+                Log.d("online gameCreation", "board 1/1 saved")
 
-            saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
-            Log.d("online gameCreation", "ships 1/1 saved")
+                saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
+                Log.d("online gameCreation", "ships 1/1 saved")
 
-            _waitForEnemyEvent.value = Event(Unit)
-            Log.d("online gameCreation", "game ready to launch")
-            return@launch
-        }
+                _waitForEnemyEvent.value = Event(Unit)
+                Log.d("online gameCreation", "game ready to launch")
+                return@launch
+            }
 
-        openGame.attackerUid = _player.value!!.uid
-        openGame.playerAtTurnUid = _player.value!!.uid
-            Log.d("gameCreation", "current player is set as attaccker; it's your turn now")
-        saveGame(openGame)
-        gameRepository.removeFromOpenGames(openGame)
+            openGame.attackerUid = _player.value!!.uid
+            openGame.playerAtTurnUid = _player.value!!.uid
+            Log.d("gameCreation", "current player is set as attacker; it's your turn now")
+            saveGame(openGame)
+            gameRepository.removeFromOpenGames(openGame)
             Log.d("gameCreation", "game saved")
 
-        _board.value!!.gameUid = openGame.uid
-        _board.value!!.playerUid = _player.value!!.uid
-        saveBoard(_board.value!!, openGame)
+            _board.value!!.gameUid = openGame.uid
+            _board.value!!.playerUid = _player.value!!.uid
+            saveBoard(_board.value!!, openGame)
             Log.d("gameCreation", "board saved")
 
-        saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
+            saveShipsToBoard(_board.value!!.uid!!, _board.value!!.ships.value!!)
             Log.d("gameCreation", "ships saved to board")
-        activeGame = openGame
-        _gameReadyEvent.value = Event(openGame)
+//            activeGame = openGame
+            _gameReadyEvent.value = Event(openGame)
             Log.d("gameCreation", "game ready")
 
         } catch (e: Exception) {
@@ -247,7 +241,7 @@ class BoardPreparationViewModel @Inject constructor(
         val board = Board(game.uid, boardModel.playerUid!!)
 
 
-        val result = boardRepository.saveBoard(board)
+        val result = boardRepository.saveBoard(board, this.isBotGame)
 
         boardModel.uid = board.uid
         if (result is DataResult.Error) {
@@ -260,7 +254,7 @@ class BoardPreparationViewModel @Inject constructor(
             .map { it.toShip() }
             .forEach {
                 it.boardUid = boardUid
-                shipRepository.insert(it)
+                shipRepository.insert(it, isBotGame)
             }
 
     }

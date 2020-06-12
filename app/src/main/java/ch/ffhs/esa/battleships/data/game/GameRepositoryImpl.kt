@@ -37,7 +37,7 @@ class GameRepositoryImpl @Inject constructor(
                 game.uid = "%s_%s".format(game.defenderUid, dateString)
             }
 
-            if (game.attackerUid != BOT_PLAYER_ID) {
+            if (game.attackerUid != BOT_PLAYER_ID && game.defenderUid != OFFLINE_PLAYER_ID) {
                 val result = remoteGameDataSource.save(game)
                 if (result is DataResult.Error) {
                     throw result.exception

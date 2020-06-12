@@ -7,9 +7,8 @@ import ch.ffhs.esa.battleships.data.shot.Shot
 import ch.ffhs.esa.battleships.data.shot.ShotDataSource
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -19,10 +18,9 @@ import kotlinx.coroutines.tasks.await
 
 
 class RemoteShotDataSource internal constructor(
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val firebaseDatabase: FirebaseDatabase
 ) : ShotDataSource {
-
-    val database = Firebase.database.reference
 
     @InternalCoroutinesApi
     @ExperimentalCoroutinesApi
@@ -46,10 +44,10 @@ class RemoteShotDataSource internal constructor(
                     }
                 }
 
-                database.child(FIREBASE_BOARD_PATH).child(boardUid).child("shot")
+                firebaseDatabase.reference.child(FIREBASE_BOARD_PATH).child(boardUid).child("shot")
                     .addListenerForSingleValueEvent(callback)
 
-                awaitClose { database.removeEventListener(callback) }
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
 
                 return@callbackFlow
             }
@@ -71,7 +69,8 @@ class RemoteShotDataSource internal constructor(
                 return@withContext DataResult.Error(Exception("Shot does not have an Uid assigned"))
             }
 
-            val task = database.child(FIREBASE_BOARD_PATH).child(shot.boardUid).child("shot")
+            val task = firebaseDatabase.reference.child(FIREBASE_BOARD_PATH).child(shot.boardUid)
+                .child("shot")
                 .child(shot.uid)
                 .setValue(shot)
             task.await()
@@ -100,10 +99,10 @@ class RemoteShotDataSource internal constructor(
                 }
             }
 
-            database.child(FIREBASE_BOARD_PATH).child(boardUid).child("shot")
+            firebaseDatabase.reference.child(FIREBASE_BOARD_PATH).child(boardUid).child("shot")
                 .addValueEventListener(callback)
 
-            awaitClose { database.removeEventListener(callback) }
+            awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
 
         }
     }

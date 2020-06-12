@@ -29,22 +29,22 @@ class BridgeViewModel @Inject constructor(
     private fun loadActiveGamesFromPlayer(playerUid: String) = viewModelScope.launch {
         try {
             Log.d("procedureLogger", "------------- >>>>>>> bridge loadActiveGamesFromPlayer()")
-        val result = gameRepository.findActiveGamesFromPlayer(playerUid)
+            val result = gameRepository.findActiveGamesFromPlayer(playerUid)
 
-        if (result is DataResult.Success) {
-            _activeGames.value = result.data
-        }
+            if (result is DataResult.Success) {
+                _activeGames.value = result.data
+            }
 
-        if (playerUid != OFFLINE_PLAYER_ID) {
-            val localResult = gameRepository.findActiveGamesFromPlayer(OFFLINE_PLAYER_ID)
-            if (localResult is DataResult.Success) {
-                if (_activeGames.value == null) {
-                    _activeGames.value = localResult.data
-                } else {
-                    _activeGames.value = _activeGames.value!! + localResult.data
+            if (playerUid != OFFLINE_PLAYER_ID) {
+                val localResult = gameRepository.findActiveGamesFromPlayer(OFFLINE_PLAYER_ID)
+                if (localResult is DataResult.Success) {
+                    if (_activeGames.value == null) {
+                        _activeGames.value = localResult.data
+                    } else {
+                        _activeGames.value = _activeGames.value!! + localResult.data
+                    }
                 }
             }
-        }
 
         } catch (e: Exception) {
             println(e.stackTrace.toString())

@@ -4,7 +4,7 @@ import ch.ffhs.esa.battleships.data.DataResult
 
 interface ShipRepository {
 
-    suspend fun insert(ship: Ship): DataResult<String>
+    suspend fun insert(ship: Ship, isBotGame: Boolean): DataResult<String>
 
-    suspend fun findByBoard(boardUid: String): DataResult<List<Ship>>
+    suspend fun findByBoard(boardUid: String, isBotGame: Boolean): DataResult<List<Ship>>
 }

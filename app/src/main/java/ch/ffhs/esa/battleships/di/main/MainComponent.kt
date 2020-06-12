@@ -1,8 +1,6 @@
 package ch.ffhs.esa.battleships.di.main
 
-import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
-import ch.ffhs.esa.battleships.ui.auth.LoginFragment
-import ch.ffhs.esa.battleships.ui.auth.SignUpFragment
+import ch.ffhs.esa.battleships.ui.main.MainActivity
 import ch.ffhs.esa.battleships.ui.main.MainFragment
 import dagger.Subcomponent
 
@@ -15,4 +13,6 @@ interface MainComponent {
     }
 
     fun inject(mainFragment: MainFragment)
+
+    fun inject(mainActivity: MainActivity)
 }
