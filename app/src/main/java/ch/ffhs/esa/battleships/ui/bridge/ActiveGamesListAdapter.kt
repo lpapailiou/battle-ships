@@ -49,7 +49,7 @@ class ActiveGamesListAdapter(
             }
 
             val uName = navOwnPlayerId
-            if ((uName.equals(item.attackerUid) && item.playerAtTurnName.equals(item.attackerName)) || (uName.equals(item.defenderUid) && item.playerAtTurnName.equals(item.defenderName)) || item.playerAtTurnName.equals("You")) {
+            if ((item.attackerUid != null && item.defenderUid != null) && ((uName.equals(item.attackerUid) && item.playerAtTurnName.equals(item.attackerName)) || (uName.equals(item.defenderUid) && item.playerAtTurnName.equals(item.defenderName)) || item.playerAtTurnName.equals("You"))) {
                 val turnText = itemView.findViewById<TextView>(R.id.turn)
                 turnText.text = "(your turn)"
                 turnText.setTextColor(Color.parseColor("#FA021F"))
