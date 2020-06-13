@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
@@ -109,16 +110,14 @@ class BridgeFragment : Fragment() {
             resumeGame(game)
         }
         viewDataBinding.bridgeGameList.adapter = listAdapter
-
     }
 
     private fun isItMyTurn(playerId: String, playerName: String, nextTurn: String): Boolean {
-        if (navOwnPlayerId.equals(playerId) && playerName.equals(nextTurn)) {
+        if ((navOwnPlayerId.equals(playerId) || OFFLINE_PLAYER_ID.equals(playerId)) && playerName.equals(nextTurn)) {
             return true
         }
         return false
     }
-
 
     private fun startNewGame(isBotGame: Boolean) {
         navIsBotGame = isBotGame
