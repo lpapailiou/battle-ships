@@ -15,6 +15,10 @@ class LocalGameDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : GameDataSource {
 
+    override suspend fun findClosedByPlayer(playerUid: String): DataResult<List<Game>> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun findByUid(uid: String): DataResult<Game> =
         withContext(ioDispatcher) {
             try {
@@ -44,6 +48,16 @@ class LocalGameDataSource internal constructor(
         withContext(ioDispatcher) {
             try {
                 val games = gameDao.findAllWithPlayerInfo(uid)
+                return@withContext DataResult.Success(games)
+            } catch (e: Exception) {
+                return@withContext DataResult.Error(e)
+            }
+        }
+
+    override suspend fun findClosedGames(uid: String): DataResult<List<GameWithPlayerInfo>> =
+        withContext(ioDispatcher) {
+            try {
+                val games = gameDao.findAllClosedWithPlayerInfo(uid)
                 return@withContext DataResult.Success(games)
             } catch (e: Exception) {
                 return@withContext DataResult.Error(e)

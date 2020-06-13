@@ -85,6 +85,34 @@ class GameRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun findClosedGamesFromPlayer(playerUid: String): DataResult<List<GameWithPlayerInfo>> {
+        return withContext(ioDispatcher) {
+            if (playerUid != BOT_PLAYER_ID && playerUid != OFFLINE_PLAYER_ID) {
+                val remoteResult = remoteGameDataSource.findClosedByPlayer(playerUid)
+
+                if (remoteResult is DataResult.Error) {
+                    throw remoteResult.exception
+                }
+
+                remoteResult as DataResult.Success<List<Game>>
+                val enemyPlayerUids = remoteResult.data
+                    .mapNotNull { if (it.attackerUid == playerUid) it.defenderUid else it.attackerUid }
+                    .toHashSet()
+
+                enemyPlayerUids.forEach {
+                    playerRepository.findByUid(it)
+                }
+
+                remoteResult.data
+                    .forEach { game ->
+                        localGameDataSource.save(game)
+                        localGameDataSource.update(game)
+                    }
+            }
+            return@withContext localGameDataSource.findClosedGames(playerUid)
+        }
+    }
+
 
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {
         return withContext(ioDispatcher) {

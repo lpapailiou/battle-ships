@@ -14,19 +14,19 @@
 
         <variable
             name="viewModel"
-            type="ch.ffhs.esa.battleships.business.bridge.BridgeViewModel" />
+            type="ch.ffhs.esa.battleships.business.score.ScoreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{viewModel.resumeGame(gameWithPlayerInfo)"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:paddingRight="8dp"
         android:paddingBottom="8dp">
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="1dp"
@@ -61,9 +61,10 @@
             android:layout_height="18dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="1dp"
-            android:text="@{gameWithPlayerInfo.lastChangedAtFormatted()}"
+            android:text="@{(gameWithPlayerInfo.winnerUid.equals(gameWithPlayerInfo.attackerUid) ? (@string/winner_is + gameWithPlayerInfo.attackerName) : @string/nullstring)+(gameWithPlayerInfo.winnerUid.equals(gameWithPlayerInfo.defenderUid) ? (@string/winner_is + gameWithPlayerInfo.defenderName) : @string/nullstring)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/user" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

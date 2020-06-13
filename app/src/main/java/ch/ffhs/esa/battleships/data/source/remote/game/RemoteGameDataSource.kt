@@ -25,7 +25,9 @@ class RemoteGameDataSource internal constructor(
     private val firebaseDatabase: FirebaseDatabase
 ) : GameDataSource {
 
-
+    override suspend fun findClosedGames(uid: String): DataResult<List<GameWithPlayerInfo>> {
+        TODO("Not yet implemented")
+    }
     override suspend fun findByUid(uid: String): DataResult<Game> =
         withContext(ioDispatcher) {
             Log.d(
@@ -189,6 +191,49 @@ class RemoteGameDataSource internal constructor(
                         val games = dataSnapshot.children
                             .map { it.getValue(FirebaseGame::class.java) }
                             .map { it!!.toGame() }
+                            .filter { it.winnerUid == null}
+
+                        offer(games)
+                        channel.close()
+                    }
+
+                    override fun onCancelled(p0: DatabaseError) {
+                        Log.e(null, "remote board data source cancelled - findByPlayer")
+                        throw p0.toException()
+                    }
+                }
+
+                firebaseDatabase.reference.child(FIREBASE_PLAYER_PATH).child(playerUid)
+                    .child("game")
+                    .addListenerForSingleValueEvent(callback)
+
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
+
+                return@callbackFlow
+            }
+
+            var games: List<Game> = listOf()
+            flow.collect(object : FlowCollector<List<Game>> {
+                override suspend fun emit(value: List<Game>) {
+
+                    games = value
+                }
+            })
+
+            return@withContext Success(games)
+        }
+
+    @InternalCoroutinesApi
+    @ExperimentalCoroutinesApi
+    override suspend fun findClosedByPlayer(playerUid: String): DataResult<List<Game>> =
+        withContext(ioDispatcher) {
+            val flow = callbackFlow<List<Game>> {
+                val callback = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val games = dataSnapshot.children
+                            .map { it.getValue(FirebaseGame::class.java) }
+                            .map { it!!.toGame() }
+                            .filter { it.winnerUid != null }
 
                         offer(games)
                         channel.close()

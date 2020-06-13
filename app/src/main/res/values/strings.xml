@@ -19,6 +19,9 @@
     <string name="positioning_hint_board_preparation"><![CDATA[drag&drop to move, click to rotate]]></string>
     <string name="prepare_your_ships">PREPARE YOUR SHIPS</string>
     <string name="rules">Rules</string>
+    <string name="not_sure">"?"</string>
+    <string name="winner_is">"winner: "</string>
+    <string name="nullstring">""</string>
 
     <string name="rulesText">
         <![CDATA[
@@ -76,6 +79,5 @@
     <string name="or">OR</string>
     <string name="Connection">Connection</string>
     <string name="there_is_no_wifi_in_these_waters">There is no WIFI in these waters!</string>
-
 
 </resources>
