@@ -43,12 +43,10 @@ class MainActivity : AppCompatActivity() {
         var navEnemyId: String = ""
         var navGameId: MutableLiveData<String> = MutableLiveData()
         var navIsBotGame: Boolean = false
-        var activeGame: Game? = null
     }
 
     @Inject
     lateinit var connectivityListener: ConnectivityListener
-
 
     var menu: Menu? = null
 
@@ -105,18 +103,27 @@ class MainActivity : AppCompatActivity() {
 
         val auth: FirebaseAuth = FirebaseAuth.getInstance()
         auth.addAuthStateListener {
-            val item: MenuItem? = menu?.getItem(0)
-            if (auth.currentUser != null) {
-                item?.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_wifi_24)
-            } else {
-                item?.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_wifi_off_24)
-            }
+            invalidateConnectionIcon()
         }
+
+        connectivityListener.connected.observe(this, Observer {
+            invalidateConnectionIcon()
+        })
 
         if (!skipLogin) {
             setMenuVisible(false)
         }
         return true
+    }
+
+    fun invalidateConnectionIcon() {
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val item: MenuItem? = menu?.getItem(0)
+        if (auth.currentUser != null && connectivityListener.connected.value == true) {
+            item?.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_wifi_24)
+        } else {
+            item?.icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_wifi_off_24)
+        }
     }
 
     fun setMenuVisible(isVisible: Boolean) {
