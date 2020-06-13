@@ -141,44 +141,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         var navigated = false
-        if (item == menu?.getItem(2)) {
-            var currentFragment: Fragment? = null
-            supportFragmentManager.fragments.forEach {
-                it.childFragmentManager.fragments.forEach {
-                    currentFragment = it
-                }
-            }
-            if (currentFragment != null && navGameId.value != null) {
-                if (currentFragment is MainFragment) {
-                    val action =
-                        MainFragmentDirections.actionMainFragmentToGameHostFragment()
-                    (currentFragment as MainFragment).findNavController().navigate(action)
-                } else if (currentFragment is ScoreFragment) {
-                    val action =
-                        ScoreFragmentDirections.actionScoreFragmentToGameHostFragment()
-                    (currentFragment as ScoreFragment).findNavController().navigate(action)
-                } else if (currentFragment is RulesFragment) {
-                    val action =
-                        RulesFragmentDirections.actionRulesFragmentToGameHostFragment()
-                    (currentFragment as RulesFragment).findNavController().navigate(action)
-                } else if (currentFragment is AuthHostFragment) {
-                    val action =
-                        AuthHostFragmentDirections.actionAuthHostFragmentToGameHostFragment()
-                    (currentFragment as AuthHostFragment).findNavController().navigate(action)
-                } else if (currentFragment is SignUpFragment) {
-                    val action =
-                        SignUpFragmentDirections.actionSignUpFragmentToGameHostFragment()
-                    (currentFragment as SignUpFragment).findNavController().navigate(action)
-                }
-            }
-
-        } else {
-            val navController = Navigation.findNavController(
-                this,
-                R.id.nav_host_fragment
-            )
-            navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
-        }
+        val navController = Navigation.findNavController(
+            this,
+            R.id.nav_host_fragment
+        )
+        navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
         return navigated || super.onOptionsItemSelected(item)
     }
 

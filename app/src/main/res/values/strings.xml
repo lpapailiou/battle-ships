@@ -22,6 +22,7 @@
     <string name="not_sure">"?"</string>
     <string name="winner_is">"winner: "</string>
     <string name="nullstring">""</string>
+    <string name="turn_is">"next to shoot: "</string>
 
     <string name="rulesText">
         <![CDATA[

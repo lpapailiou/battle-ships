@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
@@ -86,6 +88,7 @@ class BridgeFragment : Fragment() {
         play_vs_friend_button.setOnClickListener {
             startNewGame(false)
         }
+
     }
 
     private fun setupListAdapter() {
@@ -99,6 +102,12 @@ class BridgeFragment : Fragment() {
             resumeGame(game)
         }
         viewDataBinding.bridgeGameList.adapter = listAdapter
+/*
+        listAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+            override fun onChanged() {
+                showSnackBar("Captain! The enemy may have moved!", false)
+            }
+        })*/
     }
 
 

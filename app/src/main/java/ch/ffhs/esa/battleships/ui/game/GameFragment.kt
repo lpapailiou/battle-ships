@@ -14,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,6 +28,7 @@ import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class GameFragment : Fragment() {
@@ -61,6 +63,18 @@ class GameFragment : Fragment() {
         return view
     }
 
+    private fun showSnackBar(message: String, isError: Boolean) {
+        val snackBar =
+            Snackbar.make(requireView(), message, 2000)
+        snackBar.setBackgroundTint(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorComplementary
+            )
+        )
+        snackBar.show()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,6 +92,7 @@ class GameFragment : Fragment() {
             } else {
                 inactiveBoard.boardModel = boardModel
             }
+
         })
 
         gameViewModel.ownBoard.observe(viewLifecycleOwner, Observer { boardModel ->
