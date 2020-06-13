@@ -31,7 +31,7 @@ class MainFragment : Fragment() {
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
-    open fun initMainFragment() {
+    fun initMainFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_main) != null) {
             try {
                 val auth: FirebaseAuth = FirebaseAuth.getInstance()

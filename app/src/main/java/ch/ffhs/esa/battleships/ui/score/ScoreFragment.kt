@@ -68,8 +68,7 @@ class ScoreFragment : Fragment() {
 
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.scoreViewModel
-        listAdapter = ClosedGamesListAdapter(viewModel!!) { game: GameWithPlayerInfo ->
-        }
+        listAdapter = ClosedGamesListAdapter(viewModel!!) {}
         viewDataBinding.scoreGameList.adapter = listAdapter
     }
 

@@ -31,7 +31,7 @@ class AuthHostFragment : Fragment() {
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
-    open fun initAuthFragment() {
+    fun initAuthFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_auth) != null) {
             try {
                 val auth: FirebaseAuth = FirebaseAuth.getInstance()

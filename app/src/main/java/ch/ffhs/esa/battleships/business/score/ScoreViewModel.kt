@@ -42,9 +42,9 @@ class ScoreViewModel @Inject constructor(
 
             if (result is DataResult.Success) {
                 if (playerUid == OFFLINE_PLAYER_ID) {
-                    _botScore.value = (result.data.filter { it.winnerUid == playerUid }.size ?: 0) * WINNING_SCORE_MULTIPLIER
+                    _botScore.value = (result.data.filter { it.winnerUid == playerUid }.size) * WINNING_SCORE_MULTIPLIER
                 } else {
-                    _score.value = (result.data.filter { it.winnerUid == playerUid }.size ?: 0) * WINNING_SCORE_MULTIPLIER
+                    _score.value = (result.data.filter { it.winnerUid == playerUid }.size) * WINNING_SCORE_MULTIPLIER
                 }
                 _closedGames.value = result.data
             } else {
@@ -56,7 +56,7 @@ class ScoreViewModel @Inject constructor(
                 val localResult = gameRepository.findClosedGamesFromPlayer(OFFLINE_PLAYER_ID)
 
                 if (localResult is DataResult.Success) {
-                    _botScore.value = (localResult.data.filter { it.winnerUid == OFFLINE_PLAYER_ID }.size ?: 0) * WINNING_SCORE_MULTIPLIER
+                    _botScore.value = (localResult.data.filter { it.winnerUid == OFFLINE_PLAYER_ID }.size) * WINNING_SCORE_MULTIPLIER
                     if (_closedGames.value == null) {
                         _closedGames.value = localResult.data
                     } else {

@@ -33,7 +33,7 @@ class EmailAuthViewModel @Inject constructor(
     private val _signUpFailedEvent = MutableLiveData<Event<String>>()
     val signUpFailedEvent: LiveData<Event<String>> = _signUpFailedEvent
 
-    fun createUserWithEmailAndPassword(name: String, email: String, password: String) {
+    fun createUserWithEmailAndPassword(email: String, password: String) {
         try {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task: Task<AuthResult> ->

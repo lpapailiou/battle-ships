@@ -63,18 +63,6 @@ class GameFragment : Fragment() {
         return view
     }
 
-    private fun showSnackBar(message: String, isError: Boolean) {
-        val snackBar =
-            Snackbar.make(requireView(), message, 2000)
-        snackBar.setBackgroundTint(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.colorComplementary
-            )
-        )
-        snackBar.show()
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

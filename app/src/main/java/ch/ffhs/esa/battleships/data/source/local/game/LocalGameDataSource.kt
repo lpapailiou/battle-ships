@@ -77,8 +77,8 @@ class LocalGameDataSource internal constructor(
         }
 
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {
-        TODO("Not yet implemented")
         Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalGameDataSource.findAllGamesByPlayer() not implemented!")
+        TODO("Local observation not implemented")
     }
 
     override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> {
@@ -90,12 +90,12 @@ class LocalGameDataSource internal constructor(
     }
 
     override suspend fun findByPlayer(playerUid: String): DataResult<List<Game>> {
-        TODO("Not yet implemented")
         Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalGameDataSource.findByPlayer() not implemented!")
+        TODO("Local observation not implemented")
     }
 
     override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
-        TODO("Local observation not implemented yet")
         Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalGameDataSource.observe() not implemented!")
+        TODO("Local observation not implemented")
     }
 }

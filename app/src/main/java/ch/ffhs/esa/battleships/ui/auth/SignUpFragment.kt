@@ -98,7 +98,6 @@ class SignUpFragment : Fragment() {
         button_sign_up.setOnClickListener {
             emailAuthViewModel.createUserWithEmailAndPassword(
                 edit_text_email_signup.text.toString(),
-                edit_text_email_signup.text.toString(),
                 edit_text_password_signup.text.toString()
             )
         }

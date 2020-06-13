@@ -116,7 +116,7 @@ class BoardPreparationFragment : Fragment() {
                 startProgressBar()
                 boardPreparationViewModel.startGame()
             } else {
-                showSnackBar("Some of your ships are still too close to each other!", true)
+                showSnackBar("Some of your ships are still too close to each other!")
             }
         }
 
@@ -154,12 +154,12 @@ class BoardPreparationFragment : Fragment() {
     }
 
     private fun navigateToBridge() {
-        showSnackBar("All canons ready! You'll get notified, when an enemy has been found!", false)
+        showSnackBar("All canons ready! You'll get notified, when an enemy has been found!")
         val action = GameHostFragmentDirections.actionGameHostFragmentToMainFragment()
         findNavController().navigate(action)
     }
 
-    private fun showSnackBar(message: String, isError: Boolean) {
+    private fun showSnackBar(message: String) {
         val snackBar =
             Snackbar.make(requireView(), message, 2000)
         snackBar.setBackgroundTint(

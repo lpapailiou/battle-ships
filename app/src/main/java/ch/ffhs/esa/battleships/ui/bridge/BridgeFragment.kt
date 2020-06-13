@@ -90,7 +90,7 @@ class BridgeFragment : Fragment() {
         }
         /*
         bridgeViewModel.activeGames.observe(viewLifecycleOwner, Observer {
-            showSnackBar("Captain! The enemy may have moved!", false) // TODO: would like to add this one, but keeps crashing
+            showSnackBar("Captain! The enemy may have moved!") // TODO: would like to add this one, but keeps crashing
         })*/
 
     }
@@ -100,10 +100,10 @@ class BridgeFragment : Fragment() {
         listAdapter = ActiveGamesListAdapter(viewModel!!) { game: GameWithPlayerInfo ->
             navGameId.value = game.gameUid
             if (game.attackerUid == null) {
-                showSnackBar("Still no enemies in sight. Those damn stealth ships!", false)
+                showSnackBar("Still no enemies in sight. Those damn stealth ships!")
                 return@ActiveGamesListAdapter
-            } else if (!isItMyTurn(game.attackerUid, game.attackerName ?: "", game.playerAtTurnName ?: "") && !isItMyTurn(game.defenderUid, game.defenderName ?: "", game.playerAtTurnName ?: "")) {
-                showSnackBar("Yer enemy is still plotting. Stupid land rat!", false)
+            } else if (!isItMyTurn(game.attackerUid, game.attackerName ?: "", game.playerAtTurnName ?: "") && !isItMyTurn(game.defenderUid, game.defenderName , game.playerAtTurnName ?: "")) {
+                showSnackBar("Yer enemy is still plotting. Stupid land rat!")
                 return@ActiveGamesListAdapter
             }
             resumeGame(game)
@@ -140,7 +140,7 @@ class BridgeFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun showSnackBar(message: String, isError: Boolean) {
+    private fun showSnackBar(message: String) {
         val snackBar =
             Snackbar.make(requireView(), message, 2000)
         snackBar.setBackgroundTint(

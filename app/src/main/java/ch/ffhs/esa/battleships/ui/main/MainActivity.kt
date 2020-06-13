@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    open fun hasWifi(): Boolean {
+    fun hasWifi(): Boolean {
         val connManager: ConnectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val mWifi: NetworkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
@@ -140,12 +140,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        var navigated = false
         val navController = Navigation.findNavController(
             this,
             R.id.nav_host_fragment
         )
-        navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
+        val navigated = NavigationUI.onNavDestinationSelected(item!!, navController)
         return navigated || super.onOptionsItemSelected(item)
     }
 

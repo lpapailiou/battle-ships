@@ -34,7 +34,7 @@ class GameHostFragment : Fragment() {
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
 
-    open fun initStateSensitiveBoardFragment() {
+    fun initStateSensitiveBoardFragment() {
         if ((activity as MainActivity).findViewById<View>(R.id.fragment_container_game) != null) {
             if (navGameId.value == null) {
                 var frag: Fragment? = null

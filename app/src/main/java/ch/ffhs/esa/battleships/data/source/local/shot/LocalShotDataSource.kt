@@ -35,8 +35,8 @@ class LocalShotDataSource internal constructor(
         }
 
     override suspend fun observe(boardUid: String): Flow<List<Shot>> {
-        TODO("Local observation not implemented")
         Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalShotDataSource.observe() not implemented!")
+        TODO("Local observation not implemented")
     }
 
 }
