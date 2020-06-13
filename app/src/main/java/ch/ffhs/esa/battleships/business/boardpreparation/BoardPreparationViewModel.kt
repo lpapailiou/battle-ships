@@ -78,7 +78,7 @@ class BoardPreparationViewModel @Inject constructor(
                 throw result.exception
             }
         } catch (e: Exception) {
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 
@@ -215,7 +215,7 @@ class BoardPreparationViewModel @Inject constructor(
 
         } catch (e: Exception) {
             Log.d("gameCreation", "something went wrong here")
-            println(e.stackTrace.toString())
+            e.stackTrace
             throw e
         }
     }

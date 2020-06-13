@@ -46,7 +46,7 @@ class GoogleAuthViewModel @Inject constructor(
                 }
         } catch (e: Exception) {
             _loginFailedEvent.value = Event("Error")
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 
@@ -59,7 +59,7 @@ class GoogleAuthViewModel @Inject constructor(
         playerRepository.save(player)
         _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
         } catch (e: Exception) {
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 }

@@ -31,7 +31,7 @@ class ScoreViewModel @Inject constructor(
             Log.d("procedureLogger", "------------- >>>>>>> score start()")
             loadClosedGamesFromPlayer(playerUid)
         } catch (e: Exception) {
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 
@@ -41,7 +41,6 @@ class ScoreViewModel @Inject constructor(
             val result = gameRepository.findClosedGamesFromPlayer(playerUid)
 
             if (result is DataResult.Success) {
-                println("player id is --------------------------------------" + playerUid)
                 if (playerUid == OFFLINE_PLAYER_ID) {
                     _botScore.value = (result.data.filter { it.winnerUid == playerUid }.size ?: 0) * WINNING_SCORE_MULTIPLIER
                 } else {
@@ -57,22 +56,19 @@ class ScoreViewModel @Inject constructor(
                 val localResult = gameRepository.findClosedGamesFromPlayer(OFFLINE_PLAYER_ID)
 
                 if (localResult is DataResult.Success) {
-                    println("....................................................." + localResult.data.size)
                     _botScore.value = (localResult.data.filter { it.winnerUid == OFFLINE_PLAYER_ID }.size ?: 0) * WINNING_SCORE_MULTIPLIER
-                    println("....................................................." + (localResult.data.filter { it.winnerUid == OFFLINE_PLAYER_ID }.size))
                     if (_closedGames.value == null) {
                         _closedGames.value = localResult.data
                     } else {
                         _closedGames.value = _closedGames.value!! + localResult.data
                     }
                 } else {
-                    println("------------------------------------------------------------------ NO SUCCESS")
                     _botScore.value = 0
                 }
             }
 
         } catch (e: Exception) {
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 }

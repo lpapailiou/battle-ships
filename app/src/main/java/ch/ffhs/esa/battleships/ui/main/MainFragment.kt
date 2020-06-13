@@ -66,7 +66,7 @@ class MainFragment : Fragment() {
                         .replace(R.id.fragment_container_main, frag, "login").commit()
                 }
             } catch (e: Exception) {
-                println(e.stackTrace.toString())
+                e.stackTrace
             }
         }
     }

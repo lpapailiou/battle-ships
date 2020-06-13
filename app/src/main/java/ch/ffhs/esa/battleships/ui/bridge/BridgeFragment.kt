@@ -88,6 +88,10 @@ class BridgeFragment : Fragment() {
         play_vs_friend_button.setOnClickListener {
             startNewGame(false)
         }
+        /*
+        bridgeViewModel.activeGames.observe(viewLifecycleOwner, Observer {
+            showSnackBar("Captain! The enemy may have moved!", false) // TODO: would like to add this one, but keeps crashing
+        })*/
 
     }
 
@@ -98,16 +102,21 @@ class BridgeFragment : Fragment() {
             if (game.attackerUid == null) {
                 showSnackBar("Still no enemies in sight. Those damn stealth ships!", false)
                 return@ActiveGamesListAdapter
+            } else if (!isItMyTurn(game.attackerUid, game.attackerName ?: "", game.playerAtTurnName ?: "") && !isItMyTurn(game.defenderUid, game.defenderName ?: "", game.playerAtTurnName ?: "")) {
+                showSnackBar("Yer enemy is still plotting. Stupid land rat!", false)
+                return@ActiveGamesListAdapter
             }
             resumeGame(game)
         }
         viewDataBinding.bridgeGameList.adapter = listAdapter
-/*
-        listAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
-            override fun onChanged() {
-                showSnackBar("Captain! The enemy may have moved!", false)
-            }
-        })*/
+
+    }
+
+    private fun isItMyTurn(playerId: String, playerName: String, nextTurn: String): Boolean {
+        if (navOwnPlayerId.equals(playerId) && playerName.equals(nextTurn)) {
+            return true
+        }
+        return false
     }
 
 

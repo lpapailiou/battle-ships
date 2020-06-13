@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             connectivityListener.observeConnectivity()
 
         } catch (e: Exception) {
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 
@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
         try {
             super.onBackPressed()
         } catch (e: Exception) {
-            println(e.stackTrace.toString())
+            e.stackTrace
         }
     }
 
