@@ -1,6 +1,8 @@
 package ch.ffhs.esa.battleships.ui.main
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
@@ -9,29 +11,16 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.data.ConnectivityListener
-import ch.ffhs.esa.battleships.data.game.Game
-import ch.ffhs.esa.battleships.ui.auth.AuthHostFragment
-import ch.ffhs.esa.battleships.ui.auth.AuthHostFragmentDirections
-import ch.ffhs.esa.battleships.ui.auth.SignUpFragment
-import ch.ffhs.esa.battleships.ui.auth.SignUpFragmentDirections
-import ch.ffhs.esa.battleships.ui.rules.RulesFragment
-import ch.ffhs.esa.battleships.ui.rules.RulesFragmentDirections
-import ch.ffhs.esa.battleships.ui.score.ScoreFragment
-import ch.ffhs.esa.battleships.ui.score.ScoreFragmentDirections
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
@@ -43,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         var navEnemyId: String = ""
         var navGameId: MutableLiveData<String> = MutableLiveData()
         var navIsBotGame: Boolean = false
+        var isThisOnForeGround = false
     }
 
     @Inject
@@ -74,11 +64,24 @@ class MainActivity : AppCompatActivity() {
             }
 
             connectivityListener.observeConnectivity()
+            FirebaseListener(this).listen()
+
 
         } catch (e: Exception) {
             e.stackTrace
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        isThisOnForeGround = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isThisOnForeGround = false
+    }
+
 
     fun hasWifi(): Boolean {
         val connManager: ConnectivityManager =

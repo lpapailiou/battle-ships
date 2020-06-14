@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Battle Ships</string>
+    <string name="app_name">Battleships</string>
     <string name="score">View score</string>
     <string name="practice">vs bot</string>
     <string name="online">vs friend</string>
@@ -23,6 +23,8 @@
     <string name="winner_is">"winner: "</string>
     <string name="nullstring">""</string>
     <string name="turn_is">"next to shoot: "</string>
+    <string name="channelName">"Channel name"</string>
+    <string name="channelDesc">"Channel description"</string>
 
     <string name="rulesText">
         <![CDATA[

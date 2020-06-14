@@ -260,7 +260,9 @@ class BoardPreparationViewModel @Inject constructor(
     }
 
     private suspend fun findOpenGame(): Game? {
-
+        if (_player.value == null) {
+            return null
+        }
         val result = gameRepository.findLatestGameWithNoOpponent(_player.value!!.uid)
 
         if (result is DataResult.Success) {

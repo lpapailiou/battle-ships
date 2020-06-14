@@ -32,6 +32,10 @@ class BridgeViewModel @Inject constructor(
         loadActiveGamesFromPlayer(playerUid)
     }
 
+    fun getActiveBridgeGames(): LiveData<List<GameWithPlayerInfo>> {
+        return activeGames
+    }
+
     private fun loadActiveGamesFromPlayer(playerUid: String) = viewModelScope.launch {
         try {
             Log.d("procedureLogger", "------------- >>>>>>> bridge loadActiveGamesFromPlayer()")

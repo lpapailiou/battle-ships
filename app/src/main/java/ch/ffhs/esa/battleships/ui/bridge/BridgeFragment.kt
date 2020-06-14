@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,6 +26,7 @@ import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navIsBotGame
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainFragmentDirections
+import ch.ffhs.esa.battleships.ui.main.NotificationUtil
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.bridge_fragment.*
@@ -89,10 +91,6 @@ class BridgeFragment : Fragment() {
         play_vs_friend_button.setOnClickListener {
             startNewGame(false)
         }
-        /*
-        bridgeViewModel.activeGames.observe(viewLifecycleOwner, Observer {
-            showSnackBar("Captain! The enemy may have moved!") // TODO: would like to add this one, but keeps crashing
-        })*/
 
     }
 
