@@ -16,13 +16,12 @@ import com.google.firebase.messaging.RemoteMessage
 import java.util.Observer
 
 
-class FirebaseListener(paramActivity: Activity): FirebaseMessagingService() {
+class FirebaseListener: FirebaseMessagingService() {
 
-    private val activity = paramActivity
     private val title = "Ahoy!"
     private val text = "Captain! The enemy may have moved!"
 
-    fun listen() {
+    final fun listen(activity: Activity) {
 
         var database  = FirebaseDatabase.getInstance()
         var ref  = database.getReference("player").child(navOwnPlayerId).child("game")
@@ -33,11 +32,14 @@ class FirebaseListener(paramActivity: Activity): FirebaseMessagingService() {
                 if (!isThisOnForeGround) {
                     NotificationUtil().createNotification(activity, title, text)
                 } else {
-                    if (p0.child("playerAtTurnUid").getValue().toString().equals(navOwnPlayerId)) {
+                    if (p0.child("playerAtTurnUid").getValue().toString()
+                            .equals(navOwnPlayerId)
+                    ) {
                         val toast =
                             Toast.makeText(activity.applicationContext, text, Toast.LENGTH_LONG)
                         toast.view.setBackgroundColor(Color.parseColor("#FA021F"))
-                        toast.view.findViewById<TextView>(R.id.message).setTextColor(Color.WHITE)
+                        toast.view.findViewById<TextView>(R.id.message)
+                            .setTextColor(Color.WHITE)
                         toast.show()
                     }
                 }

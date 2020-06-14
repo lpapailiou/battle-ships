@@ -1,6 +1,7 @@
 package ch.ffhs.esa.battleships.ui.main
 
 import android.os.Bundle
+import android.system.Os.listen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.ui.auth.LoginFragment
 import ch.ffhs.esa.battleships.ui.bridge.BridgeFragment
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.firebaseListenerCreated
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +30,11 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)       // hide navigation drawer icon
         initMainFragment()
+
+        if (!navOwnPlayerId.equals(OFFLINE_PLAYER_ID) && firebaseListenerCreated == false) {
+            FirebaseListener().listen((activity as MainActivity))
+            firebaseListenerCreated = true
+        }
     }
 
     // ----------------------------- fragment choice (depending on first startup) -----------------------------
