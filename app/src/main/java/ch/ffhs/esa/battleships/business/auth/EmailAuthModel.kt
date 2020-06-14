@@ -5,7 +5,7 @@ data class EmailAuthModel(
     var password: String = ""
 ) {
 
-    fun eraseCredentials() {
+    fun clearCredentials() {
         email = "";
         password = "";
     }

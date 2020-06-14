@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <import type="android.view.View" />
@@ -13,7 +15,7 @@
             type="ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/game_preparation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,7 +27,7 @@
             android:id="@+id/intro_image"
             android:layout_width="199dp"
             android:layout_height="184dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginTop="30dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/Intro"
             android:scaleType="centerInside"
@@ -36,16 +38,22 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@id/password"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:hint="@string/username"
+            android:textColorHint="@color/colorAccent"
+            app:boxStrokeColor="@color/colorAccent"
             app:errorTextColor="@color/colorComplementary"
-            app:layout_constraintTop_toBottomOf="@id/intro_image">
+            app:hintEnabled="true"
+            app:hintTextColor="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/intro_image"
+            app:layout_constraintVertical_chainStyle="packed">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_text_email_signup"
@@ -53,26 +61,39 @@
                 android:layout_height="wrap_content"
                 android:descendantFocusability="beforeDescendants"
                 android:focusableInTouchMode="true"
-                android:hint="@string/prompt_email"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/prompt_email"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:nextFocusDown="@+id/edit_text_password_signup"
+                android:nextFocusForward="@+id/edit_text_password_signup"
+                android:singleLine="true"
+                android:textColor="@color/colorAccent" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toTopOf="@id/button_sign_up"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:textColorHint="@color/colorAccent"
+            app:boxStrokeColor="@color/colorAccent"
             app:errorTextColor="@color/colorComplementary"
-            app:layout_constraintTop_toBottomOf="@id/email">
+
+
+            app:hintEnabled="true"
+            app:hintTextColor="@color/colorAccent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edit_text_password_signup"
@@ -82,7 +103,7 @@
                 android:hint="@string/prompt_password"
                 android:imeActionId="6"
                 android:imeActionLabel="@string/prompt_password"
-                android:imeOptions="actionUnspecified"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -93,16 +114,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/border_login_button"
-            android:drawableLeft="@drawable/ic_login_variant_white_36dp"
+            android:drawableLeft="@drawable/ic_baseline_launch_24"
             android:text="@string/action_sign_up"
             android:textColor="@color/colorAccent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/password"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

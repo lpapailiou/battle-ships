@@ -9,4 +9,5 @@ class BattleShipsApplication : Application() {
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create(applicationContext)
     }
+
 }

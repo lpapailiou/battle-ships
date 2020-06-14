@@ -19,6 +19,7 @@ class ShipModel(
 ) {
 
     var isPositionValid: Boolean = true
+    var isSunk: Boolean = false
 
     fun getShipCells(): HashSet<Cell> {
         val cells = HashSet<Cell>()

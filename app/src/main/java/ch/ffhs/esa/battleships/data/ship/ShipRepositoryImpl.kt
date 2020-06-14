@@ -15,30 +15,37 @@ class ShipRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ShipRepository {
 
-    override suspend fun insert(ship: Ship): DataResult<String> {
+    override suspend fun insert(
+        ship: Ship,
+        isBotGame: Boolean
+    ): DataResult<String> {
         return withContext(ioDispatcher) {
             if (ship.uid.isEmpty()) {
                 ship.uid = "%s_%d_%d".format(ship.boardUid, ship.x, ship.y)
             }
 
-            val result = remoteShipDataSource.insert(ship)
-            if (result is DataResult.Error) {
-                throw result.exception
+            if (!isBotGame) {
+                val result = remoteShipDataSource.insert(ship)
+                if (result is DataResult.Error) {
+                    throw result.exception
+                }
             }
 
             return@withContext localShipDataSource.insert(ship)
         }
     }
 
-    override suspend fun findByBoard(boardUid: String): DataResult<List<Ship>> {
-        val remoteResult = remoteShipDataSource.loadByBoard(boardUid)
+    override suspend fun findByBoard(boardUid: String, isBotGame: Boolean): DataResult<List<Ship>> {
+        if (!isBotGame) {
+            val remoteResult = remoteShipDataSource.loadByBoard(boardUid)
 
-        if (remoteResult is DataResult.Error) {
-            return remoteResult
+            if (remoteResult is DataResult.Error) {
+                return remoteResult
+            }
+
+            remoteResult as DataResult.Success
+            remoteResult.data.forEach { localShipDataSource.insert(it) }
         }
-
-        remoteResult as DataResult.Success
-        remoteResult.data.forEach { localShipDataSource.insert(it) }
 
         return localShipDataSource.loadByBoard(boardUid)
     }

@@ -1,6 +1,5 @@
 package ch.ffhs.esa.battleships.data.source.local.board
 
-import android.util.Log
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.board.Board
 import ch.ffhs.esa.battleships.data.board.BoardDataSource
@@ -37,7 +36,7 @@ class LocalBoardDataSource internal constructor(
                 if (board != null) {
                     return@withContext DataResult.Success(board)
                 } else {
-                    return@withContext DataResult.Error(Exception("Player not found!"))
+                    return@withContext DataResult.Error(Exception("Board not found!"))
                 }
             } catch (e: Exception) {
                 return@withContext DataResult.Error(e)

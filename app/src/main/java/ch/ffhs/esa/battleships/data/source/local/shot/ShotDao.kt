@@ -13,4 +13,5 @@ interface ShotDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(shot: Shot)
+
 }
