@@ -10,9 +10,9 @@ data class GameWithPlayerInfo(
     val playerAtTurnName: String?,
     val lastChangedAt: Long?,
     val attackerUid: String?,
-    val defenderUid: String
+    val defenderUid: String,
+    val winnerUid: String?
 ) {
-
     fun lastChangedAtFormatted(): CharSequence {
         return DateUtils.getRelativeTimeSpanString(lastChangedAt!!)
     }

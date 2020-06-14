@@ -1,5 +1,6 @@
 package ch.ffhs.esa.battleships.business.auth
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import ch.ffhs.esa.battleships.event.Event
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,14 +46,20 @@ class GoogleAuthViewModel @Inject constructor(
                 }
         } catch (e: Exception) {
             _loginFailedEvent.value = Event("Error")
+            e.stackTrace
         }
     }
 
 
     private fun createPlayer(uid: String, name: String) = viewModelScope.launch {
+        try {
+            Log.d("procedureLogger", "------------- >>>>>>> auth createPlayer()")
         val player = Player(name)
         player.uid = uid
         playerRepository.save(player)
         _loginSucceededEvent.value = Event(firebaseAuth.currentUser!!.uid)
+        } catch (e: Exception) {
+            e.stackTrace
+        }
     }
 }

@@ -3,125 +3,114 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/login_fragment">
+    app:startDestination="@id/main_fragment">
 
     <fragment
-        android:id="@+id/login_fragment"
-        android:name="ch.ffhs.esa.battleships.ui.auth.LoginFragment"
-        tools:layout="@layout/bridge_fragment">
+        android:id="@+id/main_fragment"
+        android:name="ch.ffhs.esa.battleships.ui.main.MainFragment"
+        android:label="Welcome to Battleships"
+        tools:layout="@layout/main_fragment">
 
         <action
-            android:id="@+id/action_loginFragment_to_bridgeFragment"
-            app:destination="@id/bridge_fragment"
-            app:popUpTo="@id/login_fragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_mainFragment_to_authHostFragment"
+            app:destination="@id/auth_host_fragment" />
 
         <action
-            android:id="@+id/action_loginFragment_to_signupFragment"
+            android:id="@+id/action_mainFragment_to_signUpFragment"
             app:destination="@id/signup_fragment" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_gameHostFragment"
+            app:destination="@id/game_host_fragment" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/game_host_fragment"
+        android:name="ch.ffhs.esa.battleships.ui.game.GameHostFragment"
+        android:label="Current game"
+        tools:layout="@layout/game_host_fragment">
+
+        <action
+            android:id="@+id/action_gameHostFragment_to_mainFragment"
+            app:destination="@id/main_fragment" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/auth_host_fragment"
+        android:name="ch.ffhs.esa.battleships.ui.auth.AuthHostFragment"
+        android:label="Connection"
+        tools:layout="@layout/auth_host_fragment">
+
+        <action
+            android:id="@+id/action_authHostFragment_to_signupFragment"
+            app:destination="@id/signup_fragment" />
+        <action
+            android:id="@+id/action_authHostFragment_to_mainFragment"
+            app:destination="@id/main_fragment" />
+        <action
+            android:id="@+id/action_authHostFragment_to_gameHostFragment"
+            app:destination="@id/game_host_fragment" />
+
+    </fragment>
+
 
     <fragment
         android:id="@+id/signup_fragment"
         android:name="ch.ffhs.esa.battleships.ui.auth.SignUpFragment"
+        android:label="Hoist your flag!"
         tools:layout="@layout/signup_fragment">
 
         <action
-            android:id="@+id/action_signUpFragment_to_bridgeFragment"
-            app:destination="@id/bridge_fragment" />
+            android:id="@+id/action_signUpFragment_to_mainFragment"
+            app:destination="@id/main_fragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_gameHostFragment"
+            app:destination="@id/game_host_fragment" />
 
     </fragment>
 
     <fragment
         android:id="@+id/bridge_fragment"
         android:name="ch.ffhs.esa.battleships.ui.bridge.BridgeFragment"
-        android:label="Welcome to Battle Ships"
         tools:layout="@layout/bridge_fragment">
-
-        <argument
-            android:name="uid"
-            app:argType="string" />
-
-        <action
-            android:id="@+id/action_mainFragment_to_boardPreparationFragment"
-            app:destination="@id/board_preparation_fragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_gameFragment"
-            app:destination="@id/game_fragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_signupFragment"
-            app:destination="@id/signup_fragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_scoreFragment"
-            app:destination="@id/score_fragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_settings_fragment"
-            app:destination="@id/settings_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/board_preparation_fragment"
         android:name="ch.ffhs.esa.battleships.ui.boardpreparation.BoardPreparationFragment"
-        android:label="Game Preparation"
         tools:layout="@layout/board_preparation_fragment">
 
-        <argument
-            android:name="uid"
-            app:argType="string" />
-        <argument
-            android:name="isBotGame"
-            app:argType="boolean" />
-
-        <action
-            android:id="@+id/action_boardPreparationFragment_to_gameFragment"
-            app:destination="@id/game_fragment"
-            app:popUpTo="@id/bridge_fragment" />
-
-        <action
-            android:id="@+id/action_boardPreparationFragment_to_bridgeFragment"
-            app:destination="@id/bridge_fragment"
-            app:popUpTo="@id/bridge_fragment"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/game_fragment"
         android:name="ch.ffhs.esa.battleships.ui.game.GameFragment"
-        android:label="Game"
         tools:layout="@layout/game_fragment">
-
-        <argument
-            android:name="gameUid"
-            app:argType="string" />
-        <argument
-            android:name="ownPlayerUid"
-            app:argType="string" />
-        <argument
-            android:name="enemyPlayerUid"
-            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/score_fragment"
         android:name="ch.ffhs.esa.battleships.ui.score.ScoreFragment"
         android:label="Game score"
-        tools:layout="@layout/score_fragment" />
+        tools:layout="@layout/score_fragment">
 
-    <fragment
-        android:id="@+id/settings_fragment"
-        android:name="ch.ffhs.esa.battleships.ui.settings.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/settings_fragment">
-
-        <action
-            android:id="@+id/action_settingsFragment_to_loginFragment"
-            app:destination="@id/login_fragment"
-            app:popUpTo="@id/login_fragment" />
+    <action
+        android:id="@+id/action_scoreFragment_to_gameHostFragment"
+        app:destination="@id/game_host_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/rules_fragment"
         android:name="ch.ffhs.esa.battleships.ui.rules.RulesFragment"
         android:label="Rules"
-        tools:layout="@layout/rules_fragment" />
+        tools:layout="@layout/rules_fragment">
+
+    <action
+        android:id="@+id/action_rulesFragment_to_gameHostFragment"
+        app:destination="@id/game_host_fragment" />
+    </fragment>
+
 </navigation>

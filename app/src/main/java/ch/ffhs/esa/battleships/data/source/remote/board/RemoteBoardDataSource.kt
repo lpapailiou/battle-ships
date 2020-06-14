@@ -7,9 +7,8 @@ import ch.ffhs.esa.battleships.data.board.Board
 import ch.ffhs.esa.battleships.data.board.BoardDataSource
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.FlowCollector
@@ -17,10 +16,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class RemoteBoardDataSource internal constructor(
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val firebaseDatabase: FirebaseDatabase
 ) : BoardDataSource {
-
-    val database = Firebase.database.reference
 
     override suspend fun findByUid(uid: String): DataResult<Board> {
         TODO("Not yet implemented")
@@ -50,10 +48,11 @@ class RemoteBoardDataSource internal constructor(
                     }
                 }
 
-                database.child(FIREBASE_BOARD_PATH).child("%s_%s".format(gameUid, playerUid))
+                firebaseDatabase.reference.child(FIREBASE_BOARD_PATH)
+                    .child("%s_%s".format(gameUid, playerUid))
                     .addListenerForSingleValueEvent(callback)
 
-                awaitClose { database.removeEventListener(callback) }
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
 
                 return@callbackFlow
             }
@@ -80,7 +79,9 @@ class RemoteBoardDataSource internal constructor(
                 return@withContext DataResult.Error(Exception("Board does not have an Uid assigned"))
             }
 
-            val task = database.child(FIREBASE_BOARD_PATH).child(board.uid).setValue(board)
+            val task = firebaseDatabase.reference.child(FIREBASE_BOARD_PATH).child(board.uid)
+                .setValue(board)
+
             task.await()
 
             if (task.isSuccessful) {

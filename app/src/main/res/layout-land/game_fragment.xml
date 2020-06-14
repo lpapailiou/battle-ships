@@ -12,7 +12,7 @@
     tools:context=".ui.game.GameFragment">
 
     <ch.ffhs.esa.battleships.ui.board.BoardView
-        android:id="@+id/board_active"
+        android:id="@+id/board_inactive"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginRight="@dimen/activity_vertical_margin"
@@ -30,7 +30,7 @@
         app:layout_constraintGuide_percent="0.50752395" />
 
     <ch.ffhs.esa.battleships.ui.board.BoardView
-        android:id="@+id/board_inactive"
+        android:id="@+id/board_active"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="@dimen/activity_vertical_margin"

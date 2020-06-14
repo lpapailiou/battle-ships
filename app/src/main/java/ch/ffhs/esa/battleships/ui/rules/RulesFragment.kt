@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 
 
 class RulesFragment : Fragment() {
@@ -25,8 +26,6 @@ class RulesFragment : Fragment() {
         setText()
     }
 
-    // TODO: maybe change to html view so images / screenshots could be embedded easily
-    // TODO: must be scrollable
     fun setText() {
         val string: String = getString(R.string.rulesText)
         val TextView: TextView = (activity as MainActivity).findViewById(R.id.rulesT) as TextView

@@ -11,11 +11,8 @@ import ch.ffhs.esa.battleships.data.game.GameDataSource
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -24,14 +21,19 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class RemoteGameDataSource internal constructor(
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val firebaseDatabase: FirebaseDatabase
 ) : GameDataSource {
 
-
-    private val database = Firebase.database.reference
-
+    override suspend fun findClosedGames(uid: String): DataResult<List<GameWithPlayerInfo>> {
+        TODO("Not yet implemented")
+    }
     override suspend fun findByUid(uid: String): DataResult<Game> =
         withContext(ioDispatcher) {
+            Log.d(
+                "implementationMissing",
+                "=====================>>>>>>>>>>>> RemoteGameDataSource.findByUid() not implemented!"
+            )  // TODO: implement
             TODO("Not implemented yet")
         }
 
@@ -50,7 +52,7 @@ class RemoteGameDataSource internal constructor(
 
             childUpdates["/player/%s/game/%s".format(game.defenderUid, game.uid)] = game
 
-            val task = database.updateChildren(childUpdates)
+            val task = firebaseDatabase.reference.updateChildren(childUpdates)
             task.await()
 
             if (task.isSuccessful) {
@@ -64,10 +66,18 @@ class RemoteGameDataSource internal constructor(
 
     override suspend fun findActiveGames(uid: String): DataResult<List<GameWithPlayerInfo>> =
         withContext(ioDispatcher) {
+            Log.d(
+                "implementationMissing",
+                "=====================>>>>>>>>>>>> RemoteGameDataSource.findActiveGames() not implemented!"
+            )
             TODO("Not implemented yet")
         }
 
     override suspend fun update(game: Game): DataResult<String> {
+        Log.d(
+            "implementationMissing",
+            "=====================>>>>>>>>>>>> RemoteGameDataSource.update() not implemented!"
+        )
         TODO("Not yet implemented")
     }
 
@@ -90,10 +100,10 @@ class RemoteGameDataSource internal constructor(
                     }
                 }
 
-                database.child("player").child(playerUid).child("game")
+                firebaseDatabase.reference.child("player").child(playerUid).child("game")
                     .addListenerForSingleValueEvent(callback)
 
-                awaitClose { database.removeEventListener(callback) }
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
             }
             var gameList: List<Game> = listOf()
             flow.collect(object : FlowCollector<List<Game>> {
@@ -132,10 +142,10 @@ class RemoteGameDataSource internal constructor(
                     }
                 }
 
-                database.child(FIREBASE_GAME_WITHOUT_ATTACKERS_PATH)
+                firebaseDatabase.reference.child(FIREBASE_GAME_WITHOUT_ATTACKERS_PATH)
                     .addListenerForSingleValueEvent(callback)
 
-                awaitClose { database.removeEventListener(callback) }
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
 
                 return@callbackFlow
             }
@@ -157,7 +167,7 @@ class RemoteGameDataSource internal constructor(
                 return@withContext Error(Exception("Game does not have an Uid assigned"))
             }
 
-            val task = database.child(
+            val task = firebaseDatabase.reference.child(
                 FIREBASE_GAME_WITHOUT_ATTACKERS_PATH
             ).child(game.uid).removeValue()
             task.await()
@@ -181,6 +191,7 @@ class RemoteGameDataSource internal constructor(
                         val games = dataSnapshot.children
                             .map { it.getValue(FirebaseGame::class.java) }
                             .map { it!!.toGame() }
+                            .filter { it.winnerUid == null}
 
                         offer(games)
                         channel.close()
@@ -192,10 +203,53 @@ class RemoteGameDataSource internal constructor(
                     }
                 }
 
-                database.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game")
+                firebaseDatabase.reference.child(FIREBASE_PLAYER_PATH).child(playerUid)
+                    .child("game")
                     .addListenerForSingleValueEvent(callback)
 
-                awaitClose { database.removeEventListener(callback) }
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
+
+                return@callbackFlow
+            }
+
+            var games: List<Game> = listOf()
+            flow.collect(object : FlowCollector<List<Game>> {
+                override suspend fun emit(value: List<Game>) {
+
+                    games = value
+                }
+            })
+
+            return@withContext Success(games)
+        }
+
+    @InternalCoroutinesApi
+    @ExperimentalCoroutinesApi
+    override suspend fun findClosedByPlayer(playerUid: String): DataResult<List<Game>> =
+        withContext(ioDispatcher) {
+            val flow = callbackFlow<List<Game>> {
+                val callback = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val games = dataSnapshot.children
+                            .map { it.getValue(FirebaseGame::class.java) }
+                            .map { it!!.toGame() }
+                            .filter { it.winnerUid != null }
+
+                        offer(games)
+                        channel.close()
+                    }
+
+                    override fun onCancelled(p0: DatabaseError) {
+                        Log.e(null, "remote board data source cancelled - findByPlayer")
+                        throw p0.toException()
+                    }
+                }
+
+                firebaseDatabase.reference.child(FIREBASE_PLAYER_PATH).child(playerUid)
+                    .child("game")
+                    .addListenerForSingleValueEvent(callback)
+
+                awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
 
                 return@callbackFlow
             }
@@ -229,10 +283,11 @@ class RemoteGameDataSource internal constructor(
 
             }
 
-            database.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game").child(gameUid)
+            firebaseDatabase.reference.child(FIREBASE_PLAYER_PATH).child(playerUid).child("game")
+                .child(gameUid)
                 .addValueEventListener(callback)
 
-            awaitClose { database.removeEventListener(callback) }
+            awaitClose { firebaseDatabase.reference.removeEventListener(callback) }
         }
     }
 }
