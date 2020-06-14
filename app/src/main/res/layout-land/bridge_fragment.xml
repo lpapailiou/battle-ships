@@ -23,7 +23,7 @@
             android:id="@+id/intro_image"
             android:layout_width="199dp"
             android:layout_height="184dp"
-            android:layout_marginLeft="60dp"
+            android:layout_marginStart="60dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/Intro"
             android:scaleType="centerInside"
@@ -37,14 +37,13 @@
             android:id="@+id/play_vs_bot_button"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-
+            android:layout_marginEnd="5dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="80dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="20dp"
             android:text="@string/practice"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintLeft_toRightOf="@id/intro_image"
-            app:layout_constraintRight_toLeftOf="@id/play_vs_friend_button"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -53,34 +52,36 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
             android:text="@string/online"
-            app:layout_constraintLeft_toRightOf="@id/play_vs_bot_button"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/sign_up_to_play_online_button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             android:text="@string/sign_up_top_play_online"
-            app:layout_constraintLeft_toLeftOf="@id/play_vs_bot_button"
-            app:layout_constraintTop_toBottomOf="@id/play_vs_bot_button" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bridge_game_list"
             android:layout_width="375dp"
-            android:layout_height="215dp"
-            android:layout_marginTop="230dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             app:items="@{viewModel.activeGames}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/play_vs_bot_button"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/play_vs_bot_button" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
