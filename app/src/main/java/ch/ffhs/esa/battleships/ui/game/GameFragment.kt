@@ -29,6 +29,7 @@ import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class GameFragment : Fragment() {
@@ -68,6 +69,11 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (navEnemyId == BOT_PLAYER_ID) {
             navOwnPlayerId = OFFLINE_PLAYER_ID
+        } else {
+            val firebaseAuth = FirebaseAuth.getInstance()
+            if (firebaseAuth.currentUser != null) {
+                navOwnPlayerId = firebaseAuth.currentUser!!.uid
+            }
         }
         gameViewModel.start(navGameId.value!!, navOwnPlayerId, navEnemyId)
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
