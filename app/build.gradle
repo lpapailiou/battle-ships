@@ -15,8 +15,18 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testApplicationId "ch.ffhs.esa.battleships"
+        testInstrumentationRunner "androidx.test.runner.InstrumentationTestRunner"
+        testHandleProfiling true
+        testFunctionalTest true
         archivesBaseName = "battleships"
+
+        testOptions {
+            reportDir "$rootDir/test-reports"
+            resultsDir "$rootDir/test-results"
+            unitTests.returnDefaultValues = true
+        }
+
     }
 
     buildTypes {
