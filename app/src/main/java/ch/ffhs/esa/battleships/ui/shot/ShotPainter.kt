@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.toRect
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.business.BOARD_SIZE
 import ch.ffhs.esa.battleships.business.shot.ShotModel

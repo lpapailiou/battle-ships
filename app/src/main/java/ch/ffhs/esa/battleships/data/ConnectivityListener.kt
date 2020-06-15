@@ -2,7 +2,6 @@ package ch.ffhs.esa.battleships.data
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import ch.ffhs.esa.battleships.ui.main.MainActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase

@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.navArgs
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.ui.boardpreparation.BoardPreparationFragment
 import ch.ffhs.esa.battleships.ui.main.MainActivity
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
-import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 
 class GameHostFragment : Fragment() {
 

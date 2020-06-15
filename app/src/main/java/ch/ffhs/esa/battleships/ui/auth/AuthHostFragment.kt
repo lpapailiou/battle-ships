@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import ch.ffhs.esa.battleships.R
 import ch.ffhs.esa.battleships.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
-import java.lang.Exception
 
 class AuthHostFragment : Fragment() {
 

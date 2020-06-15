@@ -1,24 +1,16 @@
 package ch.ffhs.esa.battleships.business.bridge
 
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ch.ffhs.esa.battleships.R
-import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.game.GameRepository
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
-import ch.ffhs.esa.battleships.ui.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class BridgeViewModel @Inject constructor(
     private val gameRepository: GameRepository

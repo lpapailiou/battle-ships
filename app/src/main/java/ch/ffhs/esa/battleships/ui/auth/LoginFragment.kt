@@ -34,7 +34,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.login_fragment.*
-import java.lang.Exception
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {

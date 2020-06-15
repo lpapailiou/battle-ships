@@ -6,17 +6,13 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import ch.ffhs.esa.battleships.event.Event
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.isThisOnForeGround
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.RemoteMessage
-import java.util.Observer
 
 
 class FirebaseListener(paramActivity: Activity): FirebaseMessagingService() {

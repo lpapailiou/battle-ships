@@ -2,7 +2,6 @@ package ch.ffhs.esa.battleships.ui.game
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -13,8 +12,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,7 +25,6 @@ import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
-import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class GameFragment : Fragment() {
@@ -122,7 +118,7 @@ class GameFragment : Fragment() {
             return
         }
 
-        inactiveBoard.setOnTouchListener(View.OnTouchListener { boardView, motionEvent ->
+        inactiveBoard.setOnTouchListener(View.OnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 swapBoards()
             }
@@ -157,6 +153,7 @@ class GameFragment : Fragment() {
 
     }
 
+    @Suppress("DEPRECATION")
     private fun vibrate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(

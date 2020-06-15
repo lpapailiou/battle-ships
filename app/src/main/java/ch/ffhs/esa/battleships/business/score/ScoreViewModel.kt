@@ -10,7 +10,6 @@ import ch.ffhs.esa.battleships.business.WINNING_SCORE_MULTIPLIER
 import ch.ffhs.esa.battleships.data.DataResult
 import ch.ffhs.esa.battleships.data.game.GameRepository
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

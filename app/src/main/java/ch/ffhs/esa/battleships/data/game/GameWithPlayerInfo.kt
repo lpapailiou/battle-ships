@@ -1,7 +1,6 @@
 package ch.ffhs.esa.battleships.data.game
 
 import android.text.format.DateUtils
-import java.util.*
 
 data class GameWithPlayerInfo(
     val gameUid: String,

@@ -1,8 +1,6 @@
 package ch.ffhs.esa.battleships.ui.main
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
@@ -82,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         isThisOnForeGround = false
     }
 
-
+    @Suppress("DEPRECATION")
     fun hasWifi(): Boolean {
         val connManager: ConnectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

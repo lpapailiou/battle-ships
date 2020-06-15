@@ -8,14 +8,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
-import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
@@ -26,7 +22,6 @@ import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navIsBotGame
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainFragmentDirections
-import ch.ffhs.esa.battleships.ui.main.NotificationUtil
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.bridge_fragment.*

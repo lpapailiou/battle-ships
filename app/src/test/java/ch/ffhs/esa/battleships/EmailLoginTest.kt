@@ -1,10 +1,8 @@
 package ch.ffhs.esa.battleships
 
 import android.app.Activity
-import androidx.lifecycle.viewModelScope
 import ch.ffhs.esa.battleships.business.auth.EmailAuthModel
 import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
-import ch.ffhs.esa.battleships.data.player.Player
 import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
@@ -12,15 +10,11 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import java.lang.Exception
 import java.util.concurrent.Executor
 
 class EmailLoginTest() : LogInListener  {

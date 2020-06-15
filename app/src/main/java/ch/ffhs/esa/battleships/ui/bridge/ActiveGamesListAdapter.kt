@@ -1,11 +1,9 @@
 package ch.ffhs.esa.battleships.ui.bridge
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ch.ffhs.esa.battleships.R
@@ -49,7 +47,7 @@ class ActiveGamesListAdapter(
             }
 
             val uName = navOwnPlayerId
-            if ((item.attackerUid != null && item.defenderUid != null) && ((uName.equals(item.attackerUid) && item.playerAtTurnName.equals(item.attackerName)) || (uName.equals(item.defenderUid) && item.playerAtTurnName.equals(item.defenderName)) || item.playerAtTurnName.equals("You"))) {
+            if ((item.attackerUid != null) && ((uName.equals(item.attackerUid) && item.playerAtTurnName.equals(item.attackerName)) || (uName.equals(item.defenderUid) && item.playerAtTurnName.equals(item.defenderName)) || item.playerAtTurnName.equals("You"))) {
                 val turnText = itemView.findViewById<TextView>(R.id.turn)
                 turnText.text = "(your turn)"
                 turnText.setTextColor(Color.parseColor("#FA021F"))

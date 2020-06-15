@@ -10,7 +10,6 @@ import ch.ffhs.esa.battleships.data.player.PlayerRepository
 import ch.ffhs.esa.battleships.event.Event
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
