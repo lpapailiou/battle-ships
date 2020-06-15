@@ -8,16 +8,27 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
 import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.bridge.BridgeViewModel
 import ch.ffhs.esa.battleships.data.game.GameWithPlayerInfo
 import ch.ffhs.esa.battleships.databinding.BridgeFragmentBinding
+import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navIsBotGame
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
+import ch.ffhs.esa.battleships.ui.main.MainFragmentDirections
+import ch.ffhs.esa.battleships.ui.main.NotificationUtil
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.bridge_fragment.*
 import javax.inject.Inject
 
@@ -31,9 +42,6 @@ class BridgeFragment : Fragment() {
     private lateinit var viewDataBinding: BridgeFragmentBinding
 
     private lateinit var listAdapter: ActiveGamesListAdapter
-
-    private val args: BridgeFragmentArgs by navArgs()
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,18 +68,20 @@ class BridgeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bridgeViewModel.start(navOwnPlayerId)
 
-        bridgeViewModel.start(args.uid)
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val isLoggedIn = auth.currentUser != null
 
         play_vs_bot_button.setOnClickListener {
             startNewGame(true)
         }
 
-        if (args.uid == OFFLINE_PLAYER_ID) {
+        if (!isLoggedIn || !(activity as MainActivity).hasWifi()) {
             play_vs_friend_button.visibility = View.GONE
 
             sign_up_to_play_online_button.setOnClickListener {
-                findNavController().navigate(BridgeFragmentDirections.actionMainFragmentToSignupFragment())
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToAuthHostFragment())
             }
             return
         }
@@ -81,13 +91,18 @@ class BridgeFragment : Fragment() {
         play_vs_friend_button.setOnClickListener {
             startNewGame(false)
         }
+
     }
 
     private fun setupListAdapter() {
         val viewModel = viewDataBinding.viewModel
         listAdapter = ActiveGamesListAdapter(viewModel!!) { game: GameWithPlayerInfo ->
+            navGameId.value = game.gameUid
             if (game.attackerUid == null) {
-                showSnackBar("Still no enemies in sight. Those damn stealth ships!", false)
+                showSnackBar("Still no enemies in sight. Those damn stealth ships!")
+                return@ActiveGamesListAdapter
+            } else if (!isItMyTurn(game.attackerUid, game.attackerName ?: "", game.playerAtTurnName ?: "") && !isItMyTurn(game.defenderUid, game.defenderName , game.playerAtTurnName ?: "")) {
+                showSnackBar("Yer enemy is still plotting. Stupid land rat!")
                 return@ActiveGamesListAdapter
             }
             resumeGame(game)
@@ -95,40 +110,42 @@ class BridgeFragment : Fragment() {
         viewDataBinding.bridgeGameList.adapter = listAdapter
     }
 
+    private fun isItMyTurn(playerId: String, playerName: String, nextTurn: String): Boolean {
+        if ((navOwnPlayerId.equals(playerId) || OFFLINE_PLAYER_ID.equals(playerId)) && playerName.equals(nextTurn)) {
+            return true
+        }
+        return false
+    }
 
     private fun startNewGame(isBotGame: Boolean) {
+        navIsBotGame = isBotGame
+        navGameId.value = null
         val action =
-            BridgeFragmentDirections.actionMainFragmentToBoardPreparationFragment(
-                args.uid,
-                isBotGame
-            )
+             MainFragmentDirections.actionMainFragmentToGameHostFragment()
+        if (isBotGame) {
+            navOwnPlayerId = OFFLINE_PLAYER_ID
+        }
         findNavController().navigate(action)
     }
 
     private fun resumeGame(game: GameWithPlayerInfo) {
         val enemyPlayerUid =
-            if (game.attackerUid == args.uid) game.defenderUid else game.attackerUid
-
+            if (game.attackerUid == navOwnPlayerId) game.defenderUid else game.attackerUid
+        navEnemyId = enemyPlayerUid!!
         val action =
-            BridgeFragmentDirections.actionMainFragmentToGameFragment(
-                game.gameUid,
-                args.uid,
-                enemyPlayerUid!!
-            )
+            MainFragmentDirections.actionMainFragmentToGameHostFragment()
         findNavController().navigate(action)
     }
 
-    private fun showSnackBar(message: String, isError: Boolean) {
+    private fun showSnackBar(message: String) {
         val snackBar =
-            Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
-        if (isError) {
-            snackBar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.colorComplementary
-                )
+            Snackbar.make(requireView(), message, 2000)
+        snackBar.setBackgroundTint(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorComplementary
             )
-        }
+        )
         snackBar.show()
     }
 

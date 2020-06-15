@@ -1,6 +1,8 @@
 package ch.ffhs.esa.battleships.ui.game
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
@@ -11,15 +13,23 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import ch.ffhs.esa.battleships.BattleShipsApplication
 import ch.ffhs.esa.battleships.R
+import ch.ffhs.esa.battleships.business.BOT_PLAYER_ID
+import ch.ffhs.esa.battleships.business.OFFLINE_PLAYER_ID
 import ch.ffhs.esa.battleships.business.game.GameViewModel
 import ch.ffhs.esa.battleships.ui.board.BoardView
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class GameFragment : Fragment() {
@@ -28,8 +38,6 @@ class GameFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val gameViewModel by viewModels<GameViewModel> { viewModelFactory }
-
-    private val args: GameFragmentArgs by navArgs()
 
     private lateinit var activeBoard: BoardView
 
@@ -56,11 +64,18 @@ class GameFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        gameViewModel.start(args.gameUid, args.ownPlayerUid, args.enemyPlayerUid)
-
+        if (navEnemyId == BOT_PLAYER_ID) {
+            navOwnPlayerId = OFFLINE_PLAYER_ID
+        } else {
+            val firebaseAuth = FirebaseAuth.getInstance()
+            if (firebaseAuth.currentUser != null) {
+                navOwnPlayerId = firebaseAuth.currentUser!!.uid
+            }
+        }
+        gameViewModel.start(navGameId.value!!, navOwnPlayerId, navEnemyId)
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->
             if (boardModel == null) {
                 return@Observer
@@ -71,6 +86,7 @@ class GameFragment : Fragment() {
             } else {
                 inactiveBoard.boardModel = boardModel
             }
+
         })
 
         gameViewModel.ownBoard.observe(viewLifecycleOwner, Observer { boardModel ->
@@ -118,6 +134,8 @@ class GameFragment : Fragment() {
             }
             return@OnTouchListener true
         })
+
+        navGameId.value = navGameId.value
     }
 
     private fun displayGameOverDialog() {

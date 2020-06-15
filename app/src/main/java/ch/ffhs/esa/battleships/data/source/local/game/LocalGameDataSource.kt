@@ -15,6 +15,10 @@ class LocalGameDataSource internal constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : GameDataSource {
 
+    override suspend fun findClosedByPlayer(playerUid: String): DataResult<List<Game>> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun findByUid(uid: String): DataResult<Game> =
         withContext(ioDispatcher) {
             try {
@@ -50,6 +54,16 @@ class LocalGameDataSource internal constructor(
             }
         }
 
+    override suspend fun findClosedGames(uid: String): DataResult<List<GameWithPlayerInfo>> =
+        withContext(ioDispatcher) {
+            try {
+                val games = gameDao.findAllClosedWithPlayerInfo(uid)
+                return@withContext DataResult.Success(games)
+            } catch (e: Exception) {
+                return@withContext DataResult.Error(e)
+            }
+        }
+
     override suspend fun update(game: Game): DataResult<String> =
         withContext(ioDispatcher) {
             try {
@@ -63,7 +77,8 @@ class LocalGameDataSource internal constructor(
         }
 
     override suspend fun findAllGamesByPlayer(playerUid: String): DataResult<List<Game>> {
-        TODO("Not yet implemented")
+        Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalGameDataSource.findAllGamesByPlayer() not implemented!")
+        TODO("Local observation not implemented")
     }
 
     override suspend fun findLatestGameWithNoOpponent(ownPlayerUid: String): DataResult<Game?> {
@@ -75,11 +90,13 @@ class LocalGameDataSource internal constructor(
     }
 
     override suspend fun findByPlayer(playerUid: String): DataResult<List<Game>> {
-        TODO("Not yet implemented")
+        Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalGameDataSource.findByPlayer() not implemented!")
+        TODO("Local observation not implemented")
     }
 
     override suspend fun observe(gameUid: String, playerUid: String): Flow<Game> {
-        TODO("Local observation not implemented yet")
+        Log.d("implementationMissing", "=====================>>>>>>>>>>>> LocalGameDataSource.observe() not implemented!")
+        TODO("Local observation not implemented")
     }
 
     override suspend fun observeByPlayer(playerUid: String): Flow<List<Game>> {
