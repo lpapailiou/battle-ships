@@ -64,6 +64,11 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (navEnemyId == BOT_PLAYER_ID) {
             navOwnPlayerId = OFFLINE_PLAYER_ID
+        } else {
+            val firebaseAuth = FirebaseAuth.getInstance()
+            if (firebaseAuth.currentUser != null) {
+                navOwnPlayerId = firebaseAuth.currentUser!!.uid
+            }
         }
         gameViewModel.start(navGameId.value!!, navOwnPlayerId, navEnemyId)
         gameViewModel.enemyBoard.observe(viewLifecycleOwner, Observer { boardModel ->

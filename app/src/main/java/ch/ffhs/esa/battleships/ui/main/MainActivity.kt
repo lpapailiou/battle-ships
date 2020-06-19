@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         var navGameId: MutableLiveData<String> = MutableLiveData()
         var navIsBotGame: Boolean = false
         var isThisOnForeGround = false
+        var firebaseListenerCreated = false
     }
 
     @Inject
@@ -62,8 +63,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             connectivityListener.observeConnectivity()
-            FirebaseListener(this).listen()
-
 
         } catch (e: Exception) {
             e.stackTrace

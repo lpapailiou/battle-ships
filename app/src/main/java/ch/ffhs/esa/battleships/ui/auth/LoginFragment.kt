@@ -22,7 +22,9 @@ import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
 import ch.ffhs.esa.battleships.databinding.LoginFragmentBinding
 import ch.ffhs.esa.battleships.event.Event
+import ch.ffhs.esa.battleships.ui.main.FirebaseListener
 import ch.ffhs.esa.battleships.ui.main.MainActivity
+import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.firebaseListenerCreated
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
 import ch.ffhs.esa.battleships.ui.main.MainFragment
@@ -87,6 +89,11 @@ class LoginFragment : Fragment() {
             skipLogin = true
             (activity as MainActivity).setMenuVisible(true)
 
+            if (!navOwnPlayerId.equals(OFFLINE_PLAYER_ID) && firebaseListenerCreated == false) {
+                FirebaseListener().listen((activity as MainActivity))
+                firebaseListenerCreated = true
+            }
+
             try {
                 (parentFragment as MainFragment).initMainFragment()
             } catch (e: Exception) {
@@ -95,7 +102,6 @@ class LoginFragment : Fragment() {
                 } catch (e: Exception) {}
             }
         }
-
 
         val failureObserver = Observer<Event<String>> {
             val toast = Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG)

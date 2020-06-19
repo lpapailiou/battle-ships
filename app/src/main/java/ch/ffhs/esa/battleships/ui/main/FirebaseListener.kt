@@ -15,28 +15,45 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessagingService
 
 
-class FirebaseListener(paramActivity: Activity): FirebaseMessagingService() {
+class FirebaseListener: FirebaseMessagingService() {
 
-    private val activity = paramActivity
     private val title = "Ahoy!"
     private val text = "Captain! The enemy may have moved!"
 
-    fun listen() {
+    final fun listen(activity: Activity) {
 
         var database  = FirebaseDatabase.getInstance()
-        var usersRef  = database.getReference("player").child(navOwnPlayerId);
-        usersRef.addValueEventListener(object : ValueEventListener {
+        var ref  = database.getReference("player").child(navOwnPlayerId).child("game")
+        ref.addChildEventListener(object: ChildEventListener {
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
                 Log.d("firebaseListener", "a game was changed in firebase")
                 if (!isThisOnForeGround) {
                     NotificationUtil().createNotification(activity, title, text)
                 } else {
-                    val toast = Toast.makeText(activity.applicationContext, text, Toast.LENGTH_LONG)
-                    toast.view.setBackgroundColor(Color.parseColor("#FA021F"))
-                    toast.view.findViewById<TextView>(R.id.message).setTextColor(Color.WHITE)
-                    toast.show()
+                    if (p0.child("playerAtTurnUid").getValue().toString()
+                            .equals(navOwnPlayerId)
+                    ) {
+                        val toast =
+                            Toast.makeText(activity.applicationContext, text, Toast.LENGTH_LONG)
+                        toast.view.setBackgroundColor(Color.parseColor("#FA021F"))
+                        toast.view.findViewById<TextView>(R.id.message)
+                            .setTextColor(Color.WHITE)
+                        toast.show()
+                    }
                 }
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                // nothing should happen
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+                // nothing should happen
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                // nothing should happen
             }
 
             override fun onCancelled(error: DatabaseError) {
