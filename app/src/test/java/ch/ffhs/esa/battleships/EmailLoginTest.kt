@@ -51,56 +51,58 @@ class EmailLoginTest() : LogInListener  {
             }
 
             override fun getException(): Exception? {
-                TODO("Not yet implemented")
+                return successTask.exception
             }
 
             override fun addOnFailureListener(p0: OnFailureListener): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnFailureListener(p0)
             }
 
             override fun addOnFailureListener(
                 p0: Executor,
                 p1: OnFailureListener
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnFailureListener(p0, p1)
             }
 
             override fun addOnFailureListener(
                 p0: Activity,
                 p1: OnFailureListener
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnFailureListener(p0, p1)
             }
 
             override fun getResult(): AuthResult? {
-                TODO("Not yet implemented")
+                return result
             }
 
             override fun <X : Throwable?> getResult(p0: Class<X>): AuthResult? {
-                TODO("Not yet implemented")
+                return getResult(p0)
             }
 
             override fun addOnSuccessListener(p0: OnSuccessListener<in AuthResult>): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnSuccessListener(p0)
             }
 
             override fun addOnSuccessListener(
                 p0: Executor,
                 p1: OnSuccessListener<in AuthResult>
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnSuccessListener(p0, p1)
             }
 
             override fun addOnSuccessListener(
                 p0: Activity,
                 p1: OnSuccessListener<in AuthResult>
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnSuccessListener(p0, p1)
             }
 
             override fun isCanceled(): Boolean {
-                TODO("Not yet implemented")
+                return isCanceled
             }
+
+
         }
 
         failureTask = object : Task<AuthResult>() {
@@ -115,55 +117,55 @@ class EmailLoginTest() : LogInListener  {
             }
 
             override fun getException(): java.lang.Exception? {
-                TODO("Not yet implemented")
+                return failureTask.exception
             }
 
             override fun addOnFailureListener(p0: OnFailureListener): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnFailureListener(p0)
             }
 
             override fun addOnFailureListener(
                 p0: Executor,
                 p1: OnFailureListener
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnFailureListener(p0, p1)
             }
 
             override fun addOnFailureListener(
                 p0: Activity,
                 p1: OnFailureListener
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnFailureListener(p0, p1)
             }
 
             override fun getResult(): AuthResult? {
-                TODO("Not yet implemented")
+                return result
             }
 
             override fun <X : Throwable?> getResult(p0: Class<X>): AuthResult? {
-                TODO("Not yet implemented")
+                return getResult(p0)
             }
 
             override fun addOnSuccessListener(p0: OnSuccessListener<in AuthResult>): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnSuccessListener(p0)
             }
 
             override fun addOnSuccessListener(
                 p0: Executor,
                 p1: OnSuccessListener<in AuthResult>
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnSuccessListener(p0, p1)
             }
 
             override fun addOnSuccessListener(
                 p0: Activity,
                 p1: OnSuccessListener<in AuthResult>
             ): Task<AuthResult> {
-                TODO("Not yet implemented")
+                return addOnSuccessListener(p0, p1)
             }
 
             override fun isCanceled(): Boolean {
-                TODO("Not yet implemented")
+                return isCanceled
             }
         }
 
