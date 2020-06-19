@@ -40,7 +40,7 @@ class GoogleAuthViewModel @Inject constructor(
                         )
 
                     } else {
-                        _loginFailedEvent.value = Event("Error") // TODO just as in EmailAuth
+                        _loginFailedEvent.value = Event("Error")
                     }
                 }
         } catch (e: Exception) {

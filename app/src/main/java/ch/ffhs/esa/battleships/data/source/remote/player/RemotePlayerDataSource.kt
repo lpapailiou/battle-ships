@@ -37,10 +37,7 @@ class RemotePlayerDataSource internal constructor(
                                 break
                             }
                         }
-                        /*val player = dataSnapshot.children
-                            .map { it.getValue(Player::class.java) }        // does not work because it.getValue(Player::class.java) -> String cannot be cast to Player
-                            .firstOrNull { it!!.uid == uid }
-                        */
+
                         offer(player)
                         channel.close()
 

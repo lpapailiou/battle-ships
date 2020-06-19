@@ -93,30 +93,4 @@ class ShotPainter(
         }
     }
 
-    /*
-    private fun drawShipHit(
-        startX: Float,
-        endX: Float,
-        startY: Float,
-        endY: Float,
-        canvas: Canvas
-    ) {
-        val imageBounds = RectF(startX, startY, endX, endY)
-
-        shipShotImage!!.bounds = imageBounds.toRect()
-        shipShotImage.draw(canvas)
-    }
-
-    private fun drawWaterHit(
-        startX: Float,
-        endX: Float,
-        startY: Float,
-        endY: Float,
-        canvas: Canvas
-    ) {
-        val imageBounds = RectF(startX, startY, endX, endY)
-
-        waterShotImage!!.bounds = imageBounds.toRect()
-        waterShotImage.draw(canvas)
-    }*/
 }
