@@ -1,4 +1,4 @@
-package ch.ffhs.esa.battleships.ui.main
+package ch.ffhs.esa.battleships.ui.notification
 
 import android.R
 import android.app.Activity
@@ -8,10 +8,10 @@ import android.widget.TextView
 import android.widget.Toast
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.isThisOnForeGround
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessagingService
 
 
@@ -29,7 +29,8 @@ class FirebaseListener: FirebaseMessagingService() {
             override fun onChildChanged(p0: DataSnapshot, p1: String?) {
                 Log.d("firebaseListener", "a game was changed in firebase")
                 if (!isThisOnForeGround) {
-                    NotificationUtil().createNotification(activity, title, text)
+                    NotificationUtil()
+                        .createNotification(activity, title, text)
                 } else {
                     if (p0.child("playerAtTurnUid").getValue().toString()
                             .equals(navOwnPlayerId)

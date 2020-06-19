@@ -1,7 +1,6 @@
 package ch.ffhs.esa.battleships.ui.main
 
 import android.os.Bundle
-import android.system.Os.listen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import ch.ffhs.esa.battleships.ui.bridge.BridgeFragment
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.firebaseListenerCreated
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.skipLogin
+import ch.ffhs.esa.battleships.ui.notification.FirebaseListener
 import com.google.firebase.auth.FirebaseAuth
 
 class MainFragment : Fragment() {

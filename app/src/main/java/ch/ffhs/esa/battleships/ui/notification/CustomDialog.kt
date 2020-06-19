@@ -1,4 +1,4 @@
-package ch.ffhs.esa.battleships.ui.dialog
+package ch.ffhs.esa.battleships.ui.notification
 
 import android.app.AlertDialog
 import android.content.Context

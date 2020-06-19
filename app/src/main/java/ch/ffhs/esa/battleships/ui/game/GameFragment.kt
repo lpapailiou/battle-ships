@@ -25,6 +25,7 @@ import ch.ffhs.esa.battleships.ui.board.BoardView
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navEnemyId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navGameId
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
+import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class GameFragment : Fragment() {

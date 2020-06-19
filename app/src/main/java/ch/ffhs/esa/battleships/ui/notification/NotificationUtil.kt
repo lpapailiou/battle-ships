@@ -1,4 +1,4 @@
-package ch.ffhs.esa.battleships.ui.main
+package ch.ffhs.esa.battleships.ui.notification
 
 import android.app.Activity
 import android.app.NotificationChannel

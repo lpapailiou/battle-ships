@@ -22,7 +22,7 @@ import ch.ffhs.esa.battleships.business.auth.EmailAuthViewModel
 import ch.ffhs.esa.battleships.business.auth.GoogleAuthViewModel
 import ch.ffhs.esa.battleships.databinding.LoginFragmentBinding
 import ch.ffhs.esa.battleships.event.Event
-import ch.ffhs.esa.battleships.ui.main.FirebaseListener
+import ch.ffhs.esa.battleships.ui.notification.FirebaseListener
 import ch.ffhs.esa.battleships.ui.main.MainActivity
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.firebaseListenerCreated
 import ch.ffhs.esa.battleships.ui.main.MainActivity.Companion.navOwnPlayerId
@@ -99,12 +99,14 @@ class LoginFragment : Fragment() {
             } catch (e: Exception) {
                 try {
                     findNavController().navigateUp()
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                }
             }
         }
 
         val failureObserver = Observer<Event<String>> {
-            val toast = Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG)
+            val toast =
+                Toast.makeText(requireContext(), it.getContentIfNotHandled(), Toast.LENGTH_LONG)
             toast.view.setBackgroundColor(Color.parseColor("#FA021F"))
             toast.view.findViewById<TextView>(android.R.id.message).setTextColor(Color.WHITE)
             toast.show()
@@ -123,7 +125,8 @@ class LoginFragment : Fragment() {
             } catch (e: Exception) {
                 try {
                     findNavController().navigate(AuthHostFragmentDirections.actionAuthHostFragmentToSignupFragment())
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                }
             }
         }
 
@@ -135,7 +138,8 @@ class LoginFragment : Fragment() {
             } catch (e: Exception) {
                 try {
                     findNavController().navigateUp()
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                }
             }
         }
 
@@ -169,7 +173,8 @@ class LoginFragment : Fragment() {
                     googleAuthViewModel.firebaseAuthWithGoogle(account)
                 }
             } catch (e: ApiException) {
-                val toast = Toast.makeText(requireContext(), "Google sign in failed:", Toast.LENGTH_LONG)
+                val toast =
+                    Toast.makeText(requireContext(), "Google sign in failed:", Toast.LENGTH_LONG)
                 toast.view.setBackgroundColor(Color.parseColor("#FA021F"))
                 toast.view.findViewById<TextView>(android.R.id.message).setTextColor(Color.WHITE)
                 toast.show()

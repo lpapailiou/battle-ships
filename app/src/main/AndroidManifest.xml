@@ -32,7 +32,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="ch.ffhs.esa.battleships.ui.main.FirebaseListener"
+            android:name="ch.ffhs.esa.battleships.ui.notification.FirebaseListener"
             android:exported="false"
             tools:ignore="Instantiatable">
             <intent-filter>
