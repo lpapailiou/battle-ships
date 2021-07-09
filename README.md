@@ -1,26 +1,19 @@
 # BattleShips
+A __battle ships__ mobile game allowing single and multi player games on android.  
+Created as FFHS project in spring 2020 in collaboration with [@ramonator00](https://github.com/ramonator00) and [@SandroBuerki](https://github.com/SandroBuerki).
 
-BattleShips ist ein Mobilegame für die Android-Plattform. Es ist ein Schiffe versenken mit
-Multiplayerfunktionalität.
+## The game
+Classic rules apply.  
+Two game modes are available:
+- single player mode: play against random bot
+- multi player mode: play against other players
 
-* Lena Papailiou
-* Ramona Koksa
-* Sandro Bürki
+Multiplayer games require a network connection with wifi (and friends). If you play without network connection, moves are saved locally and synchronized at the time of reconnecting.  
+  
+Several games can be managed in parallel. Games can be paused as well.  
+If a game is finished, scores are taken into account. Overall scores will be accessible in a ranking view.  
 
-FFHS Bern - FS 2020
-
-## Spiel
-Die Regeln richten sich ganz nach dem bekannten Klassiker.
-
-Zusätzlich bieten wir unterschiedliche Spielmodi:
-*  Singleplayer-Modus: Spiel gegen einen Bot
-*  Multiplayer-Modus: Spiel gegen einen Freund
-
-Multiplayer-Spiele erfordern eine Netzwerkverbindung (und Freunde). Falls ohne Internetverbindung
-gespielt wird, werden die gemachen Züge zwischengespeichert und bei der nächsten Verbindung synchronisiert.
-
-Sämtliche Spiele, die (parallel) gespielt werden können also pausiert werden. Sobald ein Spiel beendet ist, werden die
-Punkte entsprechend gezählt und sind später auf einer Ranking-Ansicht einsehbar.
-
-Im Unterschied zur Realität kann also nicht nur der Gewinner Geschichte schreiben!
+![screenshot of game preparation](https://raw.githubusercontent.com/lpapailiou/battle-ships/master/app/src/main/res/esa_prep_screen.png)  
+  
+![screenshot of game](https://raw.githubusercontent.com/lpapailiou/battle-ships/master/app/src/main/res/esa_game_screen.png)    
 
