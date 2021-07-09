@@ -13,7 +13,7 @@ Multiplayer games require a network connection with wifi (and friends). If you p
 Several games can be managed in parallel. Games can be paused as well.  
 If a game is finished, scores are taken into account. Overall scores will be accessible in a ranking view.  
 
-![screenshot of game preparation](https://raw.githubusercontent.com/lpapailiou/battle-ships/master/app/src/main/res/img/esa_prep_screen.png)
+![screenshot of game preparation](https://raw.githubusercontent.com/lpapailiou/battle-ships/master/app/src/main/img/esa_prep_screen.png)
   
-![screenshot of game](https://raw.githubusercontent.com/lpapailiou/battle-ships/master/app/src/main/res/img/esa_game_screen.png)
+![screenshot of game](https://raw.githubusercontent.com/lpapailiou/battle-ships/master/app/src/main/img/esa_game_screen.png)
 
